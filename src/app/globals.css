@@ -1,26 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Ruchi Foodline official design system tokens from docs/ */
+  --color-primary-green: #168a4a;
+  --color-deep-green: #0e6337;
+  --color-brand-red: #c62828;
+  --color-deep-red: #9f1f24;
+  --color-soft-green: #eef6ec;
+  --color-soft-neutral: #f7f6f2;
+  --color-border: #e3e3de;
+  --color-text: #171717;
+  --color-muted-text: #666666;
+  --color-white: #ffffff;
+  --color-accent-gold: #d4a359;
+
+  --radius-brand: 12px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, Cambria, serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary-green: var(--color-primary-green);
+  --color-deep-green: var(--color-deep-green);
+  --color-brand-red: var(--color-brand-red);
+  --color-deep-red: var(--color-deep-red);
+  --color-soft-green: var(--color-soft-green);
+  --color-soft-neutral: var(--color-soft-neutral);
+  --color-border: var(--color-border);
+  --color-text: var(--color-text);
+  --color-muted-text: var(--color-muted-text);
+  --color-white: var(--color-white);
+  --color-accent-gold: var(--color-accent-gold);
+
+  --radius-brand: 12px;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-serif {
+  font-family: 'Playfair Display', Georgia, Cambria, serif;
+}
+
+/* Custom subtle card styles enforcing 12px radius */
+.card-ruchi {
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-white);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-ruchi:hover {
+  border-color: #c4d7c0;
+  box-shadow: 0 8px 24px -6px rgba(22, 138, 74, 0.08);
+}
+
+/* Soft green pill badge for semantic tags/status */
+.badge-ruchi {
+  border-radius: 9999px;
+  background-color: var(--color-soft-green);
+  color: var(--color-primary-green);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+}
+
+/* Smooth Image Scale on Hover */
+.img-zoom-container {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.img-zoom-container img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.img-zoom-container:hover img {
+  transform: scale(1.05);
+}
+
+/* Custom scrollbar for drawer/menus */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f7f6f2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c2d6be;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #168a4a;
+}
+
+/* Keyframes for subtle entrance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
 }

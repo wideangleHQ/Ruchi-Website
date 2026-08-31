@@ -1,69 +1,58 @@
-import Image from "next/image";
+import { getCollections, getProducts } from "@/lib/shopify";
+import { HeroSection } from "@/components/home/hero-section";
+import { BrandIntro } from "@/components/home/brand-intro";
+import { CategoryShowcase } from "@/components/home/category-showcase";
+import { BestsellersSection } from "@/components/home/bestsellers-section";
+import { FeaturedCampaign } from "@/components/home/featured-campaign";
+import { StatsCounter } from "@/components/home/stats-counter";
+import { TrustPillars } from "@/components/home/trust-pillars";
+import { CustomerStories } from "@/components/home/customer-stories";
+import { RecipeShowcase } from "@/components/home/recipe-showcase";
+import { HeritageB2BSection } from "@/components/home/heritage-b2b-section";
+import { LegacySection } from "@/components/home/legacy-section";
 
-export default function Home() {
+export const revalidate = 60; // Revalidate every minute
+
+export default async function HomePage() {
+  const [products, collections] = await Promise.all([
+    getProducts({ first: 12 }),
+    getCollections(),
+  ]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="w-full">
+      {/* 1. Visually Striking Image-Led Hero */}
+      <HeroSection />
+
+      {/* 2. Editorial Brand Intro */}
+      <BrandIntro />
+
+      {/* 3. 3-Card Legacy Editorial Section */}
+      <LegacySection />
+
+      {/* 3. Category Showcase */}
+      <CategoryShowcase collections={collections} />
+
+      {/* 4. Product Bestsellers */}
+      <BestsellersSection products={products} />
+
+      {/* 5. Featured Campaign - The Sattvik Collection */}
+      <FeaturedCampaign />
+
+      {/* 6. Number Counter / Legacy Statistics */}
+      <StatsCounter />
+
+      {/* 7. Why Ruchi Trust Pillars */}
+      <TrustPillars />
+
+      {/* 8. Customer Stories / Testimonials */}
+      <CustomerStories />
+
+      {/* 9. Recipe Showcase — From the Kitchen */}
+      <RecipeShowcase />
+
+      {/* 10. Heritage Story & B2B Bulk Order Partnership */}
+      <HeritageB2BSection />
     </div>
   );
 }

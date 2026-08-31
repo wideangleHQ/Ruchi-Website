@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# mdBook generated output (docs/src/ is the source of truth)
+/docs/book/
+
 # production
 /build
 
