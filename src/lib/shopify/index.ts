@@ -30,6 +30,7 @@ import type {
   ShopifyRemoveFromCartOperation,
   ShopifyUpdateCartOperation,
 } from "./types";
+import { excludeHampers } from "./product-filters";
 
 export const TAGS = {
   products: "products",
@@ -41,9 +42,13 @@ function removeEdgesAndNodes<T>(connection: Connection<T>): T[] {
   return connection.edges.map((edge) => edge.node);
 }
 
-import { MOCK_COLLECTIONS, MOCK_PRODUCTS } from "./mock-data";
-
 // ---- Products ----
+//
+// Shopify is the single source of truth. These functions never substitute
+// unrelated placeholder/mock data on error or on a genuine zero-result
+// response — a real "no products" answer from Shopify must render as empty,
+// not silently swap in a different catalog. Failures are logged server-side
+// and degrade to empty/null so pages can render their own empty state.
 
 export async function getProduct(handle: string): Promise<Product | null> {
   try {
@@ -52,9 +57,10 @@ export async function getProduct(handle: string): Promise<Product | null> {
       variables: { handle },
       tags: [TAGS.products],
     });
-    return data.product ?? MOCK_PRODUCTS.find((p) => p.handle === handle) ?? null;
-  } catch {
-    return MOCK_PRODUCTS.find((p) => p.handle === handle) ?? null;
+    return data.product ?? null;
+  } catch (error) {
+    console.error(`[shopify] getProduct("${handle}") failed:`, error);
+    return null;
   }
 }
 
@@ -75,16 +81,10 @@ export async function getProducts({
       variables: { first, sortKey, reverse, query },
       tags: [TAGS.products],
     });
-    const products = removeEdgesAndNodes(data.products);
-    return products.length > 0 ? products : MOCK_PRODUCTS;
-  } catch {
-    if (query) {
-      const q = query.toLowerCase();
-      return MOCK_PRODUCTS.filter(
-        (p) => p.title.toLowerCase().includes(q) || p.tags.some((t) => t.includes(q))
-      );
-    }
-    return MOCK_PRODUCTS;
+    return excludeHampers(removeEdgesAndNodes(data.products));
+  } catch (error) {
+    console.error("[shopify] getProducts() failed:", error);
+    return [];
   }
 }
 
@@ -97,9 +97,10 @@ export async function getCollection(handle: string): Promise<Collection | null> 
       variables: { handle },
       tags: [TAGS.collections],
     });
-    return data.collection ?? MOCK_COLLECTIONS.find((c) => c.handle === handle) ?? null;
-  } catch {
-    return MOCK_COLLECTIONS.find((c) => c.handle === handle) ?? null;
+    return data.collection ?? null;
+  } catch (error) {
+    console.error(`[shopify] getCollection("${handle}") failed:`, error);
+    return null;
   }
 }
 
@@ -110,10 +111,10 @@ export async function getCollections(): Promise<Collection[]> {
       variables: { first: 100 },
       tags: [TAGS.collections],
     });
-    const collections = removeEdgesAndNodes(data.collections);
-    return collections.length > 0 ? collections : MOCK_COLLECTIONS;
-  } catch {
-    return MOCK_COLLECTIONS;
+    return removeEdgesAndNodes(data.collections);
+  } catch (error) {
+    console.error("[shopify] getCollections() failed:", error);
+    return [];
   }
 }
 
@@ -134,14 +135,10 @@ export async function getCollectionProducts({
       variables: { handle, first, sortKey, reverse },
       tags: [TAGS.products, TAGS.collections],
     });
-
-    if (data.collection) {
-      const prods = removeEdgesAndNodes(data.collection.products);
-      if (prods.length > 0) return prods;
-    }
-    return MOCK_PRODUCTS.filter((p) => p.tags.includes(handle));
-  } catch {
-    return MOCK_PRODUCTS.filter((p) => p.tags.includes(handle));
+    return data.collection ? excludeHampers(removeEdgesAndNodes(data.collection.products)) : [];
+  } catch (error) {
+    console.error(`[shopify] getCollectionProducts("${handle}") failed:`, error);
+    return [];
   }
 }
 

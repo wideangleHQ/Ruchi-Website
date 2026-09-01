@@ -1,111 +1,58 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 
-interface CounterItemProps {
-  target: number;
-  suffix: string;
+interface StatData {
+  displayValue: string;
   label: string;
-  description: string;
-}
-
-function CounterItem({ target, suffix, label, description }: CounterItemProps) {
-  const [count, setCount] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!isVisible) return;
-
-    // Check for prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-      const timer = setTimeout(() => setCount(target), 0);
-      return () => clearTimeout(timer);
-    }
-
-    let start = 0;
-    const duration = 1500;
-    const stepTime = 20;
-    const steps = duration / stepTime;
-    const increment = target / steps;
-
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, stepTime);
-
-    return () => clearInterval(timer);
-  }, [isVisible, target]);
-
-  return (
-    <div ref={ref} className="text-center p-6 rounded-[12px] bg-white border border-border/60 shadow-xs">
-      <div className="font-serif text-4xl sm:text-5xl font-bold text-primary-green tracking-tight mb-1">
-        {count}
-        {suffix}
-      </div>
-      <div className="text-base font-semibold text-text mb-1">{label}</div>
-      <p className="text-xs text-muted-text max-w-xs mx-auto leading-relaxed">
-        {description}
-      </p>
-    </div>
-  );
 }
 
 export function StatsCounter() {
-  const stats = [
+  const stats: StatData[] = [
     {
-      target: 50,
-      suffix: "+",
-      label: "Years of Legacy",
-      description: "Mastering the art of pure spice combinations since 1976.",
+      displayValue: "1M +",
+      label: "Happy Customers across the globe",
     },
     {
-      target: 1000,
-      suffix: "+",
-      label: "Happy Customers",
-      description: "Savoring authentic taste across generations of Indian homes.",
+      displayValue: "50+",
+      label: "Years of legacy",
     },
     {
-      target: 20,
-      suffix: "+",
-      label: "Categories",
-      description: "Bringing authentic flavour, pasta & staples into your kitchen.",
+      displayValue: "14+",
+      label: "States Connected",
     },
   ];
 
   return (
-    <section className="py-16 bg-[#f7f6f2] border-y border-border/60">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <section className="relative w-full py-12 sm:py-16 bg-white overflow-hidden border-y border-gray-200/60">
+      {/* Subtle Light Indian Pattern Background */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-30"
+        style={{
+          backgroundImage: `radial-gradient(#168a4a 0.6px, transparent 0.6px)`,
+          backgroundSize: `24px 24px`,
+          opacity: 0.05,
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#168a4a] items-center">
           {stats.map((stat, idx) => (
-            <CounterItem key={idx} {...stat} />
+            <div
+              key={idx}
+              className="flex flex-col items-center justify-center text-center py-6 md:py-2 px-4"
+            >
+              <div className="font-sans text-5xl sm:text-6xl lg:text-7xl font-extrabold text-[#168a4a] tracking-tight mb-2">
+                {stat.displayValue}
+              </div>
+              <p className="font-sans text-base sm:text-lg text-gray-900 font-semibold max-w-[240px] mx-auto leading-snug">
+                {stat.label}
+              </p>
+            </div>
           ))}
         </div>
       </div>
     </section>
   );
 }
+

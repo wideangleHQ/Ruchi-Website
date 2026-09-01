@@ -28,8 +28,8 @@ export function TrustPillars() {
   ];
 
   return (
-    <section className="py-20 bg-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+    <section className="py-16 sm:py-20 bg-transparent">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 text-center">
         <span className="text-xs font-bold uppercase tracking-widest text-primary-green mb-1 block">
           THE RUCHI COMMITMENT
         </span>

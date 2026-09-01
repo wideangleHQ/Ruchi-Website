@@ -15,45 +15,8 @@ export function HeritageB2BSection() {
   };
 
   return (
-    <section id="heritage" className="py-20 bg-[#f7f6f2] border-t border-border">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-20">
-        {/* Heritage Story Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-6 relative aspect-[4/3] rounded-[12px] overflow-hidden bg-white border border-border shadow-lg">
-            <Image
-              src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?q=80&w=1000&auto=format&fit=crop"
-              alt="Ruchi Foodline Heritage & Spices"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 text-white">
-              <span className="text-xs font-bold uppercase tracking-widest text-accent-gold">ESTABLISHED 1976</span>
-              <h3 className="font-serif text-2xl font-bold mt-1">Five Decades of Authentic Taste</h3>
-            </div>
-          </div>
-
-          <div className="lg:col-span-6 space-y-6">
-            <span className="text-xs font-bold uppercase tracking-widest text-primary-green">OUR HERITAGE STORY</span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-text leading-tight">
-              Preserving Indian Food Culture Across Generations
-            </h2>
-            <p className="text-sm font-medium text-text/80 leading-relaxed">
-              Founded with a passion for uncompromised purity, Ruchi Foodline has grown into one of India’s most trusted FMCG brands, delivering farm-fresh quality across generations.
-            </p>
-            <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="p-4 rounded-[12px] bg-white border border-border/80">
-                <span className="font-serif font-bold text-xl text-primary-green block">100%</span>
-                <span className="text-xs font-semibold text-text/70">Pure & Unadulterated</span>
-              </div>
-              <div className="p-4 rounded-[12px] bg-white border border-border/80">
-                <span className="font-serif font-bold text-xl text-primary-green block">State-of-Art</span>
-                <span className="text-xs font-semibold text-text/70">Automated Processing</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
+    <section id="heritage" className="py-16 sm:py-20 bg-transparent border-t border-border">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Restrained B2B Bulk Order Section */}
         <div id="b2b" className="rounded-[12px] bg-white border border-border p-8 sm:p-12 shadow-xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">

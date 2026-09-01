@@ -28,7 +28,6 @@ export const productVariantFragment = /* GraphQL */ `
     id
     title
     availableForSale
-    quantityAvailable
     selectedOptions {
       name
       value
@@ -86,8 +85,15 @@ export const productFragment = /* GraphQL */ `
     }
     tags
     updatedAt
+    collections(first: 10) {
+      edges {
+        node {
+          handle
+          title
+        }
+      }
+    }
   }
-  ${moneyFragment}
   ${imageFragment}
   ${productVariantFragment}
   ${seoFragment}
@@ -95,6 +101,7 @@ export const productFragment = /* GraphQL */ `
 
 export const collectionFragment = /* GraphQL */ `
   fragment collection on Collection {
+    id
     handle
     title
     description

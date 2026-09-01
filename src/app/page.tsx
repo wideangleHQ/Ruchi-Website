@@ -1,58 +1,73 @@
-import { getCollections, getProducts } from "@/lib/shopify";
+import { Suspense } from "react";
+import Image from "next/image";
+import { getCollections } from "@/lib/shopify";
 import { HeroSection } from "@/components/home/hero-section";
-import { BrandIntro } from "@/components/home/brand-intro";
-import { CategoryShowcase } from "@/components/home/category-showcase";
-import { BestsellersSection } from "@/components/home/bestsellers-section";
 import { FeaturedCampaign } from "@/components/home/featured-campaign";
 import { StatsCounter } from "@/components/home/stats-counter";
-import { TrustPillars } from "@/components/home/trust-pillars";
+import { PromotionalStrip } from "@/components/home/promotional-strip";
 import { CustomerStories } from "@/components/home/customer-stories";
 import { RecipeShowcase } from "@/components/home/recipe-showcase";
 import { HeritageB2BSection } from "@/components/home/heritage-b2b-section";
-import { LegacySection } from "@/components/home/legacy-section";
+import { CategoriesSection } from "@/components/home/categories-section";
+import { PromoAdsSection } from "@/components/home/promo-ads-section";
+import { ShopProductsSection } from "@/components/home/shop-products-section";
+import { ShopProductsSkeleton } from "@/components/home/shop-products-skeleton";
+import pageBg from "@/assets/Images/Page Background.jpg";
 
 export const revalidate = 60; // Revalidate every minute
 
 export default async function HomePage() {
-  const [products, collections] = await Promise.all([
-    getProducts({ first: 12 }),
-    getCollections(),
-  ]);
+  const collections = await getCollections();
 
   return (
-    <div className="w-full">
-      {/* 1. Visually Striking Image-Led Hero */}
-      <HeroSection />
+    <div className="relative w-full bg-white overflow-hidden">
+      {/* Page Background Layer: 20% Opacity Page Background.jpg Set as Background Only */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-white">
+        <Image
+          src={pageBg}
+          alt="Page Background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-top opacity-20 w-full h-full"
+        />
+      </div>
 
-      {/* 2. Editorial Brand Intro */}
-      <BrandIntro />
+      {/* Home Page Sections Layer */}
+      <div className="relative z-10 w-full">
+        {/* 1. Visually Striking Image-Led Hero */}
+        <HeroSection />
 
-      {/* 3. 3-Card Legacy Editorial Section */}
-      <LegacySection />
+        {/* 2. Our Categories */}
+        <CategoriesSection collections={collections} />
 
-      {/* 3. Category Showcase */}
-      <CategoryShowcase collections={collections} />
+        {/* 3. Promotional Banner Ads */}
+        <PromoAdsSection />
 
-      {/* 4. Product Bestsellers */}
-      <BestsellersSection products={products} />
+        {/* 4. Shop Our Products */}
+        <Suspense fallback={<ShopProductsSkeleton />}>
+          <ShopProductsSection collections={collections} />
+        </Suspense>
 
-      {/* 5. Featured Campaign - The Sattvik Collection */}
-      <FeaturedCampaign />
+        {/* 5. Featured Campaign - The Sattvik Collection */}
+        <FeaturedCampaign />
 
-      {/* 6. Number Counter / Legacy Statistics */}
-      <StatsCounter />
+        {/* 6. Number Counter / Legacy Statistics */}
+        <StatsCounter />
 
-      {/* 7. Why Ruchi Trust Pillars */}
-      <TrustPillars />
+        {/* 8. Promotional Strip Ad Banner */}
+        <PromotionalStrip />
 
-      {/* 8. Customer Stories / Testimonials */}
-      <CustomerStories />
+        {/* 9. Customer Stories / Testimonials */}
+        <CustomerStories />
 
-      {/* 9. Recipe Showcase — From the Kitchen */}
-      <RecipeShowcase />
+        {/* 9. Recipe Showcase — From the Kitchen */}
+        <RecipeShowcase />
 
-      {/* 10. Heritage Story & B2B Bulk Order Partnership */}
-      <HeritageB2BSection />
+        {/* 10. Heritage Story & B2B Bulk Order Partnership */}
+        <HeritageB2BSection />
+      </div>
     </div>
   );
 }
+

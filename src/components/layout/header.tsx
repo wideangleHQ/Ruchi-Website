@@ -3,117 +3,143 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, ShoppingBag, Menu, X, Heart, User, ArrowRight } from "lucide-react";
-import { useCart } from "../cart/cart-context";
+import { usePathname } from "next/navigation";
+import { ShoppingBag, Menu, X, User, ArrowRight, Search } from "lucide-react";
 import { AnnouncementBar } from "./announcement-bar";
+import { HeaderSearch } from "./header-search";
 
-export function Header() {
-  const { openCart, totalQuantity } = useCart();
+const primaryNavLinks = [
+  { label: "Home", href: "/" },
+  { label: "Shop", href: "/products" },
+  { label: "About Us", href: "/#heritage" },
+  { label: "Bulk Order", href: "/#b2b" },
+  { label: "Blog", href: "/#recipes" },
+];
+
+export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const navLinks = [
-    { label: "ALL PRODUCTS", href: "/products" },
-    { label: "COLLECTIONS", href: "/collections" },
-    { label: "BULK ORDER", href: "/#b2b" },
-    { label: "RECIPES", href: "/#recipes" },
-    { label: "ABOUT US", href: "/#heritage" },
-    { label: "CONTACT US", href: "/#footer" },
-  ];
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-border shadow-xs transition-all">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200/80 transition-all shadow-2xs">
       <AnnouncementBar />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
+      {/* TOP ROW (Row 1): 58–64px height. Logo (Left) | Search (Center) | Account, Cart, SHOP NOW (Right) */}
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <div className="flex h-14 sm:h-16 items-center justify-between gap-3 sm:gap-4 lg:gap-6">
           {/* Mobile Menu Button */}
-          <div className="flex lg:hidden">
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 text-text hover:text-primary-green transition-colors"
-              aria-label="Open menu"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </div>
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="flex lg:hidden p-1.5 -ml-1 text-gray-800 hover:text-[#168a4a] transition-colors"
+            aria-label="Open menu"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group py-1">
-            <div className="relative w-16 sm:w-20 h-14 sm:h-16 overflow-hidden flex items-center justify-center">
+          {/* LEFT: Ruchi Logo */}
+          <Link href="/" className="flex items-center group py-1 flex-shrink-0">
+            <div className="relative w-36 sm:w-44 lg:w-48 h-10 sm:h-12 flex items-center justify-start">
               <Image
-                src="/images/ruchi-logo.png"
+                src="/images/ruchi-50yrs-logo.png"
                 alt="Ruchi Foodline 50 Years Logo"
                 fill
-                className="object-contain"
+                className="object-contain object-left"
                 priority
+                unoptimized
               />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-text group-hover:text-primary-green transition-colors">
-                RUCHI
-              </span>
-              <span className="text-[9px] uppercase tracking-widest text-muted-text font-semibold">
-                FOODLINE • ESTD 1976
-              </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-xs font-semibold tracking-wider text-text hover:text-primary-green transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary-green hover:after:w-full after:transition-all"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          {/* CENTER: Desktop Search Bar (Compact Height, Pill Shape) */}
+          <div className="hidden lg:block flex-1 max-w-md xl:max-w-lg mx-2 xl:mx-4">
+            <HeaderSearch />
+          </div>
 
-          {/* Icons: Search, Wishlist/Account, Cart */}
-          <div className="flex items-center space-x-3 sm:space-x-4">
+          {/* RIGHT: Utility Actions (Account | Cart | SHOP NOW) */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+            {/* Mobile/Tablet Search Icon Toggle */}
             <button
-              onClick={() => setIsSearchOpen(true)}
-              className="p-2 text-text hover:text-primary-green hover:bg-soft-green/50 rounded-full transition-colors"
-              aria-label="Search"
+              onClick={() => setIsMobileSearchOpen((v) => !v)}
+              className="lg:hidden p-2 text-gray-800 hover:text-[#168a4a] hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Toggle search"
+              aria-expanded={isMobileSearchOpen}
             >
               <Search className="w-5 h-5" />
             </button>
 
-            <Link
-              href="/#wishlist"
-              className="hidden sm:flex p-2 text-text hover:text-primary-green hover:bg-soft-green/50 rounded-full transition-colors"
-              aria-label="Wishlist"
-            >
-              <Heart className="w-5 h-5" />
-            </Link>
-
+            {/* Account Icon */}
             <Link
               href="/#account"
-              className="hidden sm:flex p-2 text-text hover:text-primary-green hover:bg-soft-green/50 rounded-full transition-colors"
+              className="hidden sm:flex p-2 text-gray-800 hover:text-[#168a4a] hover:bg-gray-100 rounded-full transition-colors"
               aria-label="Account"
             >
               <User className="w-5 h-5" />
             </Link>
 
             {/* Cart Button */}
-            <button
-              onClick={openCart}
-              className="relative flex items-center gap-2 bg-soft-green border border-border/80 px-3.5 py-2 rounded-[12px] text-text hover:bg-primary-green hover:text-white transition-all shadow-xs group"
+            <Link
+              href="/cart"
+              className="relative flex items-center gap-1.5 p-2 text-gray-800 hover:text-[#168a4a] hover:bg-gray-100 rounded-full transition-colors"
               aria-label="Cart"
             >
-              <ShoppingBag className="w-5 h-5 text-primary-green group-hover:text-white transition-colors" />
-              <span className="hidden sm:inline text-xs font-semibold">Cart</span>
-              {totalQuantity > 0 && (
-                <span className="bg-primary-green text-white text-[11px] font-bold px-2 py-0.5 rounded-full group-hover:bg-white group-hover:text-primary-green transition-colors">
-                  {totalQuantity}
+              <ShoppingBag className="w-5 h-5" />
+              {cartQuantity > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-[#168a4a] text-white text-[10px] sm:text-[11px] font-bold min-w-[17px] h-4 sm:h-4.5 flex items-center justify-center px-1 rounded-full shadow-2xs">
+                  {cartQuantity}
                 </span>
               )}
-            </button>
+            </Link>
+
+            {/* SHOP NOW Button */}
+            <Link
+              href="/products"
+              className="hidden sm:inline-flex items-center bg-[#c62828] hover:bg-[#a82020] text-white text-[13px] font-semibold tracking-wider uppercase px-4 lg:px-5 py-2 rounded-full transition-all shadow-2xs active:scale-95 ml-1"
+            >
+              SHOP NOW
+            </Link>
           </div>
+        </div>
+      </div>
+
+      {/* Mobile Expandable Search Row */}
+      {isMobileSearchOpen && (
+        <div className="lg:hidden border-t border-gray-200/80 px-4 py-2.5 bg-white">
+          <HeaderSearch autoFocus onNavigate={() => setIsMobileSearchOpen(false)} />
+        </div>
+      )}
+
+      {/* SECOND ROW (Row 2): 38–42px height. Spread Content (Left: Primary Nav | Right: Contact Us) */}
+      <div className="hidden lg:block border-t border-gray-200/70 bg-white">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 flex items-center justify-between h-10">
+          {/* LEFT: Home | Shop | About Us | Bulk Order | Blog */}
+          <nav className="flex items-center gap-6 lg:gap-8 xl:gap-9">
+            {primaryNavLinks.map((link) => {
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors relative py-1 ${
+                    isActive
+                      ? "text-[#c62828] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#c62828]"
+                      : "text-gray-800 hover:text-[#c62828] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#c62828] hover:after:w-full after:transition-all"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* RIGHT: Contact Us */}
+          <Link
+            href="/#heritage"
+            className="text-sm font-medium text-gray-800 hover:text-[#c62828] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#c62828] hover:after:w-full after:transition-all"
+          >
+            Contact Us
+          </Link>
         </div>
       </div>
 
@@ -126,94 +152,46 @@ export function Header() {
           />
           <div className="fixed inset-y-0 left-0 w-4/5 max-w-sm bg-white shadow-2xl flex flex-col justify-between p-6">
             <div>
-              <div className="flex items-center justify-between border-b border-border pb-4">
-                <div className="flex items-center gap-2">
-                  <div className="relative w-14 h-12 overflow-hidden flex items-center justify-center">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-4">
+                <div className="flex items-center">
+                  <div className="relative w-36 h-12 flex items-center justify-center">
                     <Image
-                      src="/images/ruchi-logo.png"
+                      src="/images/ruchi-50yrs-logo.png"
                       alt="Ruchi Foodline Logo"
                       fill
-                      className="object-contain"
+                      className="object-contain object-left"
+                      unoptimized
                     />
                   </div>
-                  <span className="font-serif font-bold text-lg text-text">RUCHI</span>
                 </div>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 text-muted-text hover:text-text"
+                  className="p-2 text-gray-500 hover:text-gray-900"
+                  aria-label="Close menu"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="mt-6 flex flex-col space-y-4">
-                {navLinks.map((link) => (
+              <div className="mt-6 flex flex-col space-y-2.5">
+                {[...primaryNavLinks, { label: "Contact Us", href: "/#heritage" }].map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-sm font-semibold text-text hover:text-primary-green py-2 border-b border-border/50 flex justify-between items-center"
+                    className="text-sm font-medium text-gray-900 hover:text-[#c62828] py-2 border-b border-gray-100 flex justify-between items-center"
                   >
                     <span>{link.label}</span>
-                    <ArrowRight className="w-4 h-4 text-muted-text" />
+                    <ArrowRight className="w-4 h-4 text-gray-400" />
                   </Link>
                 ))}
               </div>
             </div>
 
-            <div className="border-t border-border pt-4 text-xs text-muted-text space-y-2">
-              <p className="font-medium text-text">Ruchi Foodline Customer Service</p>
+            <div className="border-t border-gray-200 pt-4 text-xs text-gray-500 space-y-2">
+              <p className="font-semibold text-gray-900">Ruchi Foodline Customer Service</p>
               <p>Email: care@ruchifoodline.com</p>
               <p>Toll-Free: 1800-123-7824</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Search Modal */}
-      {isSearchOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
-          <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-xs"
-            onClick={() => setIsSearchOpen(false)}
-          />
-          <div className="relative w-full max-w-2xl bg-white rounded-[12px] shadow-2xl p-4 z-10 border border-border">
-            <div className="flex items-center border-b border-border pb-3 px-2">
-              <Search className="w-5 h-5 text-muted-text mr-3" />
-              <input
-                type="text"
-                placeholder="Search Biryani Masala, Turmeric, Ready Mix..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full text-base focus:outline-none text-text placeholder:text-muted-text"
-                autoFocus
-              />
-              <button
-                onClick={() => setIsSearchOpen(false)}
-                className="p-1 text-muted-text hover:text-text ml-2"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="py-4">
-              <p className="text-xs font-semibold text-muted-text uppercase tracking-wider mb-2">
-                Popular Searches
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {["Biryani Masala", "Turmeric Powder", "Chicken Masala", "Sattvik Collection", "Fusilli Pasta"].map(
-                  (term) => (
-                    <Link
-                      key={term}
-                      href={`/products?query=${encodeURIComponent(term)}`}
-                      onClick={() => setIsSearchOpen(false)}
-                      className="text-xs bg-soft-green text-primary-green px-3 py-1.5 rounded-[8px] font-medium hover:bg-primary-green hover:text-white transition-colors"
-                    >
-                      {term}
-                    </Link>
-                  )
-                )}
-              </div>
             </div>
           </div>
         </div>
@@ -221,3 +199,5 @@ export function Header() {
     </header>
   );
 }
+
+

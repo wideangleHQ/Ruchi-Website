@@ -12,7 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated mdBook documentation output/vendored assets, not app source.
+    "docs/**",
   ]),
 ]);
-
 export default eslintConfig;

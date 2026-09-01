@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { getProduct, getProducts } from "@/lib/shopify";
 import { AddToCartButton } from "@/components/product/add-to-cart-button";
 import { ProductCard } from "@/components/product/product-card";
-import { Star, ChevronRight, Sparkles } from "lucide-react";
+import { ChevronRight, Sparkles } from "lucide-react";
 
 type Props = {
   params: Promise<{ handle: string }>;
@@ -44,7 +44,6 @@ export default async function ProductPage({ params }: Props) {
   const relatedProducts = (await getProducts({ first: 4 })).filter((p) => p.handle !== handle);
   const images = product.images.edges.map((edge) => edge.node);
   const variants = product.variants.edges.map((edge) => edge.node);
-  const price = product.priceRange.minVariantPrice.amount;
 
   return (
     <div className="bg-white py-10">
@@ -107,32 +106,6 @@ export default async function ProductPage({ params }: Props) {
               <h1 className="font-serif text-3xl sm:text-4xl font-bold text-text tracking-tight">
                 {product.title}
               </h1>
-
-              {/* Rating */}
-              <div className="flex items-center gap-2 mt-2">
-                <div className="flex text-amber-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <span className="text-xs font-semibold text-text">4.9 / 5.0</span>
-                <span className="text-xs text-muted-text">(128 Verified Reviews)</span>
-              </div>
-            </div>
-
-            {/* Price Display */}
-            <div className="flex items-baseline gap-3 pt-2 border-t border-border">
-              <span className="font-serif text-3xl font-bold text-text">
-                ₹{parseFloat(price).toFixed(2)}
-              </span>
-              {variants[0]?.compareAtPrice && (
-                <span className="text-sm text-muted-text line-through">
-                  ₹{parseFloat(variants[0].compareAtPrice.amount).toFixed(2)}
-                </span>
-              )}
-              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-[6px]">
-                Inclusive of all taxes
-              </span>
             </div>
 
             {/* Description */}
@@ -142,12 +115,7 @@ export default async function ProductPage({ params }: Props) {
 
             {/* Add to Cart Component */}
             <div className="pt-2">
-              <AddToCartButton
-                variants={variants}
-                productTitle={product.title}
-                handle={product.handle}
-                featuredImageUrl={product.featuredImage?.url}
-              />
+              <AddToCartButton variants={variants} />
             </div>
           </div>
         </div>

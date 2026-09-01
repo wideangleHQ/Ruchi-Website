@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { getCollections } from "@/lib/shopify";
 import { ArrowRight } from "lucide-react";
+import { SafeImage } from "@/components/ui/safe-image";
 
 export const metadata: Metadata = {
   title: "Collections",
@@ -36,10 +36,12 @@ export default async function CollectionsOverviewPage() {
             >
               <div>
                 <div className="relative aspect-[4/3] w-full rounded-[8px] overflow-hidden bg-white border border-border/60 mb-4">
-                  <Image
-                    src={col.image?.url || "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=800"}
-                    alt={col.title}
+                  <SafeImage
+                    src={col.image?.url ?? ""}
+                    alt={col.image?.altText ?? col.title}
+                    fallbackTitle={col.title}
                     fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>

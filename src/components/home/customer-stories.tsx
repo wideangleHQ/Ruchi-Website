@@ -1,78 +1,116 @@
 "use client";
 
 import React from "react";
-import { Star, Quote } from "lucide-react";
+import { Star } from "lucide-react";
+
+interface Review {
+  quote: string;
+  author: string;
+  location: string;
+  initial: string;
+}
+
+const reviews: Review[] = [
+  {
+    quote: "Ruchi Biryani Masala has been a staple in our home. The authenticity and aroma simply taste like home.",
+    author: "Anjali Sharma",
+    location: "Cuttack, Odisha",
+    initial: "A",
+  },
+  {
+    quote: "Their turmeric powder has rich natural curcuma color without any artificial additives. Pure traditional taste.",
+    author: "Rajesh Kumar",
+    location: "Bhubaneswar",
+    initial: "R",
+  },
+  {
+    quote: "The Sattvik collection is a true blessing during festive days. Uncompromised purity for our kitchen.",
+    author: "Sunita Das",
+    location: "Puri",
+    initial: "S",
+  },
+  {
+    quote: "Authentic spices with incredible freshness. Takes every curry to the next level.",
+    author: "Priya Mohanty",
+    location: "Sambalpur",
+    initial: "P",
+  },
+  {
+    quote: "Generations of trust in every packet. Ruchi Garam Masala is essential in all our family recipes.",
+    author: "Amitabh Nayak",
+    location: "Rourkela",
+    initial: "A",
+  },
+];
 
 export function CustomerStories() {
-  const testimonials = [
-    {
-      quote:
-        "Blandness or excess color: Ruchi Biryani Masala has been a game-changer in our home. The authenticity and aroma are unmatched. Simply taste like home.",
-      author: "Anjali Sharma",
-      role: "Homemaker, Cuttack",
-      initial: "A",
-    },
-    {
-      quote:
-        "Their turmeric powder has rich Salem curcuma color without any artificial additive. Pure taste and aroma without compromising on the traditional recipe. Highly recommended!",
-      author: "Rajesh Kumar",
-      role: "Food Enthusiast, Bhubaneswar",
-      initial: "R",
-    },
-    {
-      quote:
-        "The Sattvik kit is a blessing during festive days. Fresh, aromatic, and perfectly crafted for our traditions.",
-      author: "Sunita Das",
-      role: "Teacher, Puri",
-      initial: "S",
-    },
-  ];
+  // Duplicate array to enable seamless infinite marquee loop
+  const marqueeReviews = [...reviews, ...reviews];
 
   return (
-    <section className="py-20 bg-[#f7f6f2] border-t border-border/60">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-text tracking-tight mb-2">
-          Customer Stories
-        </h2>
-        <div className="w-10 h-0.5 bg-[#c62828] mx-auto mb-14 opacity-80" />
+    <section className="py-16 sm:py-24 bg-white border-t border-gray-200/60 overflow-x-hidden">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 lg:gap-12">
+          {/* LEFT SIDE (~35% Width): ONLY HEADING + PARAGRAPH */}
+          <div className="w-full lg:w-[34%] xl:w-[35%] flex flex-col justify-center flex-shrink-0">
+            <h2 className="tracking-tight leading-[1.15] mb-4">
+              <span className="font-sans font-bold text-[#171717] text-3xl sm:text-4xl lg:text-5xl block">
+                Real reviews
+              </span>
+              <span className="font-serif italic font-normal text-[#168a4a] text-3xl sm:text-4xl lg:text-5xl block mt-1">
+                from RUCHI customers
+              </span>
+            </h2>
+            <p className="font-sans font-medium text-sm sm:text-base text-gray-700 leading-relaxed max-w-md">
+              Discover authentic culinary stories and festive memories shared by families across India who cook with Ruchi spices every day.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-          {testimonials.map((t, idx) => (
-            <div
-              key={idx}
-              className="relative p-7 rounded-[12px] border border-border bg-white shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between"
-            >
-              <div>
-                {/* Header Rating & Quote Icon */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                    ))}
+          {/* RIGHT SIDE: Continuous Marquee Slider Bleeding to Right Viewport Edge */}
+          <div className="w-full lg:flex-1 relative overflow-hidden lg:mr-[-100vw] lg:pr-[100vw] py-2">
+            {/* MANDATORY Left Fade Gradient Overlay (PURE WHITE ONLY) */}
+            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-24 lg:w-32 bg-gradient-to-r from-white via-white/90 to-transparent z-20" />
+
+            {/* Continuous Marquee Wrapper */}
+            <div className="flex animate-marquee gap-5 py-4">
+              {marqueeReviews.map((review, idx) => (
+                <div
+                  key={`${review.author}-${idx}`}
+                  className="w-[280px] sm:w-[340px] flex-shrink-0 bg-white rounded-2xl p-6 border border-gray-200/90 hover:border-[#168a4a]/40 shadow-2xs hover:shadow-xs transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Star Rating — Green Accent Treatment */}
+                    <div className="flex items-center gap-1 text-[#168a4a] mb-3">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-[#168a4a] text-[#168a4a]" />
+                      ))}
+                    </div>
+                    {/* Review Quote — Black Typography (Medium Weight) */}
+                    <p className="text-xs sm:text-sm text-[#171717] font-medium leading-relaxed mb-6 italic font-sans">
+                      &ldquo;{review.quote}&rdquo;
+                    </p>
                   </div>
-                  <Quote className="w-6 h-6 text-accent-terracotta/30" />
-                </div>
 
-                {/* Quote Text */}
-                <p className="text-xs sm:text-sm text-text font-medium leading-relaxed mb-6 italic">
-                  &quot;{t.quote}&quot;
-                </p>
-              </div>
-
-              {/* Author Footer */}
-              <div className="flex items-center gap-3 pt-4 border-t border-border/50">
-                <div className="w-10 h-10 rounded-full bg-soft-green text-primary-green font-bold text-sm flex items-center justify-center border border-border">
-                  {t.initial}
+                  {/* Customer Info Footer — Black Typography & Green Avatar Accent */}
+                  <div className="flex items-center gap-3 pt-4 border-t border-gray-100 font-sans">
+                    <div className="w-10 h-10 rounded-full bg-[#168a4a]/10 text-[#168a4a] font-bold text-sm flex items-center justify-center border border-[#168a4a]/20">
+                      {review.initial}
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-[#171717]">{review.author}</h3>
+                      <p className="text-[11px] text-gray-500 font-medium">{review.location}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-xs font-bold text-text">{t.author}</h4>
-                  <p className="text-[11px] text-muted-text">{t.role}</p>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
+
+
+

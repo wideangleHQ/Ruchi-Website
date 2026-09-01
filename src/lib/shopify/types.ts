@@ -32,7 +32,6 @@ export type ProductVariant = {
   id: string;
   title: string;
   availableForSale: boolean;
-  quantityAvailable: number | null;
   selectedOptions: Array<{ name: string; value: string }>;
   price: Money;
   compareAtPrice: Money | null;
@@ -56,9 +55,11 @@ export type Product = {
   seo: SEO;
   tags: string[];
   updatedAt: string;
+  collections: Connection<{ handle: string; title: string }>;
 };
 
 export type Collection = {
+  id: string;
   handle: string;
   title: string;
   description: string;

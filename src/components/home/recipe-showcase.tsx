@@ -1,234 +1,179 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
-import { Clock, ArrowRight, X, Utensils } from "lucide-react";
+import Link from "next/link";
+import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 
-interface Recipe {
+interface BlogPost {
   id: string;
   title: string;
-  category: "VEGETARIAN" | "NON-VEG";
-  cookTime: string;
-  servings: string;
-  description: string;
+  excerpt: string;
+  date: string;
   imageUrl: string;
-  spiceUsed: string;
-  ingredients: string[];
-  instructions: string[];
+  slug: string;
+  category?: string;
 }
 
 export function RecipeShowcase() {
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const recipes: Recipe[] = [
+  const blogPosts: BlogPost[] = [
     {
       id: "1",
-      title: "Classic Restaurant-Style Dal Makhani",
-      category: "VEGETARIAN",
-      cookTime: "45 mins",
-      servings: "4 Servings",
-      description: "Rich, creamy, and deeply flavorful black lentils simmered with Ruchi Garam Masala and pure butter.",
-      imageUrl: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=800&auto=format&fit=crop",
-      spiceUsed: "Ruchi Special Garam Masala & Kasturi Methi",
-      ingredients: [
-        "1 cup Whole Black Lentils (Urad Dal)",
-        "1/4 cup Kidney Beans (Rajma)",
-        "2 tsp Ruchi Special Garam Masala",
-        "1 tsp Ruchi Kashmiri Red Chilli Powder",
-        "2 tbsp Butter & 3 tbsp Fresh Cream",
-      ],
-      instructions: [
-        "Soak lentils and kidney beans overnight for 8 hours.",
-        "Pressure cook with salt until soft.",
-        "Simmer on low heat with Ruchi Kashmiri Chilli Powder, butter, and cream.",
-        "Finish with Ruchi Garam Masala and serve piping hot with Naan.",
-      ],
+      title: "The Art of Blending: How We Craft Our Signature Masalas",
+      excerpt: "Discover the time-honored techniques and precision that goes into creating each blend of our authentic spice masalas.",
+      date: "March 15, 2024",
+      imageUrl: "https://images.unsplash.com/photo-1596040033229-a0b4c39d3f70?q=80&w=800&auto=format&fit=crop",
+      slug: "art-of-blending-masalas",
+      category: "Behind the Spice"
     },
     {
       id: "2",
-      title: "Sattvik Punjabi Chole Bhature",
-      category: "VEGETARIAN",
-      cookTime: "1 hr 20 mins",
-      servings: "6 Servings",
-      description: "Tangy, spice-infused chickpea curry prepared with Sattvik Ruchi Chole Masala without onion or garlic.",
-      imageUrl: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?q=80&w=800&auto=format&fit=crop",
-      spiceUsed: "Ruchi Sattvik Chole Masala",
-      ingredients: [
-        "2 cups Kabuli Chana (soaked)",
-        "2 tbsp Ruchi Sattvik Chole Masala",
-        "1 tsp Ruchi Turmeric Powder",
-        "2 Tea bags for rich dark colour",
-        "Fresh coriander and lemon juice",
-      ],
-      instructions: [
-        "Boil chickpeas with tea bags and whole spices until tender.",
-        "Prepare tomato pulp puree and cook with Ruchi Sattvik Chole Masala.",
-        "Combine and simmer for 20 minutes for deep infusion.",
-        "Serve hot with fluffy puffed Bhaturas.",
-      ],
+      title: "5 Essential Spices Every Indian Kitchen Must Have",
+      excerpt: "From turmeric to cumin, explore the fundamental spices that form the backbone of authentic Indian cooking.",
+      date: "March 10, 2024",
+      imageUrl: "https://images.unsplash.com/photo-1599909533661-aa64f4bf5754?q=80&w=800&auto=format&fit=crop",
+      slug: "essential-spices-indian-kitchen",
+      category: "Kitchen Essentials"
     },
     {
       id: "3",
-      title: "Aromatic Chicken Dum Biryani",
-      category: "NON-VEG",
-      cookTime: "2 hrs",
-      servings: "6 Servings",
-      description: "Layered Basmati rice and marinated chicken slow-cooked to royal perfection with Ruchi Biryani Masala.",
+      title: "Farm to Table: Our Journey of Sourcing Premium Spices",
+      excerpt: "Follow the journey of our spices from carefully selected farms across India to your kitchen table.",
+      date: "March 5, 2024",
+      imageUrl: "https://images.unsplash.com/photo-1631452180539-96aca7d48617?q=80&w=800&auto=format&fit=crop",
+      slug: "farm-to-table-journey",
+      category: "Our Story"
+    },
+    {
+      id: "4",
+      title: "Perfect Biryani: Mastering the Royal Recipe at Home",
+      excerpt: "Learn the secrets to creating restaurant-quality biryani with our specially crafted biryani masala blend.",
+      date: "February 28, 2024",
       imageUrl: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=800&auto=format&fit=crop",
-      spiceUsed: "Ruchi Biryani Masala & Chicken Masala",
-      ingredients: [
-        "750g Chicken pieces",
-        "3 cups Long Grain Basmati Rice",
-        "3 tbsp Ruchi Biryani Masala",
-        "1 cup Curd & Fresh Mint",
-        "Saffron infused milk",
-      ],
-      instructions: [
-        "Marinate chicken in curd, ginger-garlic paste, and Ruchi Biryani Masala for 2 hours.",
-        "Par-boil Basmati rice with whole spices until 70% cooked.",
-        "Layer marinated chicken and rice, seal tightly with dough (Dum).",
-        "Slow cook on low flame for 45 minutes until fragrant.",
-      ],
+      slug: "perfect-biryani-recipe",
+      category: "Recipe Guide"
+    },
+    {
+      id: "5",
+      title: "Health Benefits of Traditional Indian Spices",
+      excerpt: "Explore the medicinal properties and wellness benefits hidden in everyday spices used in Indian cuisine.",
+      date: "February 20, 2024",
+      imageUrl: "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?q=80&w=800&auto=format&fit=crop",
+      slug: "health-benefits-spices",
+      category: "Wellness"
     },
   ];
 
+  const scroll = (direction: "left" | "right") => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400;
+      const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === "right" ? scrollAmount : -scrollAmount);
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: "smooth"
+      });
+    }
+  };
+
   return (
-    <section id="recipes" className="py-20 bg-white border-t border-border/60">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-primary-green mb-1 block">
-              RECIPES & INSPIRATION
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-text tracking-tight">
-              From the Kitchen
+    <section id="recipes" className="py-16 sm:py-20 bg-transparent border-t border-border/40">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          {/* Left Side: Large Section Heading */}
+          <div className="lg:w-[280px] xl:w-[320px] flex-shrink-0">
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text tracking-tight leading-tight">
+              Stories,<br />
+              Flavours &<br />
+              <span className="text-primary-green">Insights</span>
             </h2>
-            <p className="text-sm text-muted-text mt-1">
-              Authentic Indian recipes to pair with Ruchi pure spices.
+            <p className="text-sm text-muted-text font-medium mt-4 leading-relaxed">
+              Explore recipes, culinary tips, and the rich heritage behind every spice blend.
             </p>
           </div>
 
-          <button
-            onClick={() => setSelectedRecipe(recipes[0])}
-            className="inline-flex items-center gap-1.5 text-xs font-bold tracking-wider text-primary-green hover:text-deep-green uppercase transition-colors"
-          >
-            <span>All Recipes</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Recipe Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {recipes.map((recipe) => (
-            <div
-              key={recipe.id}
-              onClick={() => setSelectedRecipe(recipe)}
-              className="group cursor-pointer rounded-[12px] border border-border bg-white overflow-hidden hover:border-primary-green/50 hover:shadow-md transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                {/* Image Container */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-soft-green">
-                  <Image
-                    src={recipe.imageUrl}
-                    alt={recipe.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-[6px] text-[10px] font-bold text-text uppercase tracking-wider shadow-2xs">
-                    {recipe.category}
-                  </div>
-                </div>
-
-                {/* Body Content */}
-                <div className="p-5">
-                  <div className="flex items-center gap-2 text-xs text-muted-text mb-2">
-                    <Clock className="w-3.5 h-3.5 text-primary-green" />
-                    <span>{recipe.cookTime}</span>
-                    <span>•</span>
-                    <span>{recipe.servings}</span>
-                  </div>
-
-                  <h3 className="font-serif text-lg font-semibold text-text group-hover:text-primary-green transition-colors line-clamp-1 mb-2">
-                    {recipe.title}
-                  </h3>
-
-                  <p className="text-xs text-muted-text leading-relaxed line-clamp-2">
-                    {recipe.description}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-5 pt-0 border-t border-transparent flex items-center justify-between">
-                <span className="text-[11px] font-semibold text-primary-green flex items-center gap-1">
-                  <Utensils className="w-3.5 h-3.5" /> Made with {recipe.spiceUsed.split("&")[0]}
-                </span>
-                <ArrowRight className="w-4 h-4 text-muted-text group-hover:text-primary-green group-hover:translate-x-1 transition-all" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Recipe Detail Modal */}
-      {selectedRecipe && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs"
-            onClick={() => setSelectedRecipe(null)}
-          />
-          <div className="relative w-full max-w-2xl bg-white rounded-[12px] shadow-2xl overflow-hidden z-10 max-h-[90vh] flex flex-col">
-            <div className="relative aspect-[16/9] w-full">
-              <Image
-                src={selectedRecipe.imageUrl}
-                alt={selectedRecipe.title}
-                fill
-                className="object-cover"
-              />
+          {/* Right Side: Horizontal Scrolling Cards */}
+          <div className="flex-1 relative">
+            {/* Scroll Buttons */}
+            <div className="hidden lg:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10 gap-2">
               <button
-                onClick={() => setSelectedRecipe(null)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-black/60 text-white hover:bg-black transition-colors"
+                onClick={() => scroll("left")}
+                className="p-2 rounded-full bg-white border border-border shadow-sm hover:bg-soft-green hover:border-primary-green transition-all"
+                aria-label="Scroll left"
               >
-                <X className="w-5 h-5" />
+                <ChevronLeft className="w-5 h-5 text-text" />
+              </button>
+            </div>
+            
+            <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 gap-2">
+              <button
+                onClick={() => scroll("right")}
+                className="p-2 rounded-full bg-white border border-border shadow-sm hover:bg-soft-green hover:border-primary-green transition-all"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-5 h-5 text-text" />
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto space-y-4">
-              <div>
-                <span className="text-xs font-bold text-primary-green uppercase tracking-wider">
-                  {selectedRecipe.category} • {selectedRecipe.cookTime}
-                </span>
-                <h3 className="font-serif text-2xl font-bold text-text mt-1">
-                  {selectedRecipe.title}
-                </h3>
-                <p className="text-xs text-muted-text mt-1">{selectedRecipe.description}</p>
-              </div>
+            {/* Horizontal Scroll Container */}
+            <div
+              ref={scrollContainerRef}
+              className="flex gap-5 overflow-x-auto scrollbar-hide scroll-smooth pb-2"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {blogPosts.map((post) => (
+                <Link
+                  key={post.id}
+                  href={`/blog/${post.slug}`}
+                  className="flex-shrink-0 w-[280px] sm:w-[320px] group"
+                >
+                  <div className="bg-white rounded-lg overflow-hidden border border-border hover:border-primary-green/50 hover:shadow-md transition-all duration-300">
+                    {/* Image */}
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-soft-green">
+                      <Image
+                        src={post.imageUrl}
+                        alt={post.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
 
-              <div className="p-3 rounded-[8px] bg-soft-green border border-border/60 text-xs text-text font-medium">
-                🌶️ Key Spice: <span className="font-bold text-primary-green">{selectedRecipe.spiceUsed}</span>
-              </div>
+                    {/* Content */}
+                    <div className="p-5">
+                      {post.category && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-primary-green mb-2 block">
+                          {post.category}
+                        </span>
+                      )}
+                      
+                      <h3 className="font-serif text-lg font-semibold text-text group-hover:text-primary-green transition-colors line-clamp-2 mb-2 leading-snug">
+                        {post.title}
+                      </h3>
 
-              <div>
-                <h4 className="font-serif text-base font-semibold text-text mb-2">Ingredients</h4>
-                <ul className="list-disc list-inside text-xs text-muted-text space-y-1">
-                  {selectedRecipe.ingredients.map((ing, i) => (
-                    <li key={i}>{ing}</li>
-                  ))}
-                </ul>
-              </div>
+                      <p className="text-xs text-muted-text font-medium leading-relaxed line-clamp-2 mb-3">
+                        {post.excerpt}
+                      </p>
 
-              <div>
-                <h4 className="font-serif text-base font-semibold text-text mb-2">Preparation Steps</h4>
-                <ol className="list-decimal list-inside text-xs text-muted-text space-y-1.5">
-                  {selectedRecipe.instructions.map((step, i) => (
-                    <li key={i}>{step}</li>
-                  ))}
-                </ol>
-              </div>
+                      <div className="flex items-center gap-1.5 text-xs text-muted-text">
+                        <Calendar className="w-3.5 h-3.5 text-primary-green" />
+                        <span>{post.date}</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Custom CSS to hide scrollbar */}
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 }

@@ -1,67 +1,72 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { startTransition, useActionState, useEffect, useState } from "react";
 import { ShoppingBag, Check, ShieldCheck, Truck } from "lucide-react";
 import type { ProductVariant } from "@/lib/shopify/types";
-import { useCart } from "../cart/cart-context";
+import { addItemAction } from "@/lib/shopify/cart-actions";
+import { formatMoney } from "@/utils/format";
 
 interface AddToCartButtonProps {
   variants: ProductVariant[];
-  productTitle?: string;
-  handle?: string;
-  featuredImageUrl?: string;
 }
 
-export function AddToCartButton({
-  variants,
-  productTitle = "Product",
-  handle = "product",
-  featuredImageUrl,
-}: AddToCartButtonProps) {
-  const { addItem } = useCart();
+export function AddToCartButton({ variants }: AddToCartButtonProps) {
+  const [state, formAction, isPending] = useActionState(addItemAction, undefined);
   const availableVariants = variants.filter((v) => v.availableForSale);
   const [selectedVariantId, setSelectedVariantId] = useState(
     availableVariants[0]?.id ?? variants[0]?.id
   );
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [prevPending, setPrevPending] = useState(isPending);
 
   const selectedVariant = variants.find((v) => v.id === selectedVariantId) || variants[0];
   const isSoldOut = !selectedVariantId || availableVariants.length === 0;
 
+  if (prevPending !== isPending) {
+    setPrevPending(isPending);
+    if (prevPending && !isPending) {
+      setAdded(!state?.error);
+    }
+  }
+
+  useEffect(() => {
+    if (!added) return;
+    const timer = setTimeout(() => setAdded(false), 2000);
+    return () => clearTimeout(timer);
+  }, [added]);
+
   const handleAddToCart = () => {
-    if (isSoldOut) return;
+    if (isSoldOut || !selectedVariant) return;
 
-    // Create synthetic product for cart context if needed
-    const dummyProduct = {
-      id: selectedVariant?.id || "product-id",
-      handle,
-      title: productTitle,
-      availableForSale: true,
-      description: "",
-      descriptionHtml: "",
-      options: [],
-      priceRange: {
-        minVariantPrice: selectedVariant ? selectedVariant.price : { amount: "0.00", currencyCode: "INR" },
-        maxVariantPrice: selectedVariant ? selectedVariant.price : { amount: "0.00", currencyCode: "INR" },
-      },
-      featuredImage: featuredImageUrl
-        ? { url: featuredImageUrl, altText: productTitle, width: 800, height: 800 }
-        : null,
-      images: { edges: [] },
-      variants: { edges: variants.map((v) => ({ node: v })) },
-      seo: { title: productTitle, description: "" },
-      tags: [],
-      updatedAt: new Date().toISOString(),
-    };
-
-    addItem(dummyProduct, selectedVariantId, quantity);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    startTransition(() => {
+      formAction({ merchandiseId: selectedVariant.id, quantity });
+    });
   };
+
+  const compareAtMoney = selectedVariant?.compareAtPrice ?? null;
+  const price = selectedVariant ? parseFloat(selectedVariant.price.amount) : null;
+  const compareAtPrice = compareAtMoney ? parseFloat(compareAtMoney.amount) : null;
 
   return (
     <div className="space-y-4">
+      {/* Price — always reflects the currently selected variant, never a fixed/default one */}
+      {selectedVariant && (
+        <div className="flex items-baseline gap-3 pt-2 border-t border-border">
+          <span className="font-serif text-3xl font-bold text-text">
+            {formatMoney(selectedVariant.price)}
+          </span>
+          {compareAtMoney && compareAtPrice && price !== null && compareAtPrice > price && (
+            <span className="text-sm text-muted-text line-through">
+              {formatMoney(compareAtMoney)}
+            </span>
+          )}
+          <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-[6px]">
+            Inclusive of all taxes
+          </span>
+        </div>
+      )}
+
       {/* Variant Selector */}
       {variants.length > 1 && (
         <div>
@@ -81,7 +86,7 @@ export function AddToCartButton({
                     : "border-border bg-white text-muted-text hover:text-text"
                 } ${!variant.availableForSale ? "opacity-40 cursor-not-allowed line-through" : ""}`}
               >
-                {variant.title} - ₹{parseFloat(variant.price.amount).toFixed(2)}
+                {variant.title} - {formatMoney(variant.price)}
               </button>
             ))}
           </div>
@@ -110,13 +115,13 @@ export function AddToCartButton({
 
         <button
           type="button"
-          disabled={isSoldOut}
+          disabled={isSoldOut || isPending}
           onClick={handleAddToCart}
           className={`flex-1 py-3.5 px-6 rounded-[12px] font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-xs ${
             added
               ? "bg-emerald-700 text-white"
               : "bg-primary-green hover:bg-deep-green text-white"
-          } ${isSoldOut ? "opacity-50 cursor-not-allowed" : ""}`}
+          } ${isSoldOut || isPending ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {added ? (
             <>
@@ -124,11 +129,15 @@ export function AddToCartButton({
             </>
           ) : (
             <>
-              <ShoppingBag className="w-4 h-4" /> {isSoldOut ? "Sold Out" : "Add to Cart"}
+              <ShoppingBag className="w-4 h-4" /> {isSoldOut ? "Sold Out" : isPending ? "Adding..." : "Add to Cart"}
             </>
           )}
         </button>
       </div>
+
+      {state?.error ? (
+        <p className="text-xs font-medium text-brand-red">{state.error}</p>
+      ) : null}
 
       {/* Trust Badges */}
       <div className="pt-4 border-t border-border space-y-2 text-xs text-muted-text">
