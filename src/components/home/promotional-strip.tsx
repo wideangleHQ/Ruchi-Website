@@ -7,7 +7,7 @@ import stripAd1 from "@/assets/Images/Ads/Strip 1.png";
 
 export function PromotionalStrip() {
   return (
-    <section className="pt-6 pb-12 sm:pt-8 sm:pb-16 bg-transparent">
+    <section className="py-8 sm:py-12 bg-transparent">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <Link
           href="/products"

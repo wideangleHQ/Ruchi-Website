@@ -9,12 +9,13 @@ import satvikBgImg from "@/assets/Images/SATVIK background.jpg";
 export function FeaturedCampaign() {
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
@@ -45,7 +46,7 @@ export function FeaturedCampaign() {
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#b91c1c] text-white py-12 sm:py-16 lg:py-0 lg:h-[80vh] lg:min-h-[540px] flex items-center justify-center">
+    <section className="relative w-full overflow-hidden bg-[#b91c1c] text-white py-12 sm:py-16 lg:py-0 lg:h-[66vh] lg:min-h-[460px] flex items-center justify-center">
       {/* 1. Authentic Satvik Damask Pattern Background Image */}
       <div className="absolute inset-0 z-0">
         <Image

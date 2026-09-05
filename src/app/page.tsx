@@ -8,7 +8,6 @@ import { PromotionalStrip } from "@/components/home/promotional-strip";
 import { CustomerStories } from "@/components/home/customer-stories";
 import { RecipeShowcase } from "@/components/home/recipe-showcase";
 import { HeritageB2BSection } from "@/components/home/heritage-b2b-section";
-import { CategoriesSection } from "@/components/home/categories-section";
 import { PromoAdsSection } from "@/components/home/promo-ads-section";
 import { ShopProductsSection } from "@/components/home/shop-products-section";
 import { ShopProductsSkeleton } from "@/components/home/shop-products-skeleton";
@@ -38,16 +37,13 @@ export default async function HomePage() {
         {/* 1. Visually Striking Image-Led Hero */}
         <HeroSection />
 
-        {/* 2. Our Categories */}
-        <CategoriesSection collections={collections} />
-
-        {/* 3. Promotional Banner Ads */}
-        <PromoAdsSection />
-
-        {/* 4. Shop Our Products */}
+        {/* 2. Our Categories — sticky category tabs + live product grid */}
         <Suspense fallback={<ShopProductsSkeleton />}>
           <ShopProductsSection collections={collections} />
         </Suspense>
+
+        {/* 3. Promotional Banner Ads */}
+        <PromoAdsSection />
 
         {/* 5. Featured Campaign - The Sattvik Collection */}
         <FeaturedCampaign />

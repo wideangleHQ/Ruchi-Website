@@ -1,22 +1,19 @@
 export function ShopProductsSkeleton() {
   return (
-    <section className="py-16 sm:py-24 bg-transparent">
+    <section className="py-4 sm:py-6 lg:py-8 bg-transparent">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <div className="h-3 w-32 bg-soft-green rounded mx-auto mb-3 animate-pulse" />
-          <div className="h-8 w-64 bg-soft-green rounded mx-auto animate-pulse" />
-        </div>
-
-        <div className="flex gap-2 mb-8 overflow-hidden">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-9 w-28 flex-shrink-0 rounded-[12px] bg-soft-green animate-pulse"
-            />
+        {/* Square Category Cards Skeleton */}
+        <div className="flex gap-3 sm:gap-4 lg:gap-5 mb-5 overflow-hidden py-1">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <div key={i} className="flex flex-col items-center w-[98px] sm:w-[120px] md:w-[136px] lg:w-[148px] flex-shrink-0">
+              <div className="aspect-square w-full rounded-[14px] bg-soft-green animate-pulse" />
+              <div className="h-3 w-16 bg-soft-green rounded mt-2 animate-pulse" />
+            </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* Product Grid Skeleton */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
           {Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}

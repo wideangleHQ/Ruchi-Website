@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { Building2, Store, Truck, Send, CheckCircle2 } from "lucide-react";
 
 export function HeritageB2BSection() {
@@ -15,7 +14,7 @@ export function HeritageB2BSection() {
   };
 
   return (
-    <section id="heritage" className="py-16 sm:py-20 bg-transparent border-t border-border">
+    <section id="heritage" className="py-12 sm:py-16 bg-transparent border-t border-border">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Restrained B2B Bulk Order Section */}
         <div id="b2b" className="rounded-[12px] bg-white border border-border p-8 sm:p-12 shadow-xs">

@@ -77,7 +77,7 @@ export function HeaderSearch({ className = "", inputClassName = "", autoFocus, o
           autoFocus={autoFocus}
           placeholder="Search for products, spices, mixes..."
           aria-label="Search for products"
-          className={`w-full rounded-full border border-gray-300 bg-[#f9f8f6] pl-10 pr-4 py-2.5 text-sm font-medium text-gray-900 placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:border-[#168a4a] focus:ring-2 focus:ring-[#168a4a]/20 focus:bg-white shadow-2xs ${inputClassName}`}
+          className={`w-full rounded-full border border-gray-300 bg-[#f9f8f6] pl-9 sm:pl-10 pr-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-900 placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:border-[#168a4a] focus:ring-2 focus:ring-[#168a4a]/20 focus:bg-white shadow-2xs ${inputClassName}`}
         />
       </form>
 

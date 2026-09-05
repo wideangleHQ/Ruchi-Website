@@ -1,64 +1,106 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
-import bannerImg from "@/assets/Images/Banner Image.png";
+import heroBanner1 from "@/assets/Images/Hero banner/Hero Banner 1.png";
+import heroBanner2 from "@/assets/Images/Hero banner/Hero banner 2.png";
+import heroBanner3 from "@/assets/Images/Hero banner/Hero banner 3.png";
+
+const HERO_SLIDES = [
+  {
+    id: "ruchi-curry-powder",
+    src: heroBanner1,
+    alt: "Ruchi Foodline Curry Powder — The Taste of a Richer India",
+  },
+  {
+    id: "ruchi-utkal-tea",
+    src: heroBanner2,
+    alt: "Ruchi Utkal Tea Dust — A Cup of Chai, A Richer Tomorrow",
+  },
+  {
+    id: "ruchi-non-veg-masala",
+    src: heroBanner3,
+    alt: "Ruchi Non-Veg Masala — Authentic Non-Veg Flavours",
+  },
+];
+
+const SLIDE_INTERVAL_MS = 3000;
 
 export function HeroSection() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(nextSlide, SLIDE_INTERVAL_MS);
+    return () => clearInterval(timer);
+  }, [nextSlide]);
+
   return (
-    <section className="relative w-full overflow-hidden bg-[#faf8f5]">
-      {/* Viewport-based responsive height: ~60vh from md upward, adaptive min-h on mobile so content never clips */}
-      <div className="relative w-full flex items-center min-h-[460px] sm:min-h-[500px] md:h-[60vh] md:min-h-[480px] lg:h-[60vh] lg:min-h-[520px] xl:h-[60vh] xl:min-h-[560px]">
-        {/* Background Image - Focused on top of banner image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={bannerImg}
-            alt="Celebrating 50 Years - Karlo Dosti Sehat Se"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-top opacity-100 w-full h-full"
-          />
-        </div>
+    <section
+      className="relative w-full overflow-hidden bg-white h-[60vh] min-h-[320px] select-none"
+      aria-roledescription="carousel"
+      aria-label="Featured Promotions Slideshow"
+    >
+      {/* Slides Container */}
+      <div className="relative w-full h-full">
+        {HERO_SLIDES.map((slide, index) => {
+          const isActive = index === currentIndex;
 
-        {/* Content Container - Exactly 50px left padding on desktop (lg/xl) */}
-        <div className="relative z-10 w-full pl-5 sm:pl-8 lg:pl-[50px] xl:pl-[50px] pr-5 sm:pr-8 lg:pr-12 py-8 sm:py-12 lg:py-16">
-          <div className="max-w-xl lg:max-w-2xl xl:max-w-3xl">
-            {/* Main Headline - White & Green Text Colors Only with Increased Font Size */}
-            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white leading-[1.12] mb-4 sm:mb-6 pl-4 sm:pl-6 lg:pl-8">
-              Celebrating{" "}
-              <span className="text-[#168a4a] font-serif">50 years</span>
-              <br />
-              Karlo Dosti{" "}
-              <span className="text-[#168a4a] font-serif">Sehat Se</span>
-            </h1>
-
-            {/* Accent Line */}
-            <div className="w-24 h-[3px] bg-[#168a4a] rounded-full mb-4 sm:mb-6 ml-4 sm:ml-6 lg:ml-8" />
-
-            {/* Subtitle - White Text */}
-            <p className="text-base sm:text-lg lg:text-xl text-white/95 font-medium leading-relaxed mb-6 sm:mb-8 max-w-xl pl-4 sm:pl-6 lg:pl-8">
-              Pure spices. Honest flavors.
-            </p>
-
-            {/* Action CTA Button */}
-            <div className="flex flex-wrap items-center gap-4 pl-4 sm:pl-6 lg:pl-8">
-              <Link
-                href="/products"
-                className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-[12px] bg-[#c62828] hover:bg-[#9f1f24] text-white font-semibold text-base transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <span>Shop Now</span>
-                <ArrowRight className="w-5 h-5" />
-              </Link>
+          return (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out motion-reduce:transition-none ${
+                isActive
+                  ? "opacity-100 z-10 pointer-events-auto"
+                  : "opacity-0 z-0 pointer-events-none"
+              }`}
+              aria-hidden={!isActive}
+            >
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                className="object-cover object-center w-full h-full"
+              />
             </div>
-          </div>
-        </div>
+          );
+        })}
+      </div>
+
+      {/* Subtle Slide Indicators */}
+      <div
+        className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-xs pointer-events-auto"
+        role="tablist"
+        aria-label="Slideshow slide selectors"
+      >
+        {HERO_SLIDES.map((slide, index) => {
+          const isActive = index === currentIndex;
+          return (
+            <button
+              key={slide.id}
+              type="button"
+              onClick={() => setCurrentIndex(index)}
+              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white ${
+                isActive
+                  ? "w-6 sm:w-8 bg-white"
+                  : "w-1.5 sm:w-2 bg-white/50 hover:bg-white/75"
+              }`}
+              aria-label={`Go to slide ${index + 1}: ${slide.alt}`}
+              aria-selected={isActive}
+              role="tab"
+            />
+          );
+        })}
       </div>
     </section>
   );
 }
+
 
 
 

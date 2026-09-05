@@ -48,7 +48,7 @@ export function CustomerStories() {
   const marqueeReviews = [...reviews, ...reviews];
 
   return (
-    <section className="py-16 sm:py-24 bg-white border-t border-gray-200/60 overflow-x-hidden">
+    <section className="py-12 sm:py-16 bg-white border-t border-gray-200/60 overflow-x-hidden">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 lg:gap-12">
           {/* LEFT SIDE (~35% Width): ONLY HEADING + PARAGRAPH */}

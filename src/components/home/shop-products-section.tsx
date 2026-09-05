@@ -7,7 +7,11 @@ interface ShopProductsSectionProps {
 }
 
 export async function ShopProductsSection({ collections }: ShopProductsSectionProps) {
-  const products = await getProducts({ first: 100 });
+  // 250 is the Storefront API's max page size and comfortably covers the
+  // full catalog (111 products today) in a single request — the category
+  // tabs filter client-side from this set, so every product must be present
+  // here or it silently disappears from its category.
+  const products = await getProducts({ first: 250 });
 
   if (products.length === 0) {
     return null;

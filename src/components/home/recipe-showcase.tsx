@@ -78,7 +78,7 @@ export function RecipeShowcase() {
   };
 
   return (
-    <section id="recipes" className="py-16 sm:py-20 bg-transparent border-t border-border/40">
+    <section id="recipes" className="py-12 sm:py-16 bg-transparent border-t border-border/40">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Left Side: Large Section Heading */}
