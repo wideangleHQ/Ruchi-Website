@@ -4,7 +4,6 @@ import { getCollections } from "@/lib/shopify";
 import { HeroSection } from "@/components/home/hero-section";
 import { FeaturedCampaign } from "@/components/home/featured-campaign";
 import { StatsCounter } from "@/components/home/stats-counter";
-import { PromotionalStrip } from "@/components/home/promotional-strip";
 import { CustomerStories } from "@/components/home/customer-stories";
 import { RecipeShowcase } from "@/components/home/recipe-showcase";
 import { HeritageB2BSection } from "@/components/home/heritage-b2b-section";
@@ -51,10 +50,7 @@ export default async function HomePage() {
         {/* 6. Number Counter / Legacy Statistics */}
         <StatsCounter />
 
-        {/* 8. Promotional Strip Ad Banner */}
-        <PromotionalStrip />
-
-        {/* 9. Customer Stories / Testimonials */}
+        {/* 7. Customer Stories / Testimonials */}
         <CustomerStories />
 
         {/* 9. Recipe Showcase — From the Kitchen */}

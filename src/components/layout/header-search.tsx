@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Search, Loader2 } from "lucide-react";
 import { searchProductsPreview } from "@/lib/shopify/search-actions";
 import type { Product } from "@/lib/shopify/types";
-import { formatMoney } from "@/utils/format";
 import { SafeImage } from "@/components/ui/safe-image";
 
 interface HeaderSearchProps {
@@ -77,7 +76,7 @@ export function HeaderSearch({ className = "", inputClassName = "", autoFocus, o
           autoFocus={autoFocus}
           placeholder="Search for products, spices, mixes..."
           aria-label="Search for products"
-          className={`w-full rounded-full border border-gray-300 bg-[#f9f8f6] pl-9 sm:pl-10 pr-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-900 placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:border-[#168a4a] focus:ring-2 focus:ring-[#168a4a]/20 focus:bg-white shadow-2xs ${inputClassName}`}
+          className={`w-full rounded-full border border-gray-300 bg-[#f9f8f6] pl-9 sm:pl-10 pr-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-900 placeholder:text-gray-400 placeholder:font-medium transition-all duration-200 focus:outline-none focus:border-[#168a4a] focus:ring-2 focus:ring-[#168a4a]/20 focus:bg-white shadow-2xs ${inputClassName}`}
         />
       </form>
 
@@ -117,10 +116,7 @@ export function HeaderSearch({ className = "", inputClassName = "", autoFocus, o
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-semibold text-text line-clamp-1">{product.title}</p>
-                      <p className="text-[11px] text-muted-text">
-                        {formatMoney(product.priceRange.minVariantPrice)}
-                      </p>
+                      <p className="text-xs font-medium text-text line-clamp-1">{product.title}</p>
                     </div>
                   </Link>
                 </li>
@@ -129,7 +125,7 @@ export function HeaderSearch({ className = "", inputClassName = "", autoFocus, o
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-primary-green hover:bg-soft-green/50 transition-colors"
+                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-primary-green hover:bg-soft-green/50 transition-colors"
                 >
                   View all results for &ldquo;{query.trim()}&rdquo;
                 </button>

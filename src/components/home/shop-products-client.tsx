@@ -80,13 +80,12 @@ export function ShopProductsClient({ products, collections }: ShopProductsClient
   return (
     <section className="py-4 sm:py-6 lg:py-8 bg-transparent">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* 1. SQUARE 1:1 CATEGORY CARDS (Visual Category Cards + Tab Switch Controls) */}
-        <div className="sticky top-[68px] sm:top-[74px] lg:top-[98px] z-30 bg-white/80 backdrop-blur-md py-2.5 sm:py-3.5 mb-4 sm:mb-6 rounded-[16px] transition-all">
+        {/* 1. SQUARE 1:1 CATEGORY CARDS (7-Column Grid Fitting Container - No Slider) */}
+        <div className="sticky top-[68px] sm:top-[74px] lg:top-[98px] z-30 py-2 sm:py-3 mb-5 sm:mb-7 transition-all">
           <div
-            ref={scrollContainerRef}
             role="tablist"
             aria-label="Category tab selectors"
-            className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-6 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-1 px-1 scroll-smooth"
+            className="grid grid-cols-7 gap-2 sm:gap-3.5 md:gap-4 lg:gap-5 xl:gap-6 w-full items-start"
           >
             {orderedCollections.map((collection) => {
               const imageSrc = getCategoryImage(collection.handle);
@@ -99,13 +98,13 @@ export function ShopProductsClient({ products, collections }: ShopProductsClient
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveHandle(collection.handle)}
-                  className="group flex-shrink-0 flex flex-col items-center w-[92px] sm:w-[112px] md:w-[128px] lg:w-[145px] xl:w-[155px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-green rounded-[14px] text-center transition-transform active:scale-95"
+                  className="group w-full flex flex-col items-center focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-green rounded-[14px] sm:rounded-[16px] text-center transition-transform active:scale-95"
                 >
                   {/* Square 1:1 Card Image Container */}
                   <div
-                    className={`relative aspect-square w-full rounded-[14px] overflow-hidden bg-soft-neutral/80 border transition-all duration-300 ${
+                    className={`relative aspect-square w-full rounded-[10px] sm:rounded-[14px] lg:rounded-[16px] overflow-hidden bg-soft-neutral/80 border transition-all duration-300 ${
                       isActive
-                        ? "border-primary-green ring-2 ring-primary-green ring-offset-2 shadow-sm"
+                        ? "border-primary-green ring-2 ring-primary-green ring-offset-1 sm:ring-offset-2 shadow-sm"
                         : "border-gray-200/80 group-hover:border-primary-green/40 group-hover:shadow-xs"
                     }`}
                   >
@@ -114,11 +113,11 @@ export function ShopProductsClient({ products, collections }: ShopProductsClient
                         src={imageSrc}
                         alt={collection.title}
                         fill
-                        sizes="(min-width: 1280px) 160px, (min-width: 1024px) 150px, (min-width: 640px) 120px, 95px"
+                        sizes="(min-width: 1280px) 180px, (min-width: 1024px) 160px, (min-width: 768px) 120px, 60px"
                         className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-soft-green text-primary-green font-serif font-bold text-lg">
+                      <div className="w-full h-full flex items-center justify-center bg-soft-green text-primary-green font-serif font-bold text-base sm:text-lg">
                         {collection.title.charAt(0)}
                       </div>
                     )}
@@ -126,7 +125,7 @@ export function ShopProductsClient({ products, collections }: ShopProductsClient
 
                   {/* Category Name Displayed BELOW the Square Image */}
                   <span
-                    className={`mt-1.5 sm:mt-2 text-xs sm:text-[13px] font-semibold tracking-tight transition-colors line-clamp-1 ${
+                    className={`mt-1.5 sm:mt-2 text-[10px] sm:text-xs md:text-[13px] lg:text-sm font-semibold tracking-tight leading-tight text-center transition-colors line-clamp-2 ${
                       isActive
                         ? "text-primary-green font-bold"
                         : "text-gray-800 group-hover:text-primary-green"

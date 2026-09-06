@@ -1,26 +1,55 @@
 "use client";
 
-import React from "react";
-import { Sparkles, Phone, ShieldCheck } from "lucide-react";
+import React, { useEffect, useState } from "react";
+
+interface OfferSegment {
+  text: string;
+  emphasis?: boolean;
+}
+
+const OFFERS: OfferSegment[][] = [
+  [{ text: "Buy More, Save More — " }, { text: "5% OFF", emphasis: true }, { text: " on ₹299+" }],
+  [{ text: "Unlock " }, { text: "10% OFF", emphasis: true }, { text: " on Orders ₹499+" }],
+  [{ text: "Enjoy " }, { text: "15% OFF", emphasis: true }, { text: " on Orders ₹799+" }],
+  [{ text: "Get Your Biggest Saving — " }, { text: "20% OFF", emphasis: true }, { text: " on ₹999+" }],
+  [{ text: "Free Delivery", emphasis: true }, { text: " on Orders Above ₹699" }],
+];
+
+const ROTATE_INTERVAL_MS = 2800;
 
 export function AnnouncementBar() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((i) => (i + 1) % OFFERS.length);
+    }, ROTATE_INTERVAL_MS);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="bg-deep-green text-white text-[11px] sm:text-xs font-medium py-1 sm:py-1.5">
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-2 text-center sm:text-left">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-accent-gold animate-pulse flex-shrink-0" />
-          <span className="truncate">
-            Celebrating 50 Years of Purity & Excellence | Free Express Shipping on Orders Above ₹499
-          </span>
-        </div>
-        <div className="hidden md:flex items-center gap-3 text-[10px] sm:text-[11px] text-white/80 flex-shrink-0">
-          <span className="flex items-center gap-1">
-            <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-accent-gold" /> 100% Authentic Guaranteed
-          </span>
-          <span className="flex items-center gap-1">
-            <Phone className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-accent-gold" /> Toll-Free: 1800-123-7824
-          </span>
-        </div>
+    <div className="bg-deep-green text-white h-7 sm:h-8 flex items-center justify-center overflow-hidden">
+      <div
+        key={index}
+        className="animate-offer-reveal flex items-center gap-2 px-4 max-w-full whitespace-nowrap text-[10.5px] xs:text-[11px] sm:text-xs font-medium tracking-tight sm:tracking-normal"
+      >
+        <span aria-hidden="true" className="text-accent-gold">
+          ✦
+        </span>
+        <span className="truncate">
+          {OFFERS[index].map((segment, i) =>
+            segment.emphasis ? (
+              <span key={i} className="font-semibold text-accent-gold">
+                {segment.text}
+              </span>
+            ) : (
+              <React.Fragment key={i}>{segment.text}</React.Fragment>
+            )
+          )}
+        </span>
+        <span aria-hidden="true" className="text-accent-gold">
+          ✦
+        </span>
       </div>
     </div>
   );

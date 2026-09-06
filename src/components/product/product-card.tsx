@@ -2,7 +2,7 @@
 
 import React, { startTransition, useActionState, useEffect, useState } from "react";
 import Link from "next/link";
-import { ShoppingBag, Heart, Share2, Check, Info, Flame } from "lucide-react";
+import { ShoppingBag, Heart, Share2, Check, Flame } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { addItemAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
@@ -48,7 +48,6 @@ export function ProductCard({ product }: { product: Product }) {
   const price = parseFloat(priceMoney.amount);
   const compareAtPrice = compareAtMoney ? parseFloat(compareAtMoney.amount) : null;
   const isSoldOut = !selectedVariant || !selectedVariant.availableForSale;
-  const basePrice = variants[0] ? parseFloat(variants[0].price.amount) : price;
 
   const tagsLower = product.tags.map((t) => t.toLowerCase());
   const badgeText =
@@ -58,7 +57,7 @@ export function ProductCard({ product }: { product: Product }) {
     (tagsLower.includes("new") && "New") ||
     null;
 
-  // Real Shopify collection membership only — never a fabricated/tag-guessed category.
+  // Real Shopify collection membership only
   const categoryTag = product.collections.edges[0]?.node.title ?? null;
   const intensityTag = INTENSITY_TAGS.find((t) => tagsLower.includes(t));
 
@@ -91,193 +90,188 @@ export function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-[12px] border border-border bg-white p-3.5 transition-all duration-300 hover:border-primary-green/40 hover:shadow-md">
-      {/* Product Image Container with Overlaid Badge & Action Buttons */}
-      <div className="relative aspect-square w-full rounded-[8px] overflow-hidden bg-[#f7f6f2] border border-border/40 p-4 mb-3 flex items-center justify-center">
-        {badgeText && (
-          <span className="absolute top-2.5 left-2.5 z-20 inline-block bg-primary-green text-white text-[10px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-[6px] shadow-2xs">
-            {badgeText}
-          </span>
-        )}
+    <div className="group relative flex flex-col justify-between rounded-[15px] border border-gray-200/90 bg-white p-3.5 sm:p-4 transition-all duration-300 hover:border-[#168a4a]/50 hover:shadow-md hover:-translate-y-0.5">
+      <div>
+        {/* Product Image Container */}
+        <div className="relative aspect-square w-full rounded-[10px] overflow-hidden bg-[#f7f6f2] border border-gray-100 p-3 mb-3.5 flex items-center justify-center">
+          {badgeText && (
+            <span className="absolute top-2.5 left-2.5 z-20 inline-block bg-[#168a4a] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-[6px] shadow-2xs">
+              {badgeText}
+            </span>
+          )}
 
-        <div className="absolute top-2.5 right-2.5 z-20 flex flex-col items-end gap-1.5">
-          <button
-            onClick={handleWishlist}
-            className="w-8 h-8 rounded-[8px] bg-white/90 backdrop-blur-xs border border-border flex items-center justify-center text-muted-text hover:text-[#c62828] hover:border-border transition-all shadow-2xs"
-            aria-label="Add to Wishlist"
-          >
-            <Heart className={`w-4 h-4 ${isWishlisted ? "fill-[#c62828] text-[#c62828]" : ""}`} />
-          </button>
-          <button
-            onClick={handleShare}
-            className="relative w-8 h-8 rounded-[8px] bg-white/90 backdrop-blur-xs border border-border flex items-center justify-center text-muted-text hover:text-primary-green hover:border-border transition-all shadow-2xs"
-            aria-label="Share product"
-          >
-            <Share2 className="w-4 h-4" />
-            {copiedShare && (
-              <span className="absolute right-9 top-1 bg-text text-white text-[9px] px-2 py-0.5 rounded shadow whitespace-nowrap">
-                Copied!
-              </span>
-            )}
-          </button>
-        </div>
+          {/* Action Icons */}
+          <div className="absolute top-2.5 right-2.5 z-20 flex flex-col items-end gap-1.5">
+            <button
+              onClick={handleWishlist}
+              className="w-8 h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#c62828] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+              aria-label="Add to Wishlist"
+            >
+              <Heart className={`w-4 h-4 ${isWishlisted ? "fill-[#c62828] text-[#c62828]" : ""}`} />
+            </button>
+            <button
+              onClick={handleShare}
+              className="relative w-8 h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+              aria-label="Share product"
+            >
+              <Share2 className="w-4 h-4" />
+              {copiedShare && (
+                <span className="absolute right-9 top-1 bg-gray-900 text-white text-[10px] font-medium px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                  Copied!
+                </span>
+              )}
+            </button>
+          </div>
 
-        <Link href={`/products/${product.handle}`} className="block w-full h-full relative">
-          {product.featuredImage ? (
-            <>
-              <SafeImage
-                src={product.featuredImage.url}
-                alt={product.featuredImage.altText ?? product.title}
-                fallbackTitle={product.title}
-                fill
-                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                className={`object-contain p-2 transition-transform duration-500 group-hover:scale-105 ${
-                  secondaryImage ? "group-hover:opacity-0" : ""
-                }`}
-              />
-              {secondaryImage && (
+          <Link href={`/products/${product.handle}`} className="block w-full h-full relative">
+            {product.featuredImage ? (
+              <>
                 <SafeImage
-                  src={secondaryImage.url}
-                  alt={secondaryImage.altText ?? product.title}
+                  src={product.featuredImage.url}
+                  alt={product.featuredImage.altText ?? product.title}
                   fallbackTitle={product.title}
                   fill
-                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                  className="object-contain p-2 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
-                />
-              )}
-            </>
-          ) : (
-            <div className="w-full h-full bg-soft-green flex items-center justify-center text-primary-green font-serif font-bold text-xl">
-              Ruchi
-            </div>
-          )}
-        </Link>
-      </div>
-
-      {/* Category (real Shopify collection) & Spice Intensity Row */}
-      {(categoryTag || intensityTag) && (
-      <div className="flex items-center justify-between gap-2 mb-1">
-        {categoryTag && (
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-primary-green">
-            {categoryTag}
-          </span>
-        )}
-        {intensityTag && (
-          <span className="inline-flex items-center gap-1 bg-soft-green border border-primary-green/20 text-deep-green text-[10px] font-bold px-2 py-0.5 rounded-full">
-            <Flame className="w-3 h-3 text-primary-green fill-primary-green" />
-            {intensityTag.toUpperCase()}
-          </span>
-        )}
-      </div>
-      )}
-
-      {/* Product Name */}
-      <Link href={`/products/${product.handle}`} className="block mb-1.5">
-        <h3 className="font-sans text-sm sm:text-base font-black text-text uppercase tracking-wide leading-snug line-clamp-1 group-hover:text-primary-green transition-colors">
-          {product.title}
-        </h3>
-      </Link>
-
-      {/* Description */}
-      <p className="text-xs text-muted-text font-normal leading-relaxed line-clamp-2 mb-3 min-h-[2.25rem]">
-        {product.description || "Masterfully crafted heritage spice blend for authentic cooking."}
-      </p>
-
-      {/* Pack Size Variant Selector */}
-      {hasCustomVariants && variants.length > 1 && (
-        <div className="mb-3">
-          <span className="block mb-1.5 text-[10px] font-bold tracking-wider text-muted-text uppercase">
-            Compare Pack Sizes
-          </span>
-          <div className="grid grid-cols-3 gap-1.5">
-            {variants.map((v) => {
-              const vPrice = parseFloat(v.price.amount);
-              const diff = vPrice - basePrice;
-              const diffLabel =
-                diff === 0
-                  ? "Base"
-                  : `+${formatMoney({ amount: diff.toFixed(2), currencyCode: v.price.currencyCode })}`;
-              const isSelected = selectedVariantId === v.id;
-
-              return (
-                <button
-                  key={v.id}
-                  disabled={!v.availableForSale}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setSelectedVariantId(v.id);
-                  }}
-                  className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-[6px] border text-center transition-all ${
-                    !v.availableForSale
-                      ? "border-border/60 bg-white text-muted-text/50 line-through cursor-not-allowed"
-                      : isSelected
-                        ? "border-2 border-primary-green bg-soft-green text-deep-green font-bold shadow-2xs"
-                        : "border-border/80 bg-white text-muted-text hover:text-text"
+                  sizes="(min-width: 1280px) 280px, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                  className={`object-contain p-2 transition-transform duration-500 group-hover:scale-105 ${
+                    secondaryImage ? "group-hover:opacity-0" : ""
                   }`}
-                >
-                  <span className="text-[11px] font-bold uppercase">{v.title}</span>
-                  <span className={`text-[9px] font-semibold ${isSelected ? "text-primary-green" : "text-muted-text/70"}`}>
-                    {diffLabel}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+                />
+                {secondaryImage && (
+                  <SafeImage
+                    src={secondaryImage.url}
+                    alt={secondaryImage.altText ?? product.title}
+                    fallbackTitle={product.title}
+                    fill
+                    sizes="(min-width: 1280px) 280px, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                    className="object-contain p-2 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
+                  />
+                )}
+              </>
+            ) : (
+              <div className="w-full h-full bg-emerald-50 flex items-center justify-center text-[#168a4a] font-serif font-bold text-xl">
+                Ruchi
+              </div>
+            )}
+          </Link>
         </div>
-      )}
 
-      {/* Price Row */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5">
-          <span className="text-lg font-extrabold text-text">
-            {formatMoney(priceMoney)}
-          </span>
-          <Info className="w-3.5 h-3.5 text-muted-text/60" />
-          {compareAtMoney && compareAtPrice && compareAtPrice > price && (
-            <span className="text-[10px] text-muted-text line-through font-medium">
-              {formatMoney(compareAtMoney)}
+        {/* Category & Intensity Tag */}
+        {(categoryTag || intensityTag) && (
+          <div className="flex items-center justify-between gap-2 mb-1.5">
+            {categoryTag && (
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#168a4a]">
+                {categoryTag}
+              </span>
+            )}
+            {intensityTag && (
+              <span className="inline-flex items-center gap-1 bg-emerald-50 border border-emerald-200/60 text-[#0e6337] text-[10px] font-bold px-2 py-0.5 rounded-full">
+                <Flame className="w-3 h-3 text-[#168a4a] fill-[#168a4a]" />
+                {intensityTag.toUpperCase()}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Product Name */}
+        <Link href={`/products/${product.handle}`} className="block mb-1.5">
+          <h3 className="font-sans text-sm sm:text-base font-bold text-gray-900 uppercase tracking-wide leading-snug line-clamp-1 group-hover:text-[#168a4a] transition-colors">
+            {product.title}
+          </h3>
+        </Link>
+
+        {/* Description */}
+        <p className="font-sans text-xs text-gray-600 font-medium leading-relaxed line-clamp-2 mb-3.5 min-h-[2.25rem]">
+          {product.description || "Masterfully crafted heritage spice blend for authentic cooking."}
+        </p>
+
+        {/* Pack Size Variant Selector */}
+        {hasCustomVariants && variants.length > 1 && (
+          <div className="mb-3.5">
+            <span className="block mb-1.5 text-[10px] font-bold tracking-wider text-gray-500 uppercase">
+              Pack Size
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {variants.map((v) => {
+                const isSelected = selectedVariantId === v.id;
+                return (
+                  <button
+                    key={v.id}
+                    type="button"
+                    disabled={!v.availableForSale}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedVariantId(v.id);
+                    }}
+                    className={`px-2.5 py-1 rounded-[6px] border text-xs font-semibold transition-all ${
+                      !v.availableForSale
+                        ? "border-gray-200 bg-gray-50 text-gray-300 line-through cursor-not-allowed"
+                        : isSelected
+                          ? "border-2 border-[#168a4a] bg-emerald-50 text-[#0e6337] shadow-2xs font-bold"
+                          : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:text-gray-900"
+                    }`}
+                  >
+                    <span>{v.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div>
+        {/* Price Row */}
+        <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-100">
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg sm:text-xl font-bold text-gray-900">
+              {formatMoney(priceMoney)}
+            </span>
+            {compareAtMoney && compareAtPrice && compareAtPrice > price && (
+              <span className="text-xs text-gray-400 line-through font-medium">
+                {formatMoney(compareAtMoney)}
+              </span>
+            )}
+          </div>
+          {selectedVariant?.title && selectedVariant.title.toLowerCase() !== "default title" && (
+            <span className="text-[11px] text-gray-500 font-semibold uppercase">
+              ({selectedVariant.title})
             </span>
           )}
         </div>
-        {selectedVariant?.title && selectedVariant.title.toLowerCase() !== "default title" && (
-          <span className="text-[10px] text-muted-text font-semibold uppercase">
-            ({selectedVariant.title})
-          </span>
-        )}
+
+        {/* Add to Cart Button */}
+        <button
+          onClick={handleAddToCart}
+          disabled={isSoldOut || isPending}
+          className={`w-full py-2.5 sm:py-3 rounded-[8px] font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] ${
+            isSoldOut
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+              : added
+                ? "bg-[#168a4a] text-white border-2 border-[#168a4a]"
+                : "bg-white border-2 border-[#168a4a] text-[#0e6337] hover:bg-[#168a4a] hover:text-white disabled:opacity-60"
+          }`}
+          aria-label="Add to cart"
+        >
+          {isSoldOut ? (
+            "Sold Out"
+          ) : added ? (
+            <>
+              <Check className="w-4 h-4" /> Added to Cart
+            </>
+          ) : isPending ? (
+            "Adding…"
+          ) : (
+            <>
+              <ShoppingBag className="w-4 h-4" /> Add to Cart
+            </>
+          )}
+        </button>
+
+        {state?.error ? (
+          <p className="mt-1.5 text-[10px] font-medium text-[#c62828] text-center">{state.error}</p>
+        ) : null}
       </div>
-
-      {/* Add to Cart Button */}
-      <button
-        onClick={handleAddToCart}
-        disabled={isSoldOut || isPending}
-        className={`w-full py-2.5 rounded-[8px] font-bold text-xs tracking-wider uppercase transition-all shadow-xs flex items-center justify-center gap-2 ${
-          isSoldOut
-            ? "bg-border text-muted-text cursor-not-allowed border border-border"
-            : added
-              ? "bg-primary-green text-white border-2 border-primary-green"
-              : "bg-white border-2 border-primary-green text-deep-green hover:bg-primary-green hover:text-white disabled:opacity-60"
-        }`}
-        aria-label="Add to cart"
-      >
-        {isSoldOut ? (
-          "Sold Out"
-        ) : added ? (
-          <>
-            <Check className="w-4 h-4" /> Added to Cart
-          </>
-        ) : isPending ? (
-          "Adding…"
-        ) : (
-          <>
-            <ShoppingBag className="w-4 h-4" /> Add to Cart
-          </>
-        )}
-      </button>
-
-      {state?.error ? (
-        <p className="mt-1.5 text-[10px] font-medium text-brand-red text-center">{state.error}</p>
-      ) : null}
     </div>
   );
 }

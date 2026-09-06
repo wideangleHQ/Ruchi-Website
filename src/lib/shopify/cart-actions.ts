@@ -123,6 +123,36 @@ export async function removeItemAction(
   }
 }
 
+/**
+ * Adds the selected variant to the cart and, on success, redirects straight
+ * to Shopify checkout — the "Buy Now" fast path. Reuses the same cart/session
+ * as Add to Cart rather than a parallel checkout flow.
+ */
+export async function buyNowAction(
+  _prevState: CartActionState,
+  payload: { merchandiseId: string; quantity?: number }
+): Promise<CartActionState> {
+  if (!payload.merchandiseId) {
+    return { error: "Missing product variant." };
+  }
+
+  let checkoutUrl: string;
+  try {
+    const cart = await getOrCreateCart();
+    const updatedCart = await addToCart(cart.id, [
+      { merchandiseId: payload.merchandiseId, quantity: payload.quantity ?? 1 },
+    ]);
+    updateTag(TAGS.cart);
+    checkoutUrl = updatedCart.checkoutUrl;
+  } catch (error) {
+    return {
+      error: isShopifyApiError(error) ? error.message : "Could not start checkout.",
+    };
+  }
+
+  redirect(checkoutUrl);
+}
+
 export async function redirectToCheckoutAction(): Promise<void> {
   const cartId = await getCartId();
   if (!cartId) redirect("/cart");

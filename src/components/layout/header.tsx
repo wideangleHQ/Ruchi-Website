@@ -11,6 +11,7 @@ import { HeaderSearch } from "./header-search";
 const primaryNavLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
+  { label: "Tea", href: "/products?category=tea" },
   { label: "About Us", href: "/#heritage" },
   { label: "Bulk Order", href: "/#b2b" },
   { label: "Blog", href: "/#recipes" },
@@ -27,7 +28,7 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
 
       {/* TOP ROW (Row 1): 48–56px height. Logo (Left) | Search (Center) | Account, Cart, SHOP NOW (Right) */}
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="flex h-12 sm:h-13 lg:h-14 items-center justify-between gap-3 sm:gap-4 lg:gap-6">
+        <div className="flex h-16 sm:h-18 lg:h-20 items-center justify-between gap-3 sm:gap-4 lg:gap-6">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -39,12 +40,12 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
 
           {/* LEFT: Ruchi Logo */}
           <Link href="/" className="flex items-center group py-0.5 flex-shrink-0">
-            <div className="relative w-32 sm:w-36 lg:w-40 h-8 sm:h-9 lg:h-9.5 flex items-center justify-start">
+            <div className="relative w-56 sm:w-64 lg:w-72 h-14 sm:h-16 lg:h-18 flex items-center justify-start overflow-visible">
               <Image
                 src="/images/ruchi-50yrs-logo.png"
                 alt="Ruchi Foodline 50 Years Logo"
                 fill
-                className="object-contain object-left"
+                className="object-contain object-left scale-[1.35] origin-left"
                 priority
                 unoptimized
               />
@@ -91,12 +92,12 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
               )}
             </Link>
 
-            {/* SHOP NOW Button */}
+            {/* Sign In / Sign Up */}
             <Link
-              href="/products"
-              className="hidden sm:inline-flex items-center bg-[#c62828] hover:bg-[#a82020] text-white text-xs font-semibold tracking-wider uppercase px-3.5 lg:px-4 py-1.5 rounded-full transition-all shadow-2xs active:scale-95 ml-1"
+              href="/#account"
+              className="hidden sm:inline-flex items-center text-[13px] font-semibold text-gray-700 hover:text-[#168a4a] transition-colors ml-1 whitespace-nowrap"
             >
-              SHOP NOW
+              Sign In / Sign Up
             </Link>
           </div>
         </div>
@@ -121,10 +122,10 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`text-[13px] font-medium transition-colors relative py-0.5 ${
+                  className={`text-[13px] transition-colors relative py-0.5 ${
                     isActive
                       ? "text-[#c62828] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#c62828]"
-                      : "text-gray-800 hover:text-[#c62828] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#c62828] hover:after:w-full after:transition-all"
+                      : "text-gray-800 font-semibold hover:text-[#c62828] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#c62828] hover:after:w-full after:transition-all"
                   }`}
                 >
                   {link.label}
@@ -136,7 +137,7 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
           {/* RIGHT: Contact Us */}
           <Link
             href="/#heritage"
-            className="text-[13px] font-medium text-gray-800 hover:text-[#c62828] transition-colors py-0.5 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#c62828] hover:after:w-full after:transition-all"
+            className="text-[13px] font-semibold text-gray-800 hover:text-[#c62828] transition-colors py-0.5 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#c62828] hover:after:w-full after:transition-all"
           >
             Contact Us
           </Link>
@@ -154,7 +155,7 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
             <div>
               <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                 <div className="flex items-center">
-                  <div className="relative w-36 h-12 flex items-center justify-center">
+                  <div className="relative w-48 h-14 flex items-center justify-center">
                     <Image
                       src="/images/ruchi-50yrs-logo.png"
                       alt="Ruchi Foodline Logo"
@@ -179,7 +180,7 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
                     key={link.label}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-sm font-medium text-gray-900 hover:text-[#c62828] py-2 border-b border-gray-100 flex justify-between items-center"
+                    className="text-sm font-semibold text-gray-900 hover:text-[#c62828] py-2 border-b border-gray-100 flex justify-between items-center"
                   >
                     <span>{link.label}</span>
                     <ArrowRight className="w-4 h-4 text-gray-400" />

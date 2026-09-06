@@ -30,7 +30,6 @@ import type {
   ShopifyRemoveFromCartOperation,
   ShopifyUpdateCartOperation,
 } from "./types";
-import { excludeHampers } from "./product-filters";
 
 export const TAGS = {
   products: "products",
@@ -81,7 +80,7 @@ export async function getProducts({
       variables: { first, sortKey, reverse, query },
       tags: [TAGS.products],
     });
-    return excludeHampers(removeEdgesAndNodes(data.products));
+    return removeEdgesAndNodes(data.products);
   } catch (error) {
     console.error("[shopify] getProducts() failed:", error);
     return [];
@@ -135,7 +134,7 @@ export async function getCollectionProducts({
       variables: { handle, first, sortKey, reverse },
       tags: [TAGS.products, TAGS.collections],
     });
-    return data.collection ? excludeHampers(removeEdgesAndNodes(data.collection.products)) : [];
+    return data.collection ? removeEdgesAndNodes(data.collection.products) : [];
   } catch (error) {
     console.error(`[shopify] getCollectionProducts("${handle}") failed:`, error);
     return [];

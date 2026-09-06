@@ -32,9 +32,11 @@ export type ProductVariant = {
   id: string;
   title: string;
   availableForSale: boolean;
+  sku: string | null;
   selectedOptions: Array<{ name: string; value: string }>;
   price: Money;
   compareAtPrice: Money | null;
+  image: Image | null;
 };
 
 export type Product = {
@@ -44,6 +46,7 @@ export type Product = {
   title: string;
   description: string;
   descriptionHtml: string;
+  productType: string;
   options: ProductOption[];
   priceRange: {
     minVariantPrice: Money;

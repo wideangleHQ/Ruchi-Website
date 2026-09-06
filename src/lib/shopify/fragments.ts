@@ -28,6 +28,7 @@ export const productVariantFragment = /* GraphQL */ `
     id
     title
     availableForSale
+    sku
     selectedOptions {
       name
       value
@@ -37,6 +38,9 @@ export const productVariantFragment = /* GraphQL */ `
     }
     compareAtPrice {
       ...money
+    }
+    image {
+      ...image
     }
   }
   ${moneyFragment}
@@ -50,6 +54,7 @@ export const productFragment = /* GraphQL */ `
     title
     description
     descriptionHtml
+    productType
     options {
       id
       name

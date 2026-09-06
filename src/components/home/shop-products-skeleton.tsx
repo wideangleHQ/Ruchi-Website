@@ -2,12 +2,12 @@ export function ShopProductsSkeleton() {
   return (
     <section className="py-4 sm:py-6 lg:py-8 bg-transparent">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Square Category Cards Skeleton */}
-        <div className="flex gap-3 sm:gap-4 lg:gap-5 mb-5 overflow-hidden py-1">
+        {/* Square Category Cards Skeleton (7-Column Grid) */}
+        <div className="grid grid-cols-7 gap-2 sm:gap-3.5 md:gap-4 lg:gap-5 xl:gap-6 w-full mb-5 sm:mb-7 py-1 items-start">
           {Array.from({ length: 7 }).map((_, i) => (
-            <div key={i} className="flex flex-col items-center w-[98px] sm:w-[120px] md:w-[136px] lg:w-[148px] flex-shrink-0">
-              <div className="aspect-square w-full rounded-[14px] bg-soft-green animate-pulse" />
-              <div className="h-3 w-16 bg-soft-green rounded mt-2 animate-pulse" />
+            <div key={i} className="flex flex-col items-center w-full">
+              <div className="aspect-square w-full rounded-[10px] sm:rounded-[14px] lg:rounded-[16px] bg-soft-green animate-pulse" />
+              <div className="h-3 w-12 sm:w-16 bg-soft-green rounded mt-1.5 sm:mt-2 animate-pulse" />
             </div>
           ))}
         </div>
