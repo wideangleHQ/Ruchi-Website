@@ -41,7 +41,12 @@ async function setCartId(cartId: string) {
 export async function getCartFromCookies(): Promise<Cart | null> {
   const cartId = await getCartId();
   if (!cartId) return null;
-  return getCart(cartId);
+  try {
+    return await getCart(cartId);
+  } catch (error) {
+    console.error(`[shopify] getCartFromCookies("${cartId}") failed:`, error);
+    return null;
+  }
 }
 
 /**

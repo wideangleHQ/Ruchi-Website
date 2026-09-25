@@ -40,12 +40,12 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
 
           {/* LEFT: Ruchi Logo */}
           <Link href="/" className="flex items-center group py-0.5 flex-shrink-0">
-            <div className="relative w-56 sm:w-64 lg:w-72 h-14 sm:h-16 lg:h-18 flex items-center justify-start overflow-visible">
+            <div className="relative w-40 sm:w-56 lg:w-72 h-11 sm:h-14 lg:h-18 flex items-center justify-start overflow-visible">
               <Image
                 src="/images/ruchi-50yrs-logo.png"
                 alt="Ruchi Foodline 50 Years Logo"
                 fill
-                className="object-contain object-left scale-[1.35] origin-left"
+                className="object-contain object-left scale-[1.2] sm:scale-[1.35] origin-left"
                 priority
                 unoptimized
               />

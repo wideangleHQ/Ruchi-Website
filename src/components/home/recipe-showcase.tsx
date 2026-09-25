@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import pageBackground from "@/assets/Images/Page Background 2.png";
 
 interface BlogPost {
   id: string;
@@ -110,13 +111,19 @@ export function RecipeShowcase() {
   return (
     <section
       id="recipes"
-      className="relative w-full min-h-[80vh] bg-[#0e6337] text-white flex flex-col justify-center py-12 sm:py-16 lg:py-20 overflow-hidden"
+      className="relative w-full min-h-[70vh] bg-[#0e6337] text-white flex flex-col justify-center py-7 sm:py-10 lg:py-12 overflow-hidden"
       aria-label="Stories, Flavours & Insights"
     >
-      <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto flex flex-col justify-between my-auto">
+      <Image
+        src={pageBackground}
+        alt=""
+        fill
+        className="object-cover object-center opacity-100 pointer-events-none select-none"
+      />
+      <div className="relative z-10 w-full flex flex-col justify-between my-auto">
         
         {/* Top-Left Section Heading & Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-6 sm:mb-8 lg:mb-10">
+        <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-4 sm:mb-6 lg:mb-7">
           <div className="max-w-2xl text-left">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
               Stories, Flavours &amp; Insights
@@ -155,16 +162,16 @@ export function RecipeShowcase() {
           </div>
         </div>
 
-        {/* Full-Width Image-First Blog Cards */}
+        {/* Full-Width (100vw) Cards Slider */}
         <div
           ref={scrollContainerRef}
-          className="flex items-stretch gap-5 sm:gap-6 overflow-x-auto scrollbar-none scroll-smooth pb-3 snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0"
+          className="w-full flex items-stretch gap-5 sm:gap-6 overflow-x-auto scrollbar-none scroll-smooth pb-3 snap-x snap-mandatory px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-[max(2rem,calc((100vw-1400px)/2+2rem))]"
         >
           {BLOG_POSTS.map((post) => (
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}
-              className="blog-card group relative block shrink-0 snap-start w-[280px] sm:w-[320px] md:w-[340px] lg:w-[360px] xl:w-[380px] h-[350px] sm:h-[390px] lg:h-[430px] rounded-[15px] overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-1.5"
+              className="blog-card group relative block shrink-0 snap-start w-[280px] sm:w-[320px] md:w-[340px] lg:w-[360px] xl:w-[380px] h-[350px] sm:h-[390px] lg:h-[430px] rounded-[15px] overflow-hidden shadow-md transition-all duration-500 hover:-translate-y-1.5"
             >
               {/* Background Image with Zoom on Hover */}
               <Image

@@ -42,7 +42,7 @@ export function Footer({ collections }: FooterProps) {
   };
 
   return (
-    <footer id="footer" className="bg-[#0e6337] text-white pt-16 pb-8 border-t border-deep-green">
+    <footer id="footer" className="relative z-20 bg-[#0e6337] text-white pt-16 pb-8 border-t border-deep-green">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-14 pb-12 border-b border-white/10">
           {/* Brand */}

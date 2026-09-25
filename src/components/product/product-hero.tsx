@@ -299,28 +299,31 @@ export function ProductHero({ product }: ProductHeroProps) {
 
       {/* Sticky Purchase Bar */}
       <div
-        className={`fixed inset-x-0 bottom-0 z-40 bg-white border-t border-border shadow-[0_-4px_16px_rgba(0,0,0,0.06)] transition-transform duration-300 ease-out motion-reduce:transition-none ${
+        className={`fixed inset-x-0 bottom-[56px] md:bottom-0 z-30 bg-white/95 backdrop-blur-md border-t border-border shadow-[0_-4px_16px_rgba(0,0,0,0.08)] transition-transform duration-300 ease-out motion-reduce:transition-none ${
           showStickyBar ? "translate-y-0" : "translate-y-full"
         }`}
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-2.5 flex items-center gap-3">
-          <div className="hidden sm:block min-w-0 flex-1">
-            <p className="text-sm font-semibold text-text truncate">{product.title}</p>
-            {variants.length > 1 && (
-              <p className="text-[11px] text-muted-text font-medium">{selectedVariant?.title}</p>
-            )}
+        <div className="mx-auto max-w-[1400px] px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs sm:text-sm font-semibold text-text truncate">{product.title}</p>
+            <div className="flex items-center gap-2">
+              <span className="font-serif text-sm sm:text-lg font-bold text-text shrink-0">
+                {selectedVariant ? formatMoney(selectedVariant.price) : ""}
+              </span>
+              {variants.length > 1 && (
+                <span className="text-[10px] text-muted-text font-medium truncate">
+                  ({selectedVariant?.title})
+                </span>
+              )}
+            </div>
           </div>
-          <span className="font-serif text-lg sm:text-xl font-semibold text-text shrink-0">
-            {selectedVariant ? formatMoney(selectedVariant.price) : ""}
-          </span>
-          <div className="flex gap-2 shrink-0 ml-auto">
+          <div className="flex gap-1.5 sm:gap-2 shrink-0">
             <button
               type="button"
               disabled={isSoldOut || isAdding}
               onClick={handleAddToCart}
               tabIndex={showStickyBar ? 0 : -1}
-              className="py-2.5 px-4 rounded-[8px] font-semibold text-xs border-2 border-primary-green text-deep-green hover:bg-soft-green transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green disabled:opacity-50"
+              className="py-2 sm:py-2.5 px-3 sm:px-4 rounded-[8px] font-semibold text-[11px] sm:text-xs border-2 border-primary-green text-deep-green hover:bg-soft-green transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green disabled:opacity-50"
             >
               Add to Cart
             </button>
@@ -329,7 +332,7 @@ export function ProductHero({ product }: ProductHeroProps) {
               disabled={isSoldOut || isBuying}
               onClick={handleBuyNow}
               tabIndex={showStickyBar ? 0 : -1}
-              className="py-2.5 px-4 rounded-[8px] font-bold text-xs bg-primary-green hover:bg-deep-green text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green disabled:opacity-50"
+              className="py-2 sm:py-2.5 px-3.5 sm:px-4 rounded-[8px] font-bold text-[11px] sm:text-xs bg-primary-green hover:bg-deep-green text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green disabled:opacity-50"
             >
               Buy Now
             </button>

@@ -49,7 +49,7 @@ export function FeaturedCampaign() {
   return (
     <section className="py-4 sm:py-6 lg:py-8 bg-transparent" aria-label="Promotional Strip Banner Slideshow">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="relative w-full aspect-[1920/420] overflow-hidden rounded-xl sm:rounded-2xl bg-transparent">
+        <div className="relative w-full aspect-[16/6] sm:aspect-[1920/420] min-h-[95px] sm:min-h-0 overflow-hidden rounded-xl sm:rounded-2xl bg-transparent">
           {STRIP_BANNERS.map((banner, index) => {
             const isActive = index === currentIndex;
             return (

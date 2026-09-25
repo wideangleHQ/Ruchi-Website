@@ -14,7 +14,7 @@ export function HeritageB2BSection() {
   };
 
   return (
-    <section id="heritage" className="py-12 sm:py-16 bg-transparent border-t border-border">
+    <section className="py-6 sm:py-8 lg:py-10 bg-transparent border-t border-border">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Restrained B2B Bulk Order Section */}
         <div id="b2b" className="rounded-[12px] bg-white border border-border p-8 sm:p-12 shadow-xs">
