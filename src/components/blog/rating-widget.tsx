@@ -6,7 +6,15 @@ import { Star } from "lucide-react";
 export function RatingWidget({ articleId }: { articleId: string }) {
   const [average, setAverage] = useState(0);
   const [count, setCount] = useState(0);
-  const [userRating, setUserRating] = useState(0);
+  const [userRating, setUserRating] = useState(() => {
+    if (typeof window === "undefined") return 0;
+    try {
+      const stored = localStorage.getItem(`blog_rating_${articleId}`);
+      return stored ? parseInt(stored, 10) || 0 : 0;
+    } catch {
+      return 0;
+    }
+  });
   const [hoveredStar, setHoveredStar] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -19,11 +27,6 @@ export function RatingWidget({ articleId }: { articleId: string }) {
         setCount(data.count || 0);
       })
       .catch(() => {});
-
-    try {
-      const stored = localStorage.getItem(`blog_rating_${articleId}`);
-      if (stored) setUserRating(parseInt(stored));
-    } catch { /* noop */ }
   }, [articleId]);
 
   const submitRating = async (score: number) => {

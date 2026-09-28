@@ -14,7 +14,6 @@ export default function CreatePostPage() {
   const [summary, setSummary] = useState("");
   const [blogId, setBlogId] = useState("");
   const [tags, setTags] = useState("");
-  const [published, setPublished] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 

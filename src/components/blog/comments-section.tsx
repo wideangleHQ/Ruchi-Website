@@ -57,14 +57,12 @@ export function CommentsSection({ articleId }: { articleId: string }) {
     }
   };
 
-  const timeAgo = (dateStr: string) => {
-    const diff = Date.now() - new Date(dateStr).getTime();
-    const days = Math.floor(diff / 86400000);
-    if (days > 30) return new Date(dateStr).toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" });
-    if (days > 0) return `${days} day${days > 1 ? "s" : ""} ago`;
-    const hours = Math.floor(diff / 3600000);
-    if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-    return "Just now";
+  const formatDate = (dateStr: string) => {
+    try {
+      return new Date(dateStr).toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" });
+    } catch {
+      return dateStr;
+    }
   };
 
   return (
@@ -146,7 +144,7 @@ export function CommentsSection({ articleId }: { articleId: string }) {
                     </div>
                   )}
                 </div>
-                <span className="text-xs text-muted-text whitespace-nowrap">{timeAgo(comment.createdAt)}</span>
+                <span className="text-xs text-muted-text whitespace-nowrap">{formatDate(comment.createdAt)}</span>
               </div>
               <p className="text-sm text-text/85 leading-relaxed">{comment.content}</p>
             </div>

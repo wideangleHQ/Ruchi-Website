@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { SlidersHorizontal, X, ChevronDown, Check } from "lucide-react";
+import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import type { Collection, Product } from "@/lib/shopify/types";
 import { ProductCard } from "@/components/product/product-card";
 import shopBanner from "@/assets/Images/Ads/Strip 2.png";
@@ -370,7 +370,7 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
               <div className="text-center py-20 border border-gray-200/80 rounded-2xl bg-gray-50/50">
                 <p className="text-base font-bold text-gray-900 mb-1.5">No products found</p>
                 <p className="text-sm font-medium text-gray-600 mb-5 max-w-sm mx-auto">
-                  We couldn't find any products matching your current filters. Try changing or clearing filters.
+                  We couldn&apos;t find any products matching your current filters. Try changing or clearing filters.
                 </p>
                 {hasActiveFilters && (
                   <button

@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import type { BlogArticle, BlogCategory } from "@/types/blog";
+import type { BlogArticle } from "@/types/blog";
 import { BlogCard } from "./blog-card";
 
 export function BlogPageClient({
@@ -29,16 +29,6 @@ export function BlogPageClient({
   const [searchInput, setSearchInput] = useState(currentSearch);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Debounced search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchInput !== currentSearch) {
-        updateParams({ search: searchInput, page: "" });
-      }
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [searchInput]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const updateParams = useCallback(
     (updates: Record<string, string>) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -52,6 +42,16 @@ export function BlogPageClient({
     },
     [router, searchParams, startTransition]
   );
+
+  // Debounced search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchInput !== currentSearch) {
+        updateParams({ search: searchInput, page: "" });
+      }
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchInput, currentSearch, updateParams]);
 
   const allTags = Array.from(new Set(articles.flatMap((a) => a.tags))).sort();
 

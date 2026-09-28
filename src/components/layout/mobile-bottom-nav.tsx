@@ -63,9 +63,11 @@ export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBo
   const [isCategorySheetOpen, setIsCategorySheetOpen] = useState(false);
 
   // Close sheet when navigating to new route
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setIsCategorySheetOpen(false);
-  }, [pathname]);
+  }
 
   // Lock body scroll when drawer/sheet is active
   useEffect(() => {

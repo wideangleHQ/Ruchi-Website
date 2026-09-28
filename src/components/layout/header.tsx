@@ -12,7 +12,7 @@ import { HeaderSearch } from "./header-search";
 const primaryNavLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
-  { label: "Tea", href: "/tea" },
+  { label: "Tea", href: "/products?category=tea" },
   { label: "About Us", href: "/#heritage" },
   { label: "Blog", href: "/#recipes" },
 ];
@@ -62,12 +62,14 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
   }, []);
 
   // Close dropdown and mobile menu on pathname changes
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setIsContactDropdownOpen(false);
     setIsMobileMenuOpen(false);
     setIsMobileSearchOpen(false);
     setIsMobileContactOpen(false);
-  }, [pathname]);
+  }
 
   // Lock body scroll when mobile hamburger overlay is active
   useEffect(() => {
@@ -178,7 +180,9 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
           {/* LEFT: Home | Shop | Tea | About Us | Blog */}
           <nav className="flex items-center gap-5 lg:gap-7 xl:gap-8">
             {primaryNavLinks.map((link) => {
-              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+              const isActive = link.href.includes("?")
+                ? pathname === link.href.split("?")[0]
+                : (link.href === "/" ? pathname === "/" : pathname === link.href);
 
               return (
                 <Link

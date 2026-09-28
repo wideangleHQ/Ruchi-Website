@@ -1,15 +1,17 @@
 import "server-only";
 
-const domain = process.env.SHOPIFY_STORE_DOMAIN;
-const adminAccessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
-const apiVersion = process.env.SHOPIFY_API_VERSION || "2026-07";
-
 export async function shopifyAdminFetch<TResult>(opts: {
   query: string;
   variables?: Record<string, unknown>;
 }): Promise<TResult> {
+  const domain = process.env.SHOPIFY_STORE_DOMAIN;
+  const adminAccessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
+  const apiVersion = process.env.SHOPIFY_API_VERSION || "2026-07";
+
   if (!domain || !adminAccessToken) {
-    throw new Error("Shopify Admin API credentials not configured");
+    throw new Error(
+      "Missing required Shopify Admin API credentials (SHOPIFY_STORE_DOMAIN and SHOPIFY_ADMIN_ACCESS_TOKEN)."
+    );
   }
 
   const host = domain.startsWith("http") ? domain : `https://${domain}`;

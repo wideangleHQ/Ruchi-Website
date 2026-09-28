@@ -1,10 +1,6 @@
 import "server-only";
 import type { ShopifyErrorLike } from "./types";
 
-const domain = process.env.SHOPIFY_STORE_DOMAIN;
-const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
-const apiVersion = process.env.SHOPIFY_API_VERSION || "2025-01";
-
 export class ShopifyApiError extends Error {
   status: number;
 
@@ -16,9 +12,12 @@ export class ShopifyApiError extends Error {
 }
 
 function endpoint() {
+  const domain = process.env.SHOPIFY_STORE_DOMAIN;
+  const apiVersion = process.env.SHOPIFY_API_VERSION || "2025-01";
+
   if (!domain) {
     throw new ShopifyApiError(
-      "SHOPIFY_STORE_DOMAIN is not configured. Set it in your environment variables.",
+      "Missing required environment variable: SHOPIFY_STORE_DOMAIN. Please configure it in your Vercel project settings.",
       500
     );
   }
@@ -41,9 +40,11 @@ export async function shopifyFetch<TResult, TVariables = Record<string, unknown>
   cache,
   revalidate,
 }: ShopifyFetchOptions<TVariables>): Promise<TResult> {
+  const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+
   if (!storefrontAccessToken) {
     throw new ShopifyApiError(
-      "SHOPIFY_STOREFRONT_ACCESS_TOKEN is not configured. Set it in your environment variables.",
+      "Missing required environment variable: SHOPIFY_STOREFRONT_ACCESS_TOKEN. Please configure it in your Vercel project settings.",
       500
     );
   }

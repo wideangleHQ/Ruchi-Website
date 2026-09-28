@@ -15,8 +15,8 @@ export default function BlogArticleLoading() {
       </div>
       <div className="aspect-[2/1] max-w-4xl bg-soft-neutral rounded-[var(--radius-brand)] animate-pulse mb-10" />
       <div className="max-w-3xl space-y-4">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="h-4 w-full bg-soft-neutral rounded animate-pulse" style={{ width: `${70 + Math.random() * 30}%` }} />
+        {["85%", "92%", "78%", "88%", "70%", "95%", "82%", "75%"].map((w, i) => (
+          <div key={i} className="h-4 w-full bg-soft-neutral rounded animate-pulse" style={{ width: w }} />
         ))}
       </div>
     </div>

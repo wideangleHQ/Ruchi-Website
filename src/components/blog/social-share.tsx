@@ -1,6 +1,6 @@
 "use client";
 
-import { Share2, Link as LinkIcon, Check } from "lucide-react";
+import { Link as LinkIcon, Check } from "lucide-react";
 import { useState } from "react";
 
 const SHARE_TARGETS = [

@@ -21,9 +21,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const toggleCart = useCallback(() => setIsOpen((prev) => !prev), []);
 
   // Close cart drawer when navigating to a new route
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setIsOpen(false);
-  }, [pathname]);
+  }
 
   // Lock body scroll when cart drawer is active
   useEffect(() => {

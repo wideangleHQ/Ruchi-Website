@@ -3,7 +3,7 @@
 import React, { useEffect, useState, startTransition, useActionState } from "react";
 import Link from "next/link";
 import { X, ShoppingBag, Zap, Check, ShieldCheck, Truck, Minus, Plus, ArrowRight } from "lucide-react";
-import type { Product, ProductVariant } from "@/lib/shopify/types";
+import type { Product } from "@/lib/shopify/types";
 import { addItemAction, buyNowAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
 import { SafeImage } from "../ui/safe-image";
@@ -37,12 +37,14 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
   const [activeImageIdx, setActiveImageIdx] = useState(0);
 
   // Sync image with selected variant if available
-  useEffect(() => {
+  const [lastVariantId, setLastVariantId] = useState(selectedVariantId);
+  if (selectedVariantId !== lastVariantId) {
+    setLastVariantId(selectedVariantId);
     if (selectedVariant?.image?.url) {
       const idx = images.findIndex((img) => img.url === selectedVariant.image?.url);
       if (idx !== -1) setActiveImageIdx(idx);
     }
-  }, [selectedVariantId, selectedVariant, images]);
+  }
 
   const [addState, addAction, isAdding] = useActionState(addItemAction, undefined);
   const [buyState, buyAction, isBuying] = useActionState(buyNowAction, undefined);

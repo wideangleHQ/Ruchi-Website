@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { X, ShoppingBag, ArrowRight, ShieldCheck, Truck, Sparkles } from "lucide-react";
+import { X, ShoppingBag, ArrowRight, ShieldCheck, Truck } from "lucide-react";
 import { useCartDrawer } from "@/context/cart-context";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CheckoutButton } from "@/components/cart/checkout-button";
