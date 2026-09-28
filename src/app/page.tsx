@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Image from "next/image";
 import { getCollections } from "@/lib/shopify";
+import { getArticles, getBlogs } from "@/lib/shopify/blog";
 import { HeroSection } from "@/components/home/hero-section";
 import { CategoryCardsSection } from "@/components/home/category-cards-section";
 import { BestSellersSection } from "@/components/home/best-sellers-section";
@@ -10,13 +11,16 @@ import { AboutLegacySection } from "@/components/home/about-legacy-section";
 import { TrustPillars } from "@/components/home/trust-pillars";
 import { RecipeShowcase } from "@/components/home/recipe-showcase";
 import { SocialMediaSection } from "@/components/home/social-media-section";
-import { HeritageB2BSection } from "@/components/home/heritage-b2b-section";
 import pageBg from "@/assets/Images/Page Background.jpg";
 
-export const revalidate = 60; // Revalidate every minute
+export const revalidate = 60;
 
 export default async function HomePage() {
-  const collections = await getCollections();
+  const [collections, blogData, blogCategories] = await Promise.all([
+    getCollections(),
+    getArticles({ first: 12 }),
+    getBlogs(),
+  ]);
 
   return (
     <div className="relative w-full bg-white overflow-hidden">
@@ -55,13 +59,10 @@ export default async function HomePage() {
         <TrustPillars />
 
         {/* 7. Blogs — Stories, Flavours & Insights */}
-        <RecipeShowcase />
+        <RecipeShowcase articles={blogData.articles} categories={blogCategories} />
 
         {/* 8. Social Media Posts */}
         <SocialMediaSection />
-
-        {/* B2B Bulk Order — kept for the header's "Bulk Order" (/#b2b) nav link */}
-        <HeritageB2BSection />
       </div>
     </div>
   );

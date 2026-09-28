@@ -2,14 +2,12 @@
 
 import React, { startTransition, useActionState, useEffect, useState } from "react";
 import Link from "next/link";
-import { ShoppingBag, Heart, Share2, Eye, Check, Flame } from "lucide-react";
+import { ShoppingBag, Heart, Share2, Eye, Check } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { addItemAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
 import { SafeImage } from "../ui/safe-image";
 import { ProductQuickViewModal } from "./product-quick-view-modal";
-
-const INTENSITY_TAGS = ["mild", "medium", "hot"] as const;
 
 export function ProductCard({ product }: { product: Product }) {
   const [state, formAction, isPending] = useActionState(addItemAction, undefined);
@@ -54,14 +52,11 @@ export function ProductCard({ product }: { product: Product }) {
   const tagsLower = product.tags.map((t) => t.toLowerCase());
   const badgeText =
     (tagsLower.includes("bestseller") && "Bestseller") ||
-    (tagsLower.includes("popular") && "Popular Choice") ||
-    (tagsLower.includes("premium") && "Premium") ||
     (tagsLower.includes("new") && "New") ||
     null;
 
   // Real Shopify collection membership only
   const categoryTag = product.collections.edges[0]?.node.title ?? null;
-  const intensityTag = INTENSITY_TAGS.find((t) => tagsLower.includes(t));
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -92,33 +87,33 @@ export function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="group relative flex flex-col justify-between h-full w-full rounded-[15px] border border-gray-200/90 bg-white p-3.5 sm:p-4 transition-all duration-300 hover:border-[#168a4a]/50 hover:shadow-md hover:-translate-y-0.5">
+    <div className="group relative flex flex-col justify-between h-full w-full rounded-[12px] sm:rounded-[15px] border border-gray-200/90 bg-white p-2.5 xs:p-3 sm:p-4 transition-all duration-300 hover:border-[#168a4a]/50 hover:shadow-md hover:-translate-y-0.5">
       <div className="flex flex-col flex-1">
         {/* Product Image Container */}
-        <div className="relative aspect-square w-full rounded-[10px] overflow-hidden bg-[#f7f6f2] border border-gray-100 p-3 mb-3.5 flex items-center justify-center shrink-0">
+        <div className="relative aspect-square w-full rounded-[8px] sm:rounded-[10px] overflow-hidden bg-[#f7f6f2] border border-gray-100 p-2 sm:p-3 mb-2 sm:mb-3.5 flex items-center justify-center shrink-0">
           {badgeText && (
-            <span className="absolute top-2.5 left-2.5 z-20 inline-block bg-[#168a4a] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-[6px] shadow-2xs">
+            <span className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-20 inline-block bg-[#168a4a] text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-[5px] sm:rounded-[6px] shadow-2xs">
               {badgeText}
             </span>
           )}
 
           {/* Action Icons */}
-          <div className="absolute top-2.5 right-2.5 z-20 flex flex-col items-end gap-1.5">
+          <div className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-20 flex flex-col items-end gap-1 sm:gap-1.5">
             <button
               onClick={handleWishlist}
-              className="w-8 h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#c62828] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#c62828] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
               aria-label="Add to Wishlist"
             >
-              <Heart className={`w-4 h-4 ${isWishlisted ? "fill-[#c62828] text-[#c62828]" : ""}`} />
+              <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? "fill-[#c62828] text-[#c62828]" : ""}`} />
             </button>
             <button
               onClick={handleShare}
-              className="relative w-8 h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+              className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
               aria-label="Share product"
             >
-              <Share2 className="w-4 h-4" />
+              <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               {copiedShare && (
-                <span className="absolute right-9 top-1 bg-gray-900 text-white text-[10px] font-medium px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                <span className="absolute right-8 sm:right-9 top-1 bg-gray-900 text-white text-[9px] sm:text-[10px] font-medium px-1.5 sm:px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
                   Copied!
                 </span>
               )}
@@ -129,10 +124,10 @@ export function ProductCard({ product }: { product: Product }) {
                 e.stopPropagation();
                 setIsQuickViewOpen(true);
               }}
-              className="w-8 h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
               aria-label="Quick view"
             >
-              <Eye className="w-4 h-4" />
+              <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
           </div>
 
@@ -145,7 +140,7 @@ export function ProductCard({ product }: { product: Product }) {
                   fallbackTitle={product.title}
                   fill
                   sizes="(min-width: 1280px) 280px, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                  className={`object-contain p-2 transition-transform duration-500 group-hover:scale-105 ${
+                  className={`object-contain p-1.5 sm:p-2 transition-transform duration-500 group-hover:scale-105 ${
                     secondaryImage ? "group-hover:opacity-0" : ""
                   }`}
                 />
@@ -156,58 +151,52 @@ export function ProductCard({ product }: { product: Product }) {
                     fallbackTitle={product.title}
                     fill
                     sizes="(min-width: 1280px) 280px, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                    className="object-contain p-2 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
+                    className="object-contain p-1.5 sm:p-2 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
                   />
                 )}
               </>
             ) : (
-              <div className="w-full h-full bg-emerald-50 flex items-center justify-center text-[#168a4a] font-serif font-bold text-xl">
+              <div className="w-full h-full bg-emerald-50 flex items-center justify-center text-[#168a4a] font-serif font-bold text-lg sm:text-xl">
                 Ruchi
               </div>
             )}
           </Link>
         </div>
 
-        {/* Category & Intensity Tag - Reserved height for vertical consistency */}
-        <div className="min-h-[22px] flex items-center justify-between gap-2 mb-1.5">
+        {/* Category Tag - Reserved height for vertical consistency */}
+        <div className="min-h-[18px] sm:min-h-[22px] flex items-center justify-between gap-1.5 sm:gap-2 mb-1 sm:mb-1.5">
           {categoryTag ? (
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#168a4a] truncate">
+            <span className="text-[9.5px] sm:text-[11px] font-bold uppercase tracking-wider text-[#168a4a] truncate">
               {categoryTag}
             </span>
           ) : (
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#168a4a]/70">
+            <span className="text-[9.5px] sm:text-[11px] font-bold uppercase tracking-wider text-[#168a4a]/70">
               Ruchi Spices
-            </span>
-          )}
-          {intensityTag && (
-            <span className="inline-flex items-center gap-1 bg-emerald-50 border border-emerald-200/60 text-[#0e6337] text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
-              <Flame className="w-3 h-3 text-[#168a4a] fill-[#168a4a]" />
-              {intensityTag.toUpperCase()}
             </span>
           )}
         </div>
 
         {/* Product Name */}
-        <Link href={`/products/${product.handle}`} className="block mb-1.5">
-          <h3 className="font-sans text-sm sm:text-base font-bold text-gray-900 uppercase tracking-wide leading-snug line-clamp-2 min-h-[2.5rem] sm:min-h-[2.75rem] group-hover:text-[#168a4a] transition-colors">
+        <Link href={`/products/${product.handle}`} className="block mb-1 sm:mb-1.5">
+          <h3 className="font-sans text-xs sm:text-base font-bold text-gray-900 uppercase tracking-wide leading-snug line-clamp-2 min-h-[2rem] sm:min-h-[2.75rem] group-hover:text-[#168a4a] transition-colors">
             {product.title}
           </h3>
         </Link>
 
-        {/* Description */}
-        <p className="font-sans text-xs text-gray-600 font-medium leading-relaxed line-clamp-2 mb-3 min-h-[2.25rem] sm:min-h-[2.5rem]">
+        {/* Description - Shown on sm+ screens */}
+        <p className="hidden sm:block font-sans text-xs text-gray-600 font-medium leading-relaxed line-clamp-2 mb-3 min-h-[2.25rem] sm:min-h-[2.5rem]">
           {product.description || "Masterfully crafted heritage spice blend for authentic cooking."}
         </p>
 
         {/* Pack Size Variant Selector Area - Fixed min-height for uniform alignment */}
-        <div className="min-h-[52px] mb-3 flex flex-col justify-start">
+        <div className="min-h-[38px] sm:min-h-[52px] mb-2 sm:mb-3 flex flex-col justify-start">
           {hasCustomVariants && variants.length > 1 ? (
             <div>
-              <span className="block mb-1 text-[10px] font-bold tracking-wider text-gray-500 uppercase">
+              <span className="block mb-0.5 sm:mb-1 text-[9px] sm:text-[10px] font-bold tracking-wider text-gray-500 uppercase">
                 Pack Size
               </span>
-              <div className="flex flex-wrap gap-1.5">
-                {variants.map((v) => {
+              <div className="flex flex-wrap gap-1 sm:gap-1.5">
+                {variants.slice(0, 3).map((v) => {
                   const isSelected = selectedVariantId === v.id;
                   return (
                     <button
@@ -219,7 +208,7 @@ export function ProductCard({ product }: { product: Product }) {
                         e.stopPropagation();
                         setSelectedVariantId(v.id);
                       }}
-                      className={`px-2 py-0.5 rounded-[5px] border text-[11px] font-semibold transition-all ${
+                      className={`px-1.5 sm:px-2 py-0.5 rounded-[4px] sm:rounded-[5px] border text-[9.5px] sm:text-[11px] font-semibold transition-all ${
                         !v.availableForSale
                           ? "border-gray-200 bg-gray-50 text-gray-300 line-through cursor-not-allowed"
                           : isSelected
@@ -235,10 +224,10 @@ export function ProductCard({ product }: { product: Product }) {
             </div>
           ) : (
             <div>
-              <span className="block mb-1 text-[10px] font-bold tracking-wider text-gray-400 uppercase">
+              <span className="block mb-0.5 sm:mb-1 text-[9px] sm:text-[10px] font-bold tracking-wider text-gray-400 uppercase">
                 Pack Size
               </span>
-              <span className="inline-block px-2 py-0.5 rounded-[5px] border border-gray-200/70 bg-gray-50/60 text-gray-600 text-[11px] font-medium">
+              <span className="inline-block px-1.5 sm:px-2 py-0.5 rounded-[4px] sm:rounded-[5px] border border-gray-200/70 bg-gray-50/60 text-gray-600 text-[9.5px] sm:text-[11px] font-medium">
                 {variants[0]?.title && variants[0].title.toLowerCase() !== "default title"
                   ? variants[0].title
                   : "Standard Pack"}
@@ -250,19 +239,19 @@ export function ProductCard({ product }: { product: Product }) {
 
       <div className="mt-auto">
         {/* Price Row */}
-        <div className="flex items-center justify-between mb-3 pt-2.5 border-t border-gray-100 min-h-[34px]">
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg sm:text-xl font-bold text-gray-900">
+        <div className="flex items-center justify-between mb-2 sm:mb-3 pt-1.5 sm:pt-2.5 border-t border-gray-100 min-h-[28px] sm:min-h-[34px]">
+          <div className="flex items-baseline gap-1.5 sm:gap-2">
+            <span className="text-sm sm:text-xl font-bold text-gray-900">
               {formatMoney(priceMoney)}
             </span>
             {compareAtMoney && compareAtPrice && compareAtPrice > price && (
-              <span className="text-xs text-gray-400 line-through font-medium">
+              <span className="text-[10px] sm:text-xs text-gray-400 line-through font-medium">
                 {formatMoney(compareAtMoney)}
               </span>
             )}
           </div>
           {selectedVariant?.title && selectedVariant.title.toLowerCase() !== "default title" && (
-            <span className="text-[11px] text-gray-500 font-semibold uppercase">
+            <span className="text-[9.5px] sm:text-[11px] text-gray-500 font-semibold uppercase truncate max-w-[70px] sm:max-w-none">
               ({selectedVariant.title})
             </span>
           )}
@@ -272,7 +261,7 @@ export function ProductCard({ product }: { product: Product }) {
         <button
           onClick={handleAddToCart}
           disabled={isSoldOut || isPending}
-          className={`w-full py-2.5 sm:py-3 rounded-[8px] font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] ${
+          className={`w-full py-2 sm:py-3 rounded-[6px] sm:rounded-[8px] font-bold text-[11px] sm:text-sm tracking-wide sm:tracking-wider uppercase transition-all shadow-xs flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer active:scale-[0.99] ${
             isSoldOut
               ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
               : added
@@ -285,13 +274,13 @@ export function ProductCard({ product }: { product: Product }) {
             "Sold Out"
           ) : added ? (
             <>
-              <Check className="w-4 h-4" /> Added to Cart
+              <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Added
             </>
           ) : isPending ? (
             "Adding…"
           ) : (
             <>
-              <ShoppingBag className="w-4 h-4" /> Add to Cart
+              <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Add to Cart
             </>
           )}
         </button>

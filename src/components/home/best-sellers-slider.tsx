@@ -48,16 +48,29 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
 
   return (
     <div className="relative">
-      {/* Header Row: Title & Subtitle on left, View All & Navigation buttons on right */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4 sm:mb-6 lg:mb-7">
+      {/* Mobile Header: Title & Arrow perfectly aligned on the same row */}
+      <div className="flex sm:hidden items-center justify-between gap-2 mb-3">
         <div>
-          <span className="text-xs font-bold uppercase tracking-widest text-[#168a4a] mb-1 block">
-            CUSTOMER FAVOURITES
-          </span>
+          <h2 className="font-serif text-2xl font-bold tracking-tight text-gray-900">
+            Best Sellers
+          </h2>
+        </div>
+        <Link
+          href="/products?sort=best-selling"
+          aria-label="View all best sellers"
+          className="w-9 h-9 rounded-full bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-[#168a4a] hover:bg-[#168a4a] hover:text-white transition-colors shrink-0"
+        >
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+
+      {/* Desktop & Tablet Header Row: Title & Subtitle on left, View All & Slider Navigation buttons on right */}
+      <div className="hidden sm:flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4 sm:mb-6 lg:mb-7">
+        <div>
           <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900">
             Best Sellers
           </h2>
-          <p className="mt-2 text-sm text-gray-600 max-w-xl">
+          <p className="mt-1.5 text-sm text-gray-600 max-w-xl">
             The pure spices and blends our customers reach for again and again.
           </p>
         </div>
@@ -66,7 +79,7 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
         <div className="flex items-center gap-3 sm:gap-4 self-end sm:self-auto shrink-0">
           <Link
             href="/products?sort=best-selling"
-            className="group hidden sm:inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#168a4a] hover:text-[#0e6337] transition-colors"
+            className="group inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#168a4a] hover:text-[#0e6337] transition-colors"
           >
             <span>View All</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -101,30 +114,31 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
         </div>
       </div>
 
-      {/* Product Cards Slider Track */}
-      <div
-        ref={scrollRef}
-        className="flex items-stretch gap-3 sm:gap-4 lg:gap-5 overflow-x-auto scrollbar-none scroll-smooth pb-4 pt-1 snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0"
-      >
+      {/* Mobile: Horizontal Product Slider (Shows ~1.5 - 2 cards with smooth swipe & snap) */}
+      <div className="flex sm:hidden items-stretch gap-3 overflow-x-auto scrollbar-none scroll-smooth pb-2 pt-1 snap-x snap-mandatory -mx-4 px-4">
         {products.map((product) => (
           <div
             key={product.id}
-            className="product-slide-card w-[240px] sm:w-[270px] md:w-[290px] lg:w-[310px] shrink-0 snap-start flex flex-col self-stretch"
+            className="product-slide-card w-[215px] xs:w-[240px] shrink-0 snap-start flex flex-col self-stretch"
           >
             <ProductCard product={product} />
           </div>
         ))}
       </div>
 
-      {/* Mobile View All Link at bottom */}
-      <div className="mt-4 sm:hidden text-center">
-        <Link
-          href="/products?sort=best-selling"
-          className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-[#168a4a] hover:text-[#0e6337] py-2 px-4 rounded-full bg-emerald-50 border border-emerald-200/60 transition-colors"
-        >
-          <span>Explore All Best Sellers</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
+      {/* Desktop & Tablet: Product Cards Slider Track */}
+      <div
+        ref={scrollRef}
+        className="hidden sm:flex items-stretch gap-3 sm:gap-4 lg:gap-5 overflow-x-auto scrollbar-none scroll-smooth pb-4 pt-1 snap-x snap-mandatory"
+      >
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="product-slide-card w-[270px] md:w-[290px] lg:w-[310px] shrink-0 snap-start flex flex-col self-stretch"
+          >
+            <ProductCard product={product} />
+          </div>
+        ))}
       </div>
     </div>
   );

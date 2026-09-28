@@ -40,7 +40,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-white h-[60vh] min-h-[320px] select-none"
+      className="relative w-full overflow-hidden bg-white select-none min-h-[140px] xs:min-h-[165px] sm:min-h-[240px] md:min-h-[300px] lg:min-h-[360px] xl:min-h-[400px] aspect-[16/6] sm:aspect-[21/6] md:aspect-[2880/630]"
       aria-roledescription="carousel"
       aria-label="Featured Promotions Slideshow"
     >
@@ -74,7 +74,7 @@ export function HeroSection() {
 
       {/* Subtle Slide Indicators */}
       <div
-        className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-xs pointer-events-auto"
+        className="absolute bottom-1.5 sm:bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 sm:gap-1.5 md:gap-2 px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-full bg-black/20 backdrop-blur-xs pointer-events-auto"
         role="tablist"
         aria-label="Slideshow slide selectors"
       >
@@ -85,10 +85,10 @@ export function HeroSection() {
               key={slide.id}
               type="button"
               onClick={() => setCurrentIndex(index)}
-              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white ${
+              className={`h-1 sm:h-1.5 md:h-2 rounded-full transition-all duration-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white cursor-pointer ${
                 isActive
-                  ? "w-6 sm:w-8 bg-white"
-                  : "w-1.5 sm:w-2 bg-white/50 hover:bg-white/75"
+                  ? "w-3.5 sm:w-6 md:w-8 bg-white"
+                  : "w-1 sm:w-1.5 md:w-2 bg-white/50 hover:bg-white/75"
               }`}
               aria-label={`Go to slide ${index + 1}: ${slide.alt}`}
               aria-selected={isActive}

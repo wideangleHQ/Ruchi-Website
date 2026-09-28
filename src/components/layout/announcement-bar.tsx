@@ -31,12 +31,9 @@ export function AnnouncementBar() {
     <div className="bg-deep-green text-white h-7 sm:h-8 flex items-center justify-center overflow-hidden">
       <div
         key={index}
-        className="animate-offer-reveal flex items-center gap-2 px-4 max-w-full whitespace-nowrap text-[10.5px] xs:text-[11px] sm:text-xs font-medium tracking-tight sm:tracking-normal"
+        className="animate-offer-reveal flex items-center justify-center px-4 max-w-full whitespace-nowrap text-[10.5px] xs:text-[11px] sm:text-xs font-medium tracking-tight sm:tracking-normal"
       >
-        <span aria-hidden="true" className="text-accent-gold">
-          ✦
-        </span>
-        <span className="truncate">
+        <span className="truncate text-center">
           {OFFERS[index].map((segment, i) =>
             segment.emphasis ? (
               <span key={i} className="font-semibold text-accent-gold">
@@ -46,9 +43,6 @@ export function AnnouncementBar() {
               <React.Fragment key={i}>{segment.text}</React.Fragment>
             )
           )}
-        </span>
-        <span aria-hidden="true" className="text-accent-gold">
-          ✦
         </span>
       </div>
     </div>

@@ -1,52 +1,261 @@
-import Image from "next/image";
-import Link from "next/link";
-import basicSpicesImg from "@/assets/Images/Categories/Basic Spices.png";
-import blendedSpicesImg from "@/assets/Images/Categories/Blended Spices.png";
-import pastaImg from "@/assets/Images/Categories/Pasta.png";
-import teaImg from "@/assets/Images/Categories/Tea.png";
-import vermicelliImg from "@/assets/Images/Categories/Vermicelli.png";
-import wholeSpicesImg from "@/assets/Images/Categories/Whole Spices.png";
+"use client";
 
-const POSTS = [
-  { image: basicSpicesImg, alt: "Ruchi basic spices" },
-  { image: blendedSpicesImg, alt: "Ruchi blended masalas" },
-  { image: teaImg, alt: "Ruchi tea" },
-  { image: pastaImg, alt: "Ruchi pasta" },
-  { image: vermicelliImg, alt: "Ruchi vermicelli" },
-  { image: wholeSpicesImg, alt: "Ruchi whole spices" },
+import React, { useState, useRef } from "react";
+import Image, { type StaticImageData } from "next/image";
+import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+
+import socialImg1 from "@/assets/Images/Social Media/1.png";
+import socialImg2 from "@/assets/Images/Social Media/2.png";
+import socialImg3 from "@/assets/Images/Social Media/3.png";
+import socialImg4 from "@/assets/Images/Social Media/4.png";
+
+function InstagramIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
+
+const SOCIAL_POSTS: { id: string; image: StaticImageData; alt: string; href: string }[] = [
+  {
+    id: "post-1",
+    image: socialImg1,
+    alt: "Ruchi Foodline social post 1",
+    href: "https://www.instagram.com/ruchifoodline",
+  },
+  {
+    id: "post-2",
+    image: socialImg2,
+    alt: "Ruchi Foodline social post 2",
+    href: "https://www.instagram.com/ruchifoodline",
+  },
+  {
+    id: "post-3",
+    image: socialImg3,
+    alt: "Ruchi Foodline social post 3",
+    href: "https://www.instagram.com/ruchifoodline",
+  },
+  {
+    id: "post-4",
+    image: socialImg4,
+    alt: "Ruchi Foodline social post 4",
+    href: "https://www.instagram.com/ruchifoodline",
+  },
 ];
 
 export function SocialMediaSection() {
+  const [activeIndex, setActiveIndex] = useState(1);
+  const touchStartX = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (diff > 40 && activeIndex < SOCIAL_POSTS.length - 1) {
+      setActiveIndex((prev) => prev + 1);
+    } else if (diff < -40 && activeIndex > 0) {
+      setActiveIndex((prev) => prev - 1);
+    }
+    touchStartX.current = null;
+  };
+
   return (
-    <section className="py-5 sm:py-7 lg:py-9 bg-transparent" aria-label="Follow the Ruchi journey">
+    <section className="py-6 sm:py-8 lg:py-10 bg-transparent" aria-label="Follow the Ruchi journey on social media">
+      {/* Global Container — Exact same side padding and max-width as other sections */}
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-4 sm:mb-6 lg:mb-7">
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-text">
-            Follow the Ruchi Journey
-          </h2>
-          <p className="mt-2 text-sm text-muted-text max-w-lg mx-auto">
-            A closer look at the spices, blends, and kitchens Ruchi Foodline is part of every day.
-          </p>
+        
+        {/* Header Block with Title, Subtitle, and Follow Button */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-5 sm:mb-6 lg:mb-7">
+          <div className="text-left max-w-xl">
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
+              Follow the Ruchi Journey
+            </h2>
+            <p className="mt-1.5 text-xs sm:text-sm font-medium text-gray-600 leading-relaxed">
+              A closer look at the spices, authentic recipes, and kitchens Ruchi Foodline is part of every day.
+            </p>
+          </div>
+
+          {/* Follow Button (Desktop) */}
+          <div className="hidden sm:block shrink-0 self-end">
+            <a
+              href="https://www.instagram.com/ruchifoodline"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-95 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
+            >
+              <InstagramIcon className="w-4 h-4" />
+              <span>Follow on Instagram</span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+            </a>
+          </div>
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
-          {POSTS.map((post, idx) => (
-            <Link
-              key={idx}
-              href="/products"
-              className="group relative block aspect-square overflow-hidden rounded-[10px] sm:rounded-[12px] border border-border/60"
+        {/* Mobile: 3D Interactive Horizontal Card Slider */}
+        <div className="block md:hidden my-2">
+          <div
+            className="relative w-full h-[290px] xs:h-[320px] flex items-center justify-center overflow-hidden [perspective:1000px] select-none touch-pan-y"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {SOCIAL_POSTS.map((post, idx) => {
+              const offset = idx - activeIndex;
+              const isCenter = offset === 0;
+              const isLeft = offset === -1;
+              const isRight = offset === 1;
+
+              let transformStyle = "";
+              let opacityClass = "opacity-0 pointer-events-none scale-75";
+              let zIndex = 0;
+
+              if (isCenter) {
+                transformStyle = "translateX(0%) scale(1) rotateY(0deg)";
+                opacityClass = "opacity-100 z-20 shadow-lg pointer-events-auto";
+                zIndex = 20;
+              } else if (isLeft) {
+                transformStyle = "translateX(-58%) scale(0.85) rotateY(18deg)";
+                opacityClass = "opacity-65 z-10 shadow-sm pointer-events-auto";
+                zIndex = 10;
+              } else if (isRight) {
+                transformStyle = "translateX(58%) scale(0.85) rotateY(-18deg)";
+                opacityClass = "opacity-65 z-10 shadow-sm pointer-events-auto";
+                zIndex = 10;
+              } else if (offset < -1) {
+                transformStyle = "translateX(-110%) scale(0.7) rotateY(25deg)";
+              } else {
+                transformStyle = "translateX(110%) scale(0.7) rotateY(-25deg)";
+              }
+
+              return (
+                <div
+                  key={post.id}
+                  onClick={() => setActiveIndex(idx)}
+                  style={{
+                    transform: transformStyle,
+                    zIndex,
+                    transition: "all 400ms cubic-bezier(0.25, 1, 0.5, 1)",
+                  }}
+                  className={`absolute w-[200px] xs:w-[230px] aspect-[3/4] rounded-2xl overflow-hidden bg-white border border-gray-200/80 cursor-pointer ${opacityClass}`}
+                >
+                  <a
+                    href={post.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      if (!isCenter) e.preventDefault();
+                    }}
+                    className="relative block w-full h-full"
+                    aria-label={post.alt}
+                  >
+                    <Image
+                      src={post.image}
+                      alt={post.alt}
+                      fill
+                      sizes="240px"
+                      className="object-contain object-center w-full h-full p-1"
+                    />
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Slider Indicators & Compact Navigation Controls on Mobile */}
+          <div className="flex items-center justify-between mt-3 px-2">
+            <button
+              onClick={() => setActiveIndex((p) => Math.max(0, p - 1))}
+              disabled={activeIndex === 0}
+              aria-label="Previous social card"
+              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+                activeIndex > 0
+                  ? "bg-white text-gray-800 border-gray-200 hover:bg-gray-50 active:scale-95"
+                  : "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed opacity-40"
+              }`}
             >
-              <Image
-                src={post.image}
-                alt={post.alt}
-                fill
-                sizes="(min-width: 1024px) 220px, (min-width: 640px) 30vw, 33vw"
-                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-            </Link>
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {/* Dots */}
+            <div className="flex items-center gap-1.5">
+              {SOCIAL_POSTS.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveIndex(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === activeIndex ? "w-5 bg-[#168a4a]" : "w-1.5 bg-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={() => setActiveIndex((p) => Math.min(SOCIAL_POSTS.length - 1, p + 1))}
+              disabled={activeIndex === SOCIAL_POSTS.length - 1}
+              aria-label="Next social card"
+              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+                activeIndex < SOCIAL_POSTS.length - 1
+                  ? "bg-white text-gray-800 border-gray-200 hover:bg-gray-50 active:scale-95"
+                  : "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed opacity-40"
+              }`}
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Compact Mobile CTA Button */}
+          <div className="mt-4 text-center">
+            <a
+              href="https://www.instagram.com/ruchifoodline"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-linear-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white text-xs font-bold shadow-xs active:scale-95 transition-transform"
+            >
+              <InstagramIcon className="w-3.5 h-3.5" />
+              <span>View Instagram</span>
+              <ExternalLink className="w-3 h-3 opacity-80" />
+            </a>
+          </div>
+        </div>
+
+        {/* Desktop: 4-Column Social Media Cards Grid */}
+        <div className="hidden md:grid md:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
+          {SOCIAL_POSTS.map((post) => (
+            <a
+              key={post.id}
+              href={post.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View on Instagram"
+              className="relative block w-full rounded-xl sm:rounded-2xl overflow-hidden bg-transparent border border-gray-200/60"
+            >
+              <div className="relative aspect-[3/4] w-full flex items-center justify-center bg-transparent">
+                <Image
+                  src={post.image}
+                  alt={post.alt}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 50vw"
+                  className="object-contain object-center w-full h-full p-1"
+                />
+              </div>
+            </a>
           ))}
         </div>
+
       </div>
     </section>
   );

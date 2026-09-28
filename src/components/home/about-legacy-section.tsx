@@ -68,13 +68,13 @@ export function AboutLegacySection() {
   return (
     <section
       id="heritage"
-      className="py-5 sm:py-7 lg:py-9 bg-transparent"
+      className="py-4 sm:py-7 lg:py-9 bg-transparent"
       aria-label="About Ruchi Heritage and Story"
     >
       {/* Global Container — Exact same side padding and max-width as other sections */}
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Contained Cinematic Banner Container */}
-        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 shadow-xs min-h-[380px] sm:min-h-[440px] md:min-h-[480px] lg:min-h-[500px] flex items-center bg-stone-900">
+        {/* Contained Cinematic Banner Container — 100svh on mobile, compact on desktop */}
+        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 shadow-xs min-h-[calc(100svh-2rem)] min-h-[calc(100vh-2rem)] sm:min-h-[440px] md:min-h-[480px] lg:min-h-[500px] flex items-center bg-stone-900">
           {/* 1. Slideshow Background Canvas using images from about section folder */}
           <div className="absolute inset-0 w-full h-full">
             {ABOUT_SLIDES.map((slide, index) => {
@@ -101,21 +101,21 @@ export function AboutLegacySection() {
 
             {/* 2. Left-to-Right Readability Gradient Layer */}
             <div
-              className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-black/85 via-black/50 sm:via-black/40 to-transparent"
+              className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-black/90 via-black/60 sm:via-black/40 to-transparent"
               aria-hidden="true"
             />
           </div>
 
-          {/* 3. Constant Clean Editorial Typography */}
-          <div className="relative z-30 w-full p-6 sm:p-10 md:p-12 lg:p-16">
+          {/* 3. Constant Clean Editorial Typography — Left Aligned on all devices */}
+          <div className="relative z-30 w-full p-5 xs:p-6 sm:p-10 md:p-12 lg:p-16">
             <div className="max-w-md sm:max-w-lg lg:max-w-xl text-left">
               {/* Main Heading */}
-              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight leading-[1.2] mb-3 sm:mb-4">
+              <h2 className="font-serif text-2xl xs:text-3xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight leading-[1.2] mb-3 sm:mb-4">
                 50 Years of Flavour, Built on Trust.
               </h2>
 
               {/* Short Story Paragraph */}
-              <p className="font-sans text-xs sm:text-sm md:text-base text-white/90 font-medium leading-relaxed mb-6 sm:mb-8">
+              <p className="font-sans text-xs xs:text-sm sm:text-sm md:text-base text-white/90 font-medium leading-relaxed mb-5 sm:mb-8 max-w-sm sm:max-w-none">
                 For five decades, Ruchi Foodline has stayed true to a single belief — that authentic Indian cooking begins with honest ingredients. From hand-harvested spices to timeless recipes, our journey is built one kitchen and one shared meal at a time.
               </p>
 
@@ -133,7 +133,7 @@ export function AboutLegacySection() {
           </div>
 
           {/* 4. Minimalist Slide Indicators */}
-          <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-30 flex items-center gap-3 bg-black/35 backdrop-blur-xs px-3 py-1.5 rounded-full border border-white/10">
+          <div className="absolute bottom-3 right-3 sm:bottom-6 sm:right-6 z-30 flex items-center gap-2.5 sm:gap-3 bg-black/40 backdrop-blur-xs px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border border-white/10">
             <div
               className="flex items-center gap-1.5"
               role="tablist"
@@ -147,7 +147,7 @@ export function AboutLegacySection() {
                     type="button"
                     onClick={() => goToSlide(idx)}
                     className={`h-1 rounded-full transition-all duration-300 cursor-pointer focus:outline-hidden ${
-                      isActive ? "w-5 bg-white" : "w-1.5 bg-white/40 hover:bg-white/70"
+                      isActive ? "w-4 sm:w-5 bg-white" : "w-1.5 bg-white/40 hover:bg-white/70"
                     }`}
                     aria-label={`Go to slide ${idx + 1}`}
                     aria-selected={isActive}
@@ -156,7 +156,7 @@ export function AboutLegacySection() {
                 );
               })}
             </div>
-            <span className="text-[11px] font-mono font-medium text-white/80">
+            <span className="text-[10px] sm:text-[11px] font-mono font-medium text-white/80">
               0{currentSlide + 1} / 0{ABOUT_SLIDES.length}
             </span>
           </div>

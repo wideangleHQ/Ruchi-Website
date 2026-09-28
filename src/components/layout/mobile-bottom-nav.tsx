@@ -3,34 +3,40 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import {
   Home,
   Store,
   LayoutGrid,
-  Search,
   ShoppingBag,
   X,
   ChevronRight,
-  Sparkles,
 } from "lucide-react";
+import { useCartDrawer } from "@/context/cart-context";
 import type { Collection } from "@/lib/shopify/types";
-import { HeaderSearch } from "./header-search";
 
 import basicSpicesImg from "@/assets/Images/Categories/Basic Spices.png";
 import blendedSpicesImg from "@/assets/Images/Categories/Blended Spices.png";
 import pastaImg from "@/assets/Images/Categories/Pasta.png";
-import vermicelliImg from "@/assets/Images/Categories/Vermicelli.png";
-import teaImg from "@/assets/Images/Categories/Tea.png";
-import wholeSpicesImg from "@/assets/Images/Categories/Whole Spices.png";
+import vermicelliImg from "@/assets/Images/Categories/vermicelli.png";
+import noodlesImg from "@/assets/Images/Categories/Noodles.png";
+import teaImg from "@/assets/Images/Categories/tea.png";
+import wholeSpicesImg from "@/assets/Images/Categories/Whole Spices (2).png";
+import flourReadyMixImg from "@/assets/Images/Categories/Flour and Ready Mix.png";
 
-const CATEGORY_IMAGE_MAP: Record<string, any> = {
+const CATEGORY_IMAGE_MAP: Record<string, StaticImageData> = {
   "basic-spices": basicSpicesImg,
   "blended-spices": blendedSpicesImg,
   "whole-spices": wholeSpicesImg,
   pasta: pastaImg,
   vermicelli: vermicelliImg,
+  noodles: noodlesImg,
   tea: teaImg,
+  "flour-ready-mix-spices": flourReadyMixImg,
+  "flour-and-ready-mix-spices": flourReadyMixImg,
+  "flour-and-ready-mix": flourReadyMixImg,
+  "flour-ready-mix": flourReadyMixImg,
+  "ready-mix": flourReadyMixImg,
 };
 
 interface MobileBottomNavProps {
@@ -38,20 +44,32 @@ interface MobileBottomNavProps {
   cartQuantity?: number;
 }
 
+function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.978-.276-.101-.476-.15-.677.15-.2.3-.777.978-.953 1.178-.175.2-.351.226-.652.075-.3-.15-1.267-.467-2.414-1.49-1.282-1.144-1.637-2.22-1.838-2.571-.201-.351-.021-.541.13-.69.135-.136.3-.351.451-.527.15-.175.2-.3.301-.501.1-.201.05-.376-.025-.527-.075-.15-.677-1.631-.927-2.232-.244-.585-.492-.506-.677-.515-.175-.008-.376-.01-.577-.01-.2 0-.526.075-.802.376-.276.301-1.053 1.029-1.053 2.509 0 1.48 1.078 2.909 1.228 3.11.15.201 2.122 3.24 5.141 4.544.718.31 1.278.496 1.715.635.721.23 1.377.197 1.896.12.577-.087 1.78-.727 2.03-1.429.251-.702.251-1.304.176-1.43-.075-.125-.276-.2-.577-.35zM12.04 21.785c-1.761 0-3.488-.474-5.004-1.372l-.359-.213-3.722.977.994-3.628-.233-.371a9.816 9.816 0 0 1-1.504-5.234c0-5.437 4.423-9.86 9.864-9.86 2.634 0 5.109 1.026 6.97 2.888a9.805 9.805 0 0 1 2.89 6.974c-.001 5.438-4.425 9.861-9.896 9.861zm7.708-17.57C17.682 2.148 14.962 1 12.04 1 5.962 1 1.01 5.952 1.008 12.032c0 1.943.507 3.84 1.47 5.509L1 23l5.632-1.477c1.609.877 3.421 1.34 5.27 1.34 6.077 0 11.029-4.952 11.031-11.033 0-2.946-1.147-5.714-3.191-7.615z" />
+    </svg>
+  );
+}
+
 export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBottomNavProps) {
   const pathname = usePathname();
+  const { isOpen: isCartDrawerOpen, openCart } = useCartDrawer();
   const [isCategorySheetOpen, setIsCategorySheetOpen] = useState(false);
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-  // Close drawers when navigating to new route
+  // Close sheet when navigating to new route
   useEffect(() => {
     setIsCategorySheetOpen(false);
-    setIsSearchModalOpen(false);
   }, [pathname]);
 
-  // Lock body scroll when drawer/modal is active
+  // Lock body scroll when drawer/sheet is active
   useEffect(() => {
-    if (isCategorySheetOpen || isSearchModalOpen) {
+    if (isCategorySheetOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -59,11 +77,11 @@ export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBo
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isCategorySheetOpen, isSearchModalOpen]);
+  }, [isCategorySheetOpen]);
 
   const isHomeActive = pathname === "/";
-  const isShopActive = pathname.startsWith("/products") && !isCategorySheetOpen && !isSearchModalOpen;
-  const isCartActive = pathname === "/cart";
+  const isShopActive = pathname.startsWith("/products") && !isCategorySheetOpen;
+  const whatsappUrl = "https://wa.me/919124754082?text=Hello%20Ruchi%20Foodline%21%20I%20would%20like%20to%20inquire%20about%20your%20products%20and%20offers.";
 
   return (
     <>
@@ -115,10 +133,7 @@ export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBo
           {/* 3. CATEGORIES */}
           <button
             type="button"
-            onClick={() => {
-              setIsSearchModalOpen(false);
-              setIsCategorySheetOpen((prev) => !prev);
-            }}
+            onClick={() => setIsCategorySheetOpen((prev) => !prev)}
             aria-label="Browse categories"
             aria-expanded={isCategorySheetOpen}
             className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-center transition-all active:scale-90 cursor-pointer ${
@@ -138,57 +153,49 @@ export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBo
             <span className="text-[10px] tracking-tight mt-0.5 leading-tight">Categories</span>
           </button>
 
-          {/* 4. SEARCH */}
+          {/* 4. WHATSAPP */}
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat with Ruchi on WhatsApp"
+            className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center transition-all active:scale-90 text-[#25D366] hover:text-[#20bd5a] font-medium"
+          >
+            <div className="relative">
+              <WhatsAppIcon className="w-5 h-5" />
+            </div>
+            <span className="text-[10px] tracking-tight mt-0.5 leading-tight">WhatsApp</span>
+          </a>
+
+          {/* 5. CART — Opens Side View Pop Up Drawer */}
           <button
             type="button"
             onClick={() => {
               setIsCategorySheetOpen(false);
-              setIsSearchModalOpen((prev) => !prev);
+              openCart();
             }}
-            aria-label="Search products"
-            aria-expanded={isSearchModalOpen}
-            className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-center transition-all active:scale-90 cursor-pointer ${
-              isSearchModalOpen
-                ? "text-[#168a4a] font-bold"
-                : "text-gray-500 hover:text-gray-800 font-medium"
-            }`}
-          >
-            <div className="relative">
-              <Search
-                className={`w-5 h-5 ${isSearchModalOpen ? "stroke-[2.5]" : "stroke-[1.75]"}`}
-              />
-              {isSearchModalOpen && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#168a4a] rounded-full" />
-              )}
-            </div>
-            <span className="text-[10px] tracking-tight mt-0.5 leading-tight">Search</span>
-          </button>
-
-          {/* 5. CART */}
-          <Link
-            href="/cart"
             aria-label={`Shopping cart with ${cartQuantity} items`}
-            className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-center transition-all active:scale-90 ${
-              isCartActive
+            className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-center transition-all active:scale-90 cursor-pointer ${
+              isCartDrawerOpen
                 ? "text-[#168a4a] font-bold"
                 : "text-gray-500 hover:text-gray-800 font-medium"
             }`}
           >
             <div className="relative">
               <ShoppingBag
-                className={`w-5 h-5 ${isCartActive ? "stroke-[2.5]" : "stroke-[1.75]"}`}
+                className={`w-5 h-5 ${isCartDrawerOpen ? "stroke-[2.5]" : "stroke-[1.75]"}`}
               />
               {cartQuantity > 0 && (
                 <span className="absolute -top-1 -right-2.5 bg-[#168a4a] text-white text-[9px] font-bold min-w-[16px] h-4 flex items-center justify-center px-1 rounded-full shadow-2xs animate-scale-in">
                   {cartQuantity}
                 </span>
               )}
-              {isCartActive && (
+              {isCartDrawerOpen && (
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#168a4a] rounded-full" />
               )}
             </div>
             <span className="text-[10px] tracking-tight mt-0.5 leading-tight">Cart</span>
-          </Link>
+          </button>
         </div>
       </nav>
 
@@ -235,7 +242,7 @@ export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBo
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-[#168a4a] text-white flex items-center justify-center">
-                    <Sparkles className="w-5 h-5" />
+                    <Store className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="font-bold text-sm text-emerald-950 block">All Products</span>
@@ -282,32 +289,6 @@ export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBo
 
             {/* Bottom Padding for Safe Area */}
             <div className="h-4" />
-          </div>
-        </div>
-      )}
-
-      {/* QUICK SEARCH MODAL */}
-      {isSearchModalOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex flex-col justify-start" role="dialog" aria-modal="true">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity animate-fade-in"
-            onClick={() => setIsSearchModalOpen(false)}
-          />
-
-          {/* Modal Container */}
-          <div className="relative z-10 w-full bg-white shadow-2xl p-4 border-b border-gray-200 animate-slide-down">
-            <div className="flex items-center justify-between pb-3 mb-1">
-              <span className="font-serif text-sm font-bold text-gray-900">Search Products</span>
-              <button
-                onClick={() => setIsSearchModalOpen(false)}
-                className="p-1 rounded-full text-gray-400 hover:text-gray-700"
-                aria-label="Close search"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <HeaderSearch autoFocus onNavigate={() => setIsSearchModalOpen(false)} />
           </div>
         </div>
       )}

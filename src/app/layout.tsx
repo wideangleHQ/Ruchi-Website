@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
+import { CartDrawer } from "@/components/cart/cart-drawer";
+import { WhatsAppButton } from "@/components/ui/whatsapp-button";
+import { CartProvider } from "@/context/cart-context";
 import { getCartFromCookies } from "@/lib/shopify/cart-actions";
 import { getCollections } from "@/lib/shopify";
 import { poppinsMedium } from "@/lib/fonts";
@@ -24,10 +27,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`h-full antialiased scroll-smooth ${poppinsMedium.variable}`}>
       <body className="min-h-full flex flex-col bg-white text-text font-sans selection:bg-soft-green selection:text-primary-green">
-        <Header cartQuantity={cart?.totalQuantity ?? 0} />
-        <main className="flex-1 pb-16 md:pb-0">{children}</main>
-        <Footer collections={collections} />
-        <MobileBottomNav collections={collections} cartQuantity={cart?.totalQuantity ?? 0} />
+        <CartProvider>
+          <Header cartQuantity={cart?.totalQuantity ?? 0} />
+          <main className="flex-1 pb-16 md:pb-0">{children}</main>
+          <Footer collections={collections} />
+          <MobileBottomNav collections={collections} cartQuantity={cart?.totalQuantity ?? 0} />
+          <CartDrawer cart={cart} />
+          <WhatsAppButton />
+        </CartProvider>
       </body>
     </html>
   );

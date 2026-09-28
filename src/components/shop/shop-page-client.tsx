@@ -106,13 +106,13 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
         )}
       </div>
 
-      {/* Category */}
+      {/* Category Selection List */}
       <fieldset>
         <legend className="text-xs font-bold uppercase tracking-wider text-gray-900 mb-3">
           Category
         </legend>
         <div className="flex flex-col gap-2.5">
-          <label className="flex items-center gap-2.5 text-sm font-medium text-gray-700 cursor-pointer hover:text-gray-900 transition-colors">
+          <label className="flex items-center gap-2.5 text-sm cursor-pointer transition-colors">
             <input
               type="radio"
               name="category"
@@ -120,23 +120,42 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
               onChange={() => updateQuery({ category: undefined })}
               className="w-4 h-4 accent-[#168a4a] cursor-pointer"
             />
-            <span>All Products</span>
-          </label>
-          {categories.map((c) => (
-            <label
-              key={c.handle}
-              className="flex items-center gap-2.5 text-sm font-medium text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
+            <span
+              className={
+                activeFilters.category === "all"
+                  ? "font-semibold text-[#168a4a]"
+                  : "font-medium text-gray-800 hover:text-gray-950"
+              }
             >
-              <input
-                type="radio"
-                name="category"
-                checked={activeFilters.category === c.handle}
-                onChange={() => updateQuery({ category: c.handle })}
-                className="w-4 h-4 accent-[#168a4a] cursor-pointer"
-              />
-              <span>{c.title}</span>
-            </label>
-          ))}
+              All Products
+            </span>
+          </label>
+          {categories.map((c) => {
+            const isSelected = activeFilters.category === c.handle;
+            return (
+              <label
+                key={c.handle}
+                className="flex items-center gap-2.5 text-sm cursor-pointer transition-colors"
+              >
+                <input
+                  type="radio"
+                  name="category"
+                  checked={isSelected}
+                  onChange={() => updateQuery({ category: c.handle })}
+                  className="w-4 h-4 accent-[#168a4a] cursor-pointer"
+                />
+                <span
+                  className={
+                    isSelected
+                      ? "font-semibold text-[#168a4a]"
+                      : "font-medium text-gray-800 hover:text-gray-950"
+                  }
+                >
+                  {c.title}
+                </span>
+              </label>
+            );
+          })}
         </div>
       </fieldset>
 
@@ -184,23 +203,27 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
           Availability
         </legend>
         <div className="flex flex-col gap-2.5">
-          <label className="flex items-center gap-2.5 text-sm font-medium text-gray-700 cursor-pointer hover:text-gray-900 transition-colors">
+          <label className="flex items-center gap-2.5 text-sm font-medium text-gray-800 cursor-pointer hover:text-gray-950 transition-colors">
             <input
               type="checkbox"
               checked={activeFilters.avail === "in"}
               onChange={() => toggleAvailability("in")}
               className="w-4 h-4 rounded accent-[#168a4a] cursor-pointer"
             />
-            <span>In Stock</span>
+            <span className={activeFilters.avail === "in" ? "font-semibold text-[#168a4a]" : "font-medium"}>
+              In Stock
+            </span>
           </label>
-          <label className="flex items-center gap-2.5 text-sm font-medium text-gray-700 cursor-pointer hover:text-gray-900 transition-colors">
+          <label className="flex items-center gap-2.5 text-sm font-medium text-gray-800 cursor-pointer hover:text-gray-950 transition-colors">
             <input
               type="checkbox"
               checked={activeFilters.avail === "out"}
               onChange={() => toggleAvailability("out")}
               className="w-4 h-4 rounded accent-[#168a4a] cursor-pointer"
             />
-            <span>Out of Stock</span>
+            <span className={activeFilters.avail === "out" ? "font-semibold text-[#168a4a]" : "font-medium"}>
+              Out of Stock
+            </span>
           </label>
         </div>
       </fieldset>
@@ -275,7 +298,7 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setIsDrawerOpen(true)}
-                  className="lg:hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-[8px] border border-gray-300 bg-white text-xs font-bold text-gray-900 shadow-2xs hover:bg-gray-50 active:scale-95 transition-all cursor-pointer"
+                  className="lg:hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-[8px] border border-gray-300 bg-white text-xs font-semibold text-gray-900 shadow-2xs hover:bg-gray-50 active:scale-95 transition-all cursor-pointer"
                   aria-haspopup="dialog"
                   aria-expanded={isDrawerOpen}
                 >
@@ -286,9 +309,9 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
                   )}
                 </button>
                 <p className="text-sm font-medium text-gray-700">
-                  Showing <span className="font-bold text-gray-900">{products.length}</span> {products.length === 1 ? "Product" : "Products"}
+                  Showing <span className="font-semibold text-gray-900">{products.length}</span> {products.length === 1 ? "Product" : "Products"}
                   {activeCategoryTitle ? (
-                    <span> in <strong className="text-gray-900">{activeCategoryTitle}</strong></span>
+                    <span> in <strong className="font-semibold text-gray-900">{activeCategoryTitle}</strong></span>
                   ) : ""}
                 </p>
               </div>
@@ -302,10 +325,10 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
                   id="shop-sort"
                   value={activeFilters.sort}
                   onChange={(e) => updateQuery({ sort: e.target.value === "featured" ? undefined : e.target.value })}
-                  className="appearance-none pl-3.5 pr-9 py-2 rounded-[8px] border border-gray-300 text-xs sm:text-sm font-semibold text-gray-800 bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#168a4a] focus:border-transparent cursor-pointer shadow-2xs transition-all"
+                  className="appearance-none pl-3.5 pr-9 py-2 rounded-[8px] border border-gray-300 text-xs sm:text-sm font-medium text-gray-800 bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#168a4a] focus:border-transparent cursor-pointer shadow-2xs transition-all"
                 >
                   {SORT_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
+                    <option key={opt.value} value={opt.value} className="font-medium text-gray-800">
                       Sort By: {opt.label}
                     </option>
                   ))}
@@ -370,7 +393,7 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
                   <div className="flex justify-center mt-10">
                     <button
                       onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                      className="px-8 py-3 rounded-[8px] border-2 border-[#168a4a] text-[#0e6337] bg-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#168a4a] hover:text-white transition-all shadow-xs cursor-pointer active:scale-95"
+                      className="px-8 py-3 rounded-[8px] border-2 border-[#168a4a] text-[#0e6337] bg-white text-xs sm:text-sm font-semibold uppercase tracking-wider hover:bg-[#168a4a] hover:text-white transition-all shadow-xs cursor-pointer active:scale-95"
                     >
                       Load More Products ({products.length - visibleCount} Remaining)
                     </button>
@@ -406,7 +429,7 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
             <div className="border-t border-gray-200 p-4 bg-gray-50">
               <button
                 onClick={() => setIsDrawerOpen(false)}
-                className="w-full py-3 rounded-[8px] bg-[#168a4a] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0e6337] transition-colors cursor-pointer active:scale-95 shadow-xs"
+                className="w-full py-3 rounded-[8px] bg-[#168a4a] text-white text-xs font-semibold uppercase tracking-wider hover:bg-[#0e6337] transition-colors cursor-pointer active:scale-95 shadow-xs"
               >
                 Show {products.length} {products.length === 1 ? "Product" : "Products"}
               </button>
@@ -424,7 +447,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
       onClick={onRemove}
       className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full border border-gray-200 bg-gray-100 text-xs font-medium text-gray-800 hover:border-[#c62828] hover:text-[#c62828] transition-colors focus-visible:ring-2 focus-visible:ring-[#168a4a] cursor-pointer"
     >
-      <span>{label}</span>
+      <span className="font-medium">{label}</span>
       <X className="w-3.5 h-3.5 text-gray-500 hover:text-[#c62828]" />
     </button>
   );
