@@ -114,12 +114,12 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
         </div>
       </div>
 
-      {/* Mobile: Horizontal Product Slider (Shows ~1.5 - 2 cards with smooth swipe & snap) */}
-      <div className="flex sm:hidden items-stretch gap-3 overflow-x-auto scrollbar-none scroll-smooth pb-2 pt-1 snap-x snap-mandatory -mx-4 px-4">
+      {/* Mobile: Horizontal Product Slider with consistent side padding */}
+      <div className="flex sm:hidden items-stretch gap-2.5 xs:gap-3 overflow-x-auto scrollbar-none scroll-smooth pb-2 pt-1 snap-x snap-mandatory">
         {products.map((product) => (
           <div
             key={product.id}
-            className="product-slide-card w-[215px] xs:w-[240px] shrink-0 snap-start flex flex-col self-stretch"
+            className="product-slide-card w-[155px] xs:w-[170px] shrink-0 snap-start flex flex-col self-stretch"
           >
             <ProductCard product={product} />
           </div>

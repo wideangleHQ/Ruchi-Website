@@ -139,7 +139,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
         {/* Category Tabs Switcher (Single row horizontal swipe on mobile) */}
         <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto mb-5 sm:mb-7 lg:mb-8">
           <div
-            className="flex items-center gap-4 sm:gap-7 border-b border-white/20 overflow-x-auto scrollbar-none pb-px select-none whitespace-nowrap -mx-4 px-4 sm:mx-0 sm:px-0"
+            className="flex items-center gap-4 sm:gap-7 border-b border-white/20 overflow-x-auto scrollbar-none pb-px select-none whitespace-nowrap"
             role="tablist"
             aria-label="Blog categories"
           >

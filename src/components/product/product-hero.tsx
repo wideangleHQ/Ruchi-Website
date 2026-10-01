@@ -685,7 +685,7 @@ export function ProductHero({ product }: ProductHeroProps) {
               <div className="px-3.5 pb-3.5 pt-2 border-t border-border/60 space-y-3 text-xs text-text">
                 {product.descriptionHtml && (
                   <div
-                    className="text-muted-text leading-relaxed font-medium [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1 [&_ul]:mb-2 [&_h4]:font-bold [&_h4]:text-text [&_h4]:mt-3 [&_h4]:mb-1 [&_strong]:text-text"
+                    className="text-muted-text leading-relaxed font-medium max-h-[250px] overflow-y-auto pr-2 scrollbar-thin [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1 [&_ul]:mb-2 [&_h4]:font-bold [&_h4]:text-text [&_h4]:mt-3 [&_h4]:mb-1 [&_strong]:text-text"
                     dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
                   />
                 )}

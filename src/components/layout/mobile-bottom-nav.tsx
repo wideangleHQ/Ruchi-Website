@@ -161,7 +161,7 @@ export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBo
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat with Ruchi on WhatsApp"
-            className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center transition-all active:scale-90 text-[#25D366] hover:text-[#20bd5a] font-medium"
+            className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center transition-all active:scale-90 text-gray-500 hover:text-gray-800 font-medium"
           >
             <div className="relative">
               <WhatsAppIcon className="w-5 h-5" />

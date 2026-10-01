@@ -75,17 +75,20 @@ export function SocialMediaSection() {
   };
 
   return (
-    <section className="py-6 sm:py-8 lg:py-10 bg-transparent" aria-label="Follow the Ruchi journey on social media">
-      {/* Global Container — Exact same side padding and max-width as other sections */}
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+    <section
+      className="relative w-full min-h-[90svh] min-h-[90vh] lg:h-[90dvh] flex flex-col justify-center py-4 sm:py-6 lg:py-8 bg-transparent overflow-hidden"
+      aria-label="Follow the Ruchi journey on social media"
+    >
+      {/* Global Centered Container */}
+      <div className="relative z-10 w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto my-auto flex flex-col justify-center">
         
         {/* Header Block with Title, Subtitle, and Follow Button */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-5 sm:mb-6 lg:mb-7">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-4 mb-3 sm:mb-5 lg:mb-6">
           <div className="text-left max-w-xl">
             <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
               Follow the Ruchi Journey
             </h2>
-            <p className="mt-1.5 text-xs sm:text-sm font-medium text-gray-600 leading-relaxed">
+            <p className="mt-1 text-xs sm:text-sm font-medium text-gray-600 leading-relaxed">
               A closer look at the spices, authentic recipes, and kitchens Ruchi Foodline is part of every day.
             </p>
           </div>
@@ -105,10 +108,10 @@ export function SocialMediaSection() {
           </div>
         </div>
 
-        {/* Mobile: 3D Interactive Horizontal Card Slider */}
-        <div className="block md:hidden my-2">
+        {/* Mobile: Taller & Larger 3D Interactive Horizontal Card Slider */}
+        <div className="block md:hidden my-1">
           <div
-            className="relative w-full h-[290px] xs:h-[320px] flex items-center justify-center overflow-hidden [perspective:1000px] select-none touch-pan-y"
+            className="relative w-full h-[410px] xs:h-[450px] flex items-center justify-center overflow-hidden [perspective:1000px] select-none touch-pan-y"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
@@ -149,7 +152,7 @@ export function SocialMediaSection() {
                     zIndex,
                     transition: "all 400ms cubic-bezier(0.25, 1, 0.5, 1)",
                   }}
-                  className={`absolute w-[200px] xs:w-[230px] aspect-[3/4] rounded-2xl overflow-hidden bg-white border border-gray-200/80 cursor-pointer ${opacityClass}`}
+                  className={`absolute w-[265px] xs:w-[295px] aspect-[3/4.2] rounded-2xl overflow-hidden bg-white border border-gray-200/80 cursor-pointer ${opacityClass}`}
                 >
                   <a
                     href={post.href}
@@ -165,7 +168,7 @@ export function SocialMediaSection() {
                       src={post.image}
                       alt={post.alt}
                       fill
-                      sizes="240px"
+                      sizes="(max-width: 768px) 320px, 320px"
                       className="object-contain object-center w-full h-full p-1"
                     />
                   </a>
@@ -174,8 +177,8 @@ export function SocialMediaSection() {
             })}
           </div>
 
-          {/* Slider Indicators & Compact Navigation Controls on Mobile */}
-          <div className="flex items-center justify-between mt-3 px-2">
+          {/* Slider Indicators & Navigation Controls on Mobile */}
+          <div className="flex items-center justify-between mt-2 px-2">
             <button
               onClick={() => setActiveIndex((p) => Math.max(0, p - 1))}
               disabled={activeIndex === 0}
@@ -218,7 +221,7 @@ export function SocialMediaSection() {
           </div>
 
           {/* Compact Mobile CTA Button */}
-          <div className="mt-4 text-center">
+          <div className="mt-3 text-center">
             <a
               href="https://www.instagram.com/ruchifoodline"
               target="_blank"
@@ -232,7 +235,7 @@ export function SocialMediaSection() {
           </div>
         </div>
 
-        {/* Desktop: 4-Column Social Media Cards Grid */}
+        {/* Desktop: 4-Column Social Media Cards Grid with Increased Height */}
         <div className="hidden md:grid md:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
           {SOCIAL_POSTS.map((post) => (
             <a
@@ -241,9 +244,9 @@ export function SocialMediaSection() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="View on Instagram"
-              className="relative block w-full rounded-xl sm:rounded-2xl overflow-hidden bg-transparent border border-gray-200/60"
+              className="relative block w-full rounded-xl sm:rounded-2xl overflow-hidden bg-transparent border border-gray-200/60 shadow-2xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-1.5"
             >
-              <div className="relative aspect-[3/4] w-full flex items-center justify-center bg-transparent">
+              <div className="relative aspect-[3/4.2] w-full flex items-center justify-center bg-transparent">
                 <Image
                   src={post.image}
                   alt={post.alt}

@@ -6,7 +6,7 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { CartProvider } from "@/context/cart-context";
 import { getCartFromCookies } from "@/lib/shopify/cart-actions";
-import { getCollections } from "@/lib/shopify";
+import { getCollections, getProducts } from "@/lib/shopify";
 import { poppinsMedium } from "@/lib/fonts";
 import "./globals.css";
 
@@ -16,12 +16,22 @@ export const metadata: Metadata = {
     template: "%s | Ruchi Foodline",
   },
   description: "Ruchi Foodline official storefront. Celebrating 50 years of purity, authentic Indian spices, masalas, pasta, and food products.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [cart, collections] = await Promise.all([
+  const [cart, collections, recommendations] = await Promise.all([
     getCartFromCookies(),
     getCollections(),
+    getProducts({ first: 12 }),
   ]);
 
   return (
@@ -32,7 +42,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <main className="flex-1 pb-16 md:pb-0">{children}</main>
           <Footer collections={collections} />
           <MobileBottomNav collections={collections} cartQuantity={cart?.totalQuantity ?? 0} />
-          <CartDrawer cart={cart} />
+          <CartDrawer cart={cart} recommendations={recommendations} />
           <WhatsAppButton />
         </CartProvider>
       </body>

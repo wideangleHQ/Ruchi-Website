@@ -13,11 +13,11 @@ export function BestSellersSkeleton() {
             <div className="w-10 h-10 rounded-full bg-soft-green animate-pulse" />
           </div>
         </div>
-        <div className="flex items-stretch gap-3 sm:gap-4 lg:gap-5 overflow-hidden -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex items-stretch gap-2.5 xs:gap-3 sm:gap-4 lg:gap-5 overflow-hidden">
           {Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
-              className="w-[240px] sm:w-[270px] md:w-[290px] lg:w-[310px] shrink-0 rounded-[15px] border border-gray-200/90 bg-white p-3.5 sm:p-4"
+              className="w-[155px] xs:w-[170px] sm:w-[270px] md:w-[290px] lg:w-[310px] shrink-0 rounded-[12px] sm:rounded-[15px] border border-gray-200/90 bg-white p-2 xs:p-2.5 sm:p-4"
             >
               <div className="aspect-square w-full rounded-[10px] bg-soft-green animate-pulse mb-3.5" />
               <div className="h-2.5 w-1/3 bg-soft-green rounded animate-pulse mb-2" />

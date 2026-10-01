@@ -1,8 +1,7 @@
 "use client";
 
 import React, { startTransition, useActionState, useEffect, useState } from "react";
-import Link from "next/link";
-import { ShoppingBag, Heart, Share2, Eye, Check } from "lucide-react";
+import { ShoppingBag, Heart, Share2, Check } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { addItemAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
@@ -87,51 +86,43 @@ export function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="group relative flex flex-col justify-between h-full w-full rounded-[12px] sm:rounded-[15px] border border-gray-200/90 bg-white p-2.5 xs:p-3 sm:p-4 transition-all duration-300 hover:border-[#168a4a]/50 hover:shadow-md hover:-translate-y-0.5">
+    <div
+      onClick={() => setIsQuickViewOpen(true)}
+      className="group relative flex flex-col justify-between h-full w-full rounded-[12px] sm:rounded-[15px] border border-gray-200/90 bg-white p-2 xs:p-2.5 sm:p-4 transition-all duration-300 hover:border-[#168a4a]/50 hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
+    >
       <div className="flex flex-col flex-1">
         {/* Product Image Container */}
-        <div className="relative aspect-square w-full rounded-[8px] sm:rounded-[10px] overflow-hidden bg-[#f7f6f2] border border-gray-100 p-2 sm:p-3 mb-2 sm:mb-3.5 flex items-center justify-center shrink-0">
+        <div className="relative aspect-square w-full rounded-[8px] sm:rounded-[10px] overflow-hidden bg-[#f7f6f2] border border-gray-100 p-1.5 xs:p-2 sm:p-3 mb-1.5 sm:mb-3.5 flex items-center justify-center shrink-0">
           {badgeText && (
-            <span className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-20 inline-block bg-[#168a4a] text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-[5px] sm:rounded-[6px] shadow-2xs">
+            <span className="absolute top-1 left-1 sm:top-2.5 sm:left-2.5 z-20 inline-block bg-[#168a4a] text-white text-[8px] xs:text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-[4px] sm:rounded-[6px] shadow-2xs">
               {badgeText}
             </span>
           )}
 
           {/* Action Icons */}
-          <div className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-20 flex flex-col items-end gap-1 sm:gap-1.5">
+          <div className="absolute top-1 right-1 sm:top-2.5 sm:right-2.5 z-20 flex flex-col items-end gap-1 sm:gap-1.5">
             <button
               onClick={handleWishlist}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#c62828] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+              className="w-6.5 h-6.5 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#c62828] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
               aria-label="Add to Wishlist"
             >
-              <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? "fill-[#c62828] text-[#c62828]" : ""}`} />
+              <Heart className={`w-3 h-3 sm:w-4 sm:h-4 ${isWishlisted ? "fill-[#c62828] text-[#c62828]" : ""}`} />
             </button>
             <button
               onClick={handleShare}
-              className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+              className="relative w-6.5 h-6.5 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
               aria-label="Share product"
             >
-              <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <Share2 className="w-3 h-3 sm:w-4 sm:h-4" />
               {copiedShare && (
-                <span className="absolute right-8 sm:right-9 top-1 bg-gray-900 text-white text-[9px] sm:text-[10px] font-medium px-1.5 sm:px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                <span className="absolute right-7 sm:right-9 top-0.5 bg-gray-900 text-white text-[8.5px] sm:text-[10px] font-medium px-1.5 sm:px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
                   Copied!
                 </span>
               )}
             </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setIsQuickViewOpen(true);
-              }}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
-              aria-label="Quick view"
-            >
-              <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
           </div>
 
-          <Link href={`/products/${product.handle}`} className="block w-full h-full relative">
+          <div className="block w-full h-full relative cursor-pointer">
             {product.featuredImage ? (
               <>
                 <SafeImage
@@ -160,7 +151,7 @@ export function ProductCard({ product }: { product: Product }) {
                 Ruchi
               </div>
             )}
-          </Link>
+          </div>
         </div>
 
         {/* Category Tag - Reserved height for vertical consistency */}
@@ -177,14 +168,14 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Product Name */}
-        <Link href={`/products/${product.handle}`} className="block mb-1 sm:mb-1.5">
+        <div className="block mb-1 sm:mb-1.5 cursor-pointer">
           <h3 className="font-sans text-xs sm:text-base font-bold text-gray-900 uppercase tracking-wide leading-snug line-clamp-2 min-h-[2rem] sm:min-h-[2.75rem] group-hover:text-[#168a4a] transition-colors">
             {product.title}
           </h3>
-        </Link>
+        </div>
 
-        {/* Description - Shown on sm+ screens */}
-        <p className="hidden sm:block font-sans text-xs text-gray-600 font-medium leading-relaxed line-clamp-2 mb-3 min-h-[2.25rem] sm:min-h-[2.5rem]">
+        {/* Description - Reduced size on mobile screens */}
+        <p className="font-sans text-[10px] xs:text-[11px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 mb-1.5 sm:mb-3 min-h-[1.75rem] sm:min-h-[2.5rem]">
           {product.description || "Masterfully crafted heritage spice blend for authentic cooking."}
         </p>
 

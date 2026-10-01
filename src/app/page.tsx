@@ -9,6 +9,7 @@ import { BestSellersSkeleton } from "@/components/home/best-sellers-skeleton";
 import { PromoAdsSection } from "@/components/home/promo-ads-section";
 import { AboutLegacySection } from "@/components/home/about-legacy-section";
 import { TrustPillars } from "@/components/home/trust-pillars";
+import { CustomerStories } from "@/components/home/customer-stories";
 import { RecipeShowcase } from "@/components/home/recipe-showcase";
 import { SocialMediaSection } from "@/components/home/social-media-section";
 import pageBg from "@/assets/Images/Page Background.jpg";
@@ -58,13 +59,15 @@ export default async function HomePage() {
         {/* 6. Manufacturing Standards */}
         <TrustPillars />
 
-        {/* 7. Blogs — Stories, Flavours & Insights */}
+        {/* 7. Customer Reviews */}
+        <CustomerStories />
+
+        {/* 8. Blogs — Stories, Flavours & Insights */}
         <RecipeShowcase articles={blogData.articles} categories={blogCategories} />
 
-        {/* 8. Social Media Posts */}
+        {/* 9. Social Proof from the Ruchi community (Below blogs) */}
         <SocialMediaSection />
       </div>
     </div>
   );
 }
-

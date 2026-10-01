@@ -71,7 +71,7 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
     <section className="py-4 sm:py-6 lg:py-7 bg-transparent" aria-label="Shop by category">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Mobile: Circular Horizontal Slider */}
-        <div className="flex sm:hidden items-start gap-4 overflow-x-auto scrollbar-none py-1 -mx-4 px-4 snap-x snap-mandatory">
+        <div className="flex sm:hidden items-start gap-3.5 xs:gap-4 overflow-x-auto scrollbar-none py-1 snap-x snap-mandatory">
           {orderedCollections.map((collection) => {
             const imageSrc = getCategoryImage(collection.handle);
             return (

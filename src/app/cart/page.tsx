@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, ShoppingBag } from "lucide-react";
 import { getCartFromCookies } from "@/lib/shopify/cart-actions";
+import { getProducts } from "@/lib/shopify";
 import { CartLineItem } from "@/components/cart/cart-line-item";
+import { CartRecommendations } from "@/components/cart/cart-recommendations";
 import { CheckoutButton } from "@/components/cart/checkout-button";
 import { formatMoney } from "@/utils/format";
 
@@ -11,7 +13,10 @@ export const metadata: Metadata = {
 };
 
 export default async function CartPage() {
-  const cart = await getCartFromCookies();
+  const [cart, recommendations] = await Promise.all([
+    getCartFromCookies(),
+    getProducts({ first: 12 }),
+  ]);
   const lines = cart?.lines.edges.map((edge) => edge.node) ?? [];
 
   return (
@@ -38,9 +43,17 @@ export default async function CartPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Items List */}
             <div className="lg:col-span-7">
-              {lines.map((line) => (
-                <CartLineItem key={line.id} line={line} />
-              ))}
+              <div className="space-y-3">
+                {lines.map((line) => (
+                  <CartLineItem key={line.id} line={line} />
+                ))}
+              </div>
+
+              {recommendations.length > 0 && (
+                <div className="mt-4">
+                  <CartRecommendations products={recommendations} cartLines={lines} />
+                </div>
+              )}
             </div>
 
             {/* Order Summary */}

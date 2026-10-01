@@ -8,11 +8,11 @@ import { ShoppingBag, Menu, X, User, ArrowRight, Search, ChevronDown } from "luc
 import { useCartDrawer } from "@/context/cart-context";
 import { AnnouncementBar } from "./announcement-bar";
 import { HeaderSearch } from "./header-search";
+import ruchiLogo from "@/assets/Images/Ruchi-Logo.png";
 
 const primaryNavLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
-  { label: "Tea", href: "/products?category=tea" },
   { label: "About Us", href: "/#heritage" },
   { label: "Blog", href: "/#recipes" },
 ];
@@ -91,16 +91,15 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 sm:h-18 lg:h-20 items-center justify-between gap-3 sm:gap-4 lg:gap-6">
           
-          {/* LEFT: Ruchi Logo — Enlarged and vertically centered on mobile */}
-          <Link href="/" className="flex items-center group py-0.5 flex-shrink-0">
-            <div className="relative w-44 sm:w-56 lg:w-72 h-12 sm:h-14 lg:h-18 flex items-center justify-start overflow-visible">
+          {/* LEFT: Ruchi Logo from src/assets/Images (Crisp & properly proportioned) */}
+          <Link href="/" className="flex items-center group py-1 flex-shrink-0" aria-label="Ruchi Foodline Home">
+            <div className="relative w-14 sm:w-16 md:w-18 lg:w-20 h-10 sm:h-11 md:h-12 lg:h-13 flex items-center justify-start">
               <Image
-                src="/images/ruchi-50yrs-logo.png"
-                alt="Ruchi Foodline 50 Years Logo"
+                src={ruchiLogo}
+                alt="Ruchi Foodline Logo"
                 fill
-                className="object-contain object-left scale-[1.3] sm:scale-[1.35] origin-left"
+                className="object-contain object-left transition-opacity group-hover:opacity-90"
                 priority
-                unoptimized
               />
             </div>
           </Link>
@@ -266,15 +265,16 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
               <Link
                 href="/"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center group py-0.5 flex-shrink-0"
+                className="flex items-center group py-1 flex-shrink-0"
+                aria-label="Ruchi Foodline Home"
               >
-                <div className="relative w-44 sm:w-56 h-12 sm:h-14 flex items-center justify-start overflow-visible">
+                <div className="relative w-14 sm:w-16 h-10 sm:h-11 flex items-center justify-start">
                   <Image
-                    src="/images/ruchi-50yrs-logo.png"
+                    src={ruchiLogo}
                     alt="Ruchi Foodline Logo"
                     fill
-                    className="object-contain object-left scale-[1.3] origin-left"
-                    unoptimized
+                    className="object-contain object-left"
+                    priority
                   />
                 </div>
               </Link>

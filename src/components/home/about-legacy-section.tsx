@@ -73,8 +73,8 @@ export function AboutLegacySection() {
     >
       {/* Global Container — Exact same side padding and max-width as other sections */}
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Contained Cinematic Banner Container — 100svh on mobile, compact on desktop */}
-        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 shadow-xs min-h-[calc(100svh-2rem)] min-h-[calc(100vh-2rem)] sm:min-h-[440px] md:min-h-[480px] lg:min-h-[500px] flex items-center bg-stone-900">
+        {/* Contained Cinematic Banner Container — 90vh single frame on mobile, balanced on desktop */}
+        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 shadow-xs h-[90svh] min-h-[480px] max-h-[720px] sm:h-auto sm:min-h-[440px] md:min-h-[480px] lg:min-h-[500px] flex items-center bg-stone-900">
           {/* 1. Slideshow Background Canvas using images from about section folder */}
           <div className="absolute inset-0 w-full h-full">
             {ABOUT_SLIDES.map((slide, index) => {
@@ -101,21 +101,21 @@ export function AboutLegacySection() {
 
             {/* 2. Left-to-Right Readability Gradient Layer */}
             <div
-              className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-black/90 via-black/60 sm:via-black/40 to-transparent"
+              className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-black/90 via-black/65 sm:via-black/40 to-transparent"
               aria-hidden="true"
             />
           </div>
 
           {/* 3. Constant Clean Editorial Typography — Left Aligned on all devices */}
-          <div className="relative z-30 w-full p-5 xs:p-6 sm:p-10 md:p-12 lg:p-16">
+          <div className="relative z-30 w-full p-4 xs:p-5 sm:p-10 md:p-12 lg:p-16">
             <div className="max-w-md sm:max-w-lg lg:max-w-xl text-left">
               {/* Main Heading */}
-              <h2 className="font-serif text-2xl xs:text-3xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight leading-[1.2] mb-3 sm:mb-4">
+              <h2 className="font-serif text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight leading-[1.2] mb-2.5 sm:mb-4">
                 50 Years of Flavour, Built on Trust.
               </h2>
 
               {/* Short Story Paragraph */}
-              <p className="font-sans text-xs xs:text-sm sm:text-sm md:text-base text-white/90 font-medium leading-relaxed mb-5 sm:mb-8 max-w-sm sm:max-w-none">
+              <p className="font-sans text-xs xs:text-[13px] sm:text-sm md:text-base text-white/90 font-medium leading-relaxed mb-4 sm:mb-8 max-w-sm sm:max-w-none">
                 For five decades, Ruchi Foodline has stayed true to a single belief — that authentic Indian cooking begins with honest ingredients. From hand-harvested spices to timeless recipes, our journey is built one kitchen and one shared meal at a time.
               </p>
 
