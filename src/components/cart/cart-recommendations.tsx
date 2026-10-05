@@ -13,6 +13,19 @@ interface CartRecommendationsProps {
   cartLines: CartLine[];
 }
 
+const ADD_ON_PRICE_CEILING = 150;
+const PRIORITY_CATEGORIES = ["basic spices", "whole spices"];
+
+function cheapestAvailableVariant(product: Product) {
+  const variants = product.variants?.edges?.map((e) => e.node) ?? [];
+  const available = variants.filter((v) => v.availableForSale);
+  const pool = available.length > 0 ? available : variants;
+  return pool.reduce<typeof pool[number] | undefined>((cheapest, v) => {
+    if (!cheapest) return v;
+    return parseFloat(v.price.amount) < parseFloat(cheapest.price.amount) ? v : cheapest;
+  }, undefined);
+}
+
 export function CartRecommendations({ products, cartLines }: CartRecommendationsProps) {
   const [addingId, setAddingId] = useState<string | null>(null);
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
@@ -25,14 +38,21 @@ export function CartRecommendations({ products, cartLines }: CartRecommendations
   const inCartProductIds = new Set(cartLines.map((line) => line.merchandise.product.id));
   const inCartHandles = new Set(cartLines.map((line) => line.merchandise.product.handle));
 
-  // Filter available complementary items
+  // Filter available complementary items: must be purchasable, not already
+  // in the cart, and strictly below the add-on price ceiling.
   const eligibleProducts = products
-    .filter(
-      (p) =>
-        p.availableForSale &&
-        !inCartProductIds.has(p.id) &&
-        !inCartHandles.has(p.handle)
-    )
+    .filter((p) => {
+      if (!p.availableForSale) return false;
+      if (inCartProductIds.has(p.id) || inCartHandles.has(p.handle)) return false;
+      const cheapest = cheapestAvailableVariant(p);
+      if (!cheapest) return false;
+      return parseFloat(cheapest.price.amount) < ADD_ON_PRICE_CEILING;
+    })
+    .sort((a, b) => {
+      const aPriority = PRIORITY_CATEGORIES.includes((a.collections.edges[0]?.node.title ?? "").toLowerCase()) ? 0 : 1;
+      const bPriority = PRIORITY_CATEGORIES.includes((b.collections.edges[0]?.node.title ?? "").toLowerCase()) ? 0 : 1;
+      return aPriority - bPriority;
+    })
     .slice(0, 10);
 
   const updateScrollButtons = () => {
@@ -69,9 +89,7 @@ export function CartRecommendations({ products, cartLines }: CartRecommendations
   if (eligibleProducts.length === 0) return null;
 
   const handleAddProduct = (product: Product) => {
-    const availableVariant =
-      product.variants?.edges?.map((e) => e.node).find((v) => v.availableForSale) ||
-      product.variants?.edges?.[0]?.node;
+    const availableVariant = cheapestAvailableVariant(product);
 
     if (!availableVariant) return;
 
@@ -95,7 +113,7 @@ export function CartRecommendations({ products, cartLines }: CartRecommendations
       {/* Header with Navigation Arrows */}
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-serif text-xs sm:text-sm font-bold text-gray-900 tracking-tight">
-          Complete Your Kitchen Essentials
+          Small Additions, Big Flavours
         </h3>
 
         {/* Desktop & Mobile Navigation Arrows */}
@@ -129,10 +147,10 @@ export function CartRecommendations({ products, cartLines }: CartRecommendations
         {eligibleProducts.map((product) => {
           const isItemAdding = isPending && addingId === product.id;
           const isItemAdded = addedIds.has(product.id);
-          const firstVariant = product.variants?.edges?.[0]?.node;
+          const cheapestVariant = cheapestAvailableVariant(product);
           const packSize =
-            firstVariant?.title && firstVariant.title.toLowerCase() !== "default title"
-              ? firstVariant.title
+            cheapestVariant?.title && cheapestVariant.title.toLowerCase() !== "default title"
+              ? cheapestVariant.title
               : null;
 
           return (
@@ -177,7 +195,7 @@ export function CartRecommendations({ products, cartLines }: CartRecommendations
                 {/* Price */}
                 <div className="mt-1">
                   <span className="text-xs sm:text-sm font-bold text-gray-900">
-                    {formatMoney(product.priceRange.minVariantPrice)}
+                    {cheapestVariant ? formatMoney(cheapestVariant.price) : formatMoney(product.priceRange.minVariantPrice)}
                   </span>
                 </div>
               </div>

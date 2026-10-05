@@ -5,10 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import ad1 from "@/assets/Images/Ads/1.png";
 import ad2 from "@/assets/Images/Ads/2.png";
-import satvikCombo from "@/assets/Images/SATVIK Combo.png";
 import strip1 from "@/assets/Images/Ads/Strip 1.png";
 import strip2 from "@/assets/Images/Ads/Strip 2.png";
-import bannerImage from "@/assets/Images/Banner Image.png";
 
 export function PromoAdsSection() {
   const portraitAds = [
@@ -24,12 +22,6 @@ export function PromoAdsSection() {
       alt: "Ruchi Foodline Tea Products Special Offer",
       href: "/products?category=tea",
     },
-    {
-      id: "ad-3",
-      image: satvikCombo,
-      alt: "RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Promotion",
-      href: "/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic",
-    },
   ];
 
   const stripAds = [
@@ -43,12 +35,6 @@ export function PromoAdsSection() {
       id: "strip-2",
       image: strip2,
       alt: "Ruchi Foodline Authentic Spices & Festive Delights",
-      href: "/products",
-    },
-    {
-      id: "strip-3",
-      image: bannerImage,
-      alt: "Ruchi Foodline Premium Spices & Culinary Essentials",
       href: "/products",
     },
   ];
@@ -75,7 +61,7 @@ export function PromoAdsSection() {
             <Link
               key={ad.id}
               href={ad.href}
-              className="group relative block aspect-[4/5] w-[75%] xs:w-[70%] max-w-[320px] shrink-0 snap-start overflow-hidden rounded-xl border border-gray-200/60 bg-white shadow-2xs transition-all duration-300 active:scale-[0.99]"
+              className="group relative block aspect-[4/3] w-[75%] xs:w-[70%] max-w-[320px] shrink-0 snap-start overflow-hidden rounded-xl border border-gray-200/60 bg-white shadow-2xs transition-all duration-300 active:scale-[0.99]"
             >
               <Image
                 src={ad.image}

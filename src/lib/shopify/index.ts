@@ -41,6 +41,22 @@ function removeEdgesAndNodes<T>(connection: Connection<T>): T[] {
   return connection.edges.map((edge) => edge.node);
 }
 
+// BOGO ("buy one, get one") offer products are identified by the literal
+// word "BOGO" in the title — the only identifier available (Shopify tags
+// are unset on every product in this store; no dedicated collection
+// exists). Verified against the full catalog: exactly two products
+// ("Ruchi Fussili BOGO Offer", "Ruchi Penne BOGO Offer") match, and no
+// normal product title contains this word. Filtered out of every
+// customer-facing listing (not the direct product-detail page, which
+// isn't a "grid" the spec asks to clean up).
+function isBogoProduct(product: Product): boolean {
+  return /\bbogo\b/i.test(product.title);
+}
+
+function excludeBogoProducts(products: Product[]): Product[] {
+  return products.filter((p) => !isBogoProduct(p));
+}
+
 // ---- Products ----
 //
 // Shopify is the single source of truth. These functions never substitute
@@ -80,7 +96,7 @@ export async function getProducts({
       variables: { first, sortKey, reverse, query },
       tags: [TAGS.products],
     });
-    return removeEdgesAndNodes(data.products);
+    return excludeBogoProducts(removeEdgesAndNodes(data.products));
   } catch (error) {
     console.error("[shopify] getProducts() failed:", error);
     return [];
@@ -134,7 +150,7 @@ export async function getCollectionProducts({
       variables: { handle, first, sortKey, reverse },
       tags: [TAGS.products, TAGS.collections],
     });
-    return data.collection ? removeEdgesAndNodes(data.collection.products) : [];
+    return data.collection ? excludeBogoProducts(removeEdgesAndNodes(data.collection.products)) : [];
   } catch (error) {
     console.error(`[shopify] getCollectionProducts("${handle}") failed:`, error);
     return [];

@@ -1,10 +1,11 @@
 "use client";
 
 import React, { startTransition, useActionState, useEffect, useState } from "react";
-import { ShoppingBag, Heart, Share2, Check } from "lucide-react";
+import { ShoppingBag, Heart, Share2, Check, Minus, Plus } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { addItemAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
+import { getProductSpecs } from "@/utils/product-specs";
 import { SafeImage } from "../ui/safe-image";
 import { ProductQuickViewModal } from "./product-quick-view-modal";
 
@@ -14,6 +15,7 @@ export function ProductCard({ product }: { product: Product }) {
   const [copiedShare, setCopiedShare] = useState(false);
   const [added, setAdded] = useState(false);
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
+  const [quantity, setQuantity] = useState(1);
   const [prevPending, setPrevPending] = useState(isPending);
 
   if (prevPending !== isPending) {
@@ -57,13 +59,16 @@ export function ProductCard({ product }: { product: Product }) {
   // Real Shopify collection membership only
   const categoryTag = product.collections.edges[0]?.node.title ?? null;
 
+  const specs = getProductSpecs(product.title, selectedVariant?.title);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (isSoldOut || !selectedVariant) return;
     startTransition(() => {
-      formAction({ merchandiseId: selectedVariant.id, quantity: 1 });
+      formAction({ merchandiseId: selectedVariant.id, quantity });
     });
+    setQuantity(1);
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -174,10 +179,23 @@ export function ProductCard({ product }: { product: Product }) {
           </h3>
         </div>
 
-        {/* Description - Reduced size on mobile screens */}
-        <p className="font-sans text-[10px] xs:text-[11px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 mb-1.5 sm:mb-3 min-h-[1.75rem] sm:min-h-[2.5rem]">
-          {product.description || "Masterfully crafted heritage spice blend for authentic cooking."}
-        </p>
+        {/* Key Specifications (from product catalogue) — falls back to the generic description */}
+        {specs.length > 0 ? (
+          <ul className="mb-1.5 sm:mb-3 min-h-[1.75rem] sm:min-h-[2.5rem] space-y-0.5">
+            {specs.slice(0, 3).map((spec) => (
+              <li
+                key={spec}
+                className="font-sans text-[10px] xs:text-[11px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-1 pl-2.5 relative before:content-['•'] before:absolute before:left-0 before:text-[#168a4a]"
+              >
+                {spec}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="font-sans text-[10px] xs:text-[11px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 mb-1.5 sm:mb-3 min-h-[1.75rem] sm:min-h-[2.5rem]">
+            {product.description || "Masterfully crafted heritage spice blend for authentic cooking."}
+          </p>
+        )}
 
         {/* Pack Size Variant Selector Area - Fixed min-height for uniform alignment */}
         <div className="min-h-[38px] sm:min-h-[52px] mb-2 sm:mb-3 flex flex-col justify-start">
@@ -248,33 +266,71 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
 
-        {/* Add to Cart Button */}
-        <button
-          onClick={handleAddToCart}
-          disabled={isSoldOut || isPending}
-          className={`w-full py-2 sm:py-3 rounded-[6px] sm:rounded-[8px] font-bold text-[11px] sm:text-sm tracking-wide sm:tracking-wider uppercase transition-all shadow-xs flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer active:scale-[0.99] ${
-            isSoldOut
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
-              : added
-                ? "bg-[#168a4a] text-white border-2 border-[#168a4a]"
-                : "bg-white border-2 border-[#168a4a] text-[#0e6337] hover:bg-[#168a4a] hover:text-white disabled:opacity-60"
-          }`}
-          aria-label="Add to cart"
-        >
-          {isSoldOut ? (
-            "Sold Out"
-          ) : added ? (
-            <>
-              <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Added
-            </>
-          ) : isPending ? (
-            "Adding…"
-          ) : (
-            <>
-              <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Add to Cart
-            </>
+        {/* Quantity Stepper + Add to Cart */}
+        <div className="flex items-stretch gap-1.5 sm:gap-2">
+          {!isSoldOut && (
+            <div
+              className="flex items-center border border-gray-200 rounded-[6px] sm:rounded-[8px] shrink-0"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setQuantity((q) => Math.max(1, q - 1));
+                }}
+                disabled={quantity <= 1}
+                aria-label="Decrease quantity"
+                className="w-6 h-full sm:w-8 flex items-center justify-center text-gray-500 hover:text-[#168a4a] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              >
+                <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              </button>
+              <span className="w-5 sm:w-6 text-center text-[11px] sm:text-xs font-bold text-gray-900 tabular-nums">
+                {quantity}
+              </span>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setQuantity((q) => q + 1);
+                }}
+                aria-label="Increase quantity"
+                className="w-6 h-full sm:w-8 flex items-center justify-center text-gray-500 hover:text-[#168a4a] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              >
+                <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              </button>
+            </div>
           )}
-        </button>
+
+          <button
+            onClick={handleAddToCart}
+            disabled={isSoldOut || isPending}
+            className={`flex-1 min-w-0 py-2 sm:py-3 px-2 whitespace-nowrap rounded-[6px] sm:rounded-[8px] font-bold text-[11px] sm:text-sm tracking-wide sm:tracking-wider uppercase transition-all shadow-xs flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer active:scale-[0.99] ${
+              isSoldOut
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                : added
+                  ? "bg-[#168a4a] text-white border-2 border-[#168a4a]"
+                  : "bg-white border-2 border-[#168a4a] text-[#0e6337] hover:bg-[#168a4a] hover:text-white disabled:opacity-60"
+            }`}
+            aria-label="Add to cart"
+          >
+            {isSoldOut ? (
+              "Sold Out"
+            ) : added ? (
+              <>
+                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Added
+              </>
+            ) : isPending ? (
+              "Adding…"
+            ) : (
+              <>
+                <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Add to Cart
+              </>
+            )}
+          </button>
+        </div>
 
         {state?.error ? (
           <p className="mt-1.5 text-[10px] font-medium text-[#c62828] text-center">{state.error}</p>

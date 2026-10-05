@@ -70,6 +70,10 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
   return (
     <section className="py-4 sm:py-6 lg:py-7 bg-transparent" aria-label="Shop by category">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-text tracking-tight text-center sm:text-left mb-4 sm:mb-5 lg:mb-6">
+          Explore the Flavours Behind Every Ruchi Meal
+        </h2>
+
         {/* Mobile: Circular Horizontal Slider */}
         <div className="flex sm:hidden items-start gap-3.5 xs:gap-4 overflow-x-auto scrollbar-none py-1 snap-x snap-mandatory">
           {orderedCollections.map((collection) => {

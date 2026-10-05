@@ -13,7 +13,7 @@ import ruchiLogo from "@/assets/Images/Ruchi-Logo.png";
 const primaryNavLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
-  { label: "About Us", href: "/#heritage" },
+  { label: "About Us", href: "/about" },
   { label: "Blog", href: "/#recipes" },
 ];
 
@@ -21,9 +21,9 @@ const contactNav = {
   label: "Contact Us",
   href: "/#footer",
   children: [
-    { label: "Queries", href: "/#footer", description: "General questions & customer support" },
-    { label: "Bulk Order", href: "/#footer", description: "Bulk purchasing & commercial orders" },
-    { label: "Partner", href: "/#footer", description: "Distributor & business partnerships" },
+    { label: "Queries", href: "/contact/queries", description: "General questions & customer support" },
+    { label: "Bulk Order", href: "/contact/bulk-order", description: "Bulk purchasing & commercial orders" },
+    { label: "Partner", href: "/contact/partner", description: "Distributor & business partnerships" },
   ],
 };
 
@@ -343,9 +343,8 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
           <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 pt-5 pb-8 border-t border-gray-200/80 bg-gray-50/70 text-xs text-gray-600 space-y-2 mt-4">
             <p className="font-bold text-gray-900 text-xs">Ruchi Foodline Customer Service</p>
             <div className="flex flex-col gap-1 text-[11px]">
-              <p>Email: <a href="mailto:care@ruchifoodline.com" className="text-[#168a4a] font-semibold">care@ruchifoodline.com</a></p>
+              <p>Email: <a href="mailto:info@ruchifoodline.com" className="text-[#168a4a] font-semibold">info@ruchifoodline.com</a></p>
               <p>Toll-Free: <a href="tel:18003454439" className="text-[#168a4a] font-semibold">1800 345 4439</a></p>
-              <p>WhatsApp: <a href="https://wa.me/919124754082?text=Hello%20Ruchi%20Foodline%2C%20I%20have%20an%20inquiry" target="_blank" rel="noopener noreferrer" className="text-[#25D366] font-semibold">9124754082</a></p>
             </div>
           </div>
         </div>

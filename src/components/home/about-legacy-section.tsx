@@ -122,7 +122,7 @@ export function AboutLegacySection() {
               {/* Clean Editorial CTA Link */}
               <div>
                 <Link
-                  href="/products"
+                  href="/about"
                   className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white hover:text-emerald-300 transition-colors py-1"
                 >
                   <span>Discover Our Story</span>

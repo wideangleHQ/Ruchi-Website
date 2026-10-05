@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, startTransition, useActionState } from "react";
+import React, { useEffect, useState, useSyncExternalStore, startTransition, useActionState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X, ShoppingBag, Zap, Check, ShieldCheck, Truck, Minus, Plus, ArrowRight } from "lucide-react";
@@ -14,11 +14,16 @@ interface ProductQuickViewModalProps {
   onClose: () => void;
 }
 
+const emptySubscribe = () => () => {};
+
 export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModalProps) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   useEffect(() => {
-    setMounted(true);
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
@@ -272,7 +277,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                   <div className="flex items-center border border-gray-200 rounded-xl bg-white px-2 h-[44px] sm:h-[48px] md:h-[50px] shrink-0">
                     <button
                       type="button"
-                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                      onClick={() => setQuantity((q: number) => Math.max(1, q - 1))}
                       className="p-1.5 text-gray-500 hover:text-gray-900 rounded-md cursor-pointer transition-colors"
                       aria-label="Decrease quantity"
                     >
@@ -283,7 +288,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                     </span>
                     <button
                       type="button"
-                      onClick={() => setQuantity((q) => q + 1)}
+                      onClick={() => setQuantity((q: number) => q + 1)}
                       className="p-1.5 text-gray-500 hover:text-gray-900 rounded-md cursor-pointer transition-colors"
                       aria-label="Increase quantity"
                     >

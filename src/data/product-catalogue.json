@@ -1,0 +1,988 @@
+[
+  {
+    "sku": "RF131806BPP50GBOXP1",
+    "title": "RUCHI Black Pepper Powder",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Seasoning",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131856CPS50GPCHP1",
+    "title": "RUCHI Chilli Powder",
+    "weight": "50 GM",
+    "specs": [
+      "Perfect Blend of Colour & Pungency",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131857CPS100GPCHP1",
+    "title": "RUCHI Chilli Powder",
+    "weight": "100 GM",
+    "specs": [
+      "Perfect Blend of Colour & Pungency",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131855CPS250GPCHP1",
+    "title": "RUCHI Chilli Powder",
+    "weight": "250 GM",
+    "specs": [
+      "Perfect Blend of Colour & Pungency",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131858CPS500GPCHP1",
+    "title": "RUCHI Chilli Powder",
+    "weight": "500 GM",
+    "specs": [
+      "Perfect Blend of Colour & Pungency",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131844DPL100GBOXP1",
+    "title": "RUCHI Cinnamon Powder",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian Spice",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131860DPS50GPCHP1",
+    "title": "RUCHI Coriander Powder",
+    "weight": "50 GM",
+    "specs": [
+      "Super Fine Quality",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131861DPS100GPCHP1",
+    "title": "RUCHI Coriander Powder",
+    "weight": "100 GM",
+    "specs": [
+      "Super Fine Quality",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131859DPS250GPCHP1",
+    "title": "RUCHI Coriander Powder",
+    "weight": "250 GM",
+    "specs": [
+      "Super Fine Quality",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131862DPS500GPCHP1",
+    "title": "RUCHI Coriander Powder",
+    "weight": "500 GM",
+    "specs": [
+      "Authentic Indian Spice",
+      "Super Fine Quality",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131863HPS50GPCHP1",
+    "title": "RUCHI Turmeric Powder",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131854HPS100GPCHP1",
+    "title": "RUCHI Turmeric Powder",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian Spice",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131870HPS250GPCHP1",
+    "title": "RUCHI Turmeric Powder",
+    "weight": "250 GM",
+    "specs": [
+      "Authentic Indian Spice",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131864HPS500GPCHP1",
+    "title": "RUCHI Turmeric Powder",
+    "weight": "500 GM",
+    "specs": [
+      "Authentic Indian Spice",
+      "Super Fine Quality",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131866JPS50GPCHP1",
+    "title": "RUCHI Cumin Powder",
+    "weight": "50 GM",
+    "specs": [
+      "Matchless Flavour, Freshness and Aroma",
+      "Super Fine Quality",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131867JPS100GPCHP1",
+    "title": "RUCHI Cumin Powder",
+    "weight": "100 GM",
+    "specs": [
+      "Matchless Flavour, Freshness and Aroma",
+      "Super Fine Quality",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131865JPS250GPCHP1",
+    "title": "RUCHI Cumin Powder",
+    "weight": "250 GM",
+    "specs": [
+      "Matchless Flavour, Freshness and Aroma",
+      "Super Fine Quality",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131868JPS500GPCHP1",
+    "title": "RUCHI Cumin Powder",
+    "weight": "500 GM",
+    "specs": [
+      "Matchless Flavour, Freshness and Aroma",
+      "Super Fine Quality",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131869KCPL50GBOXP1",
+    "title": "RUCHI Kashmiri Chilli Powder",
+    "weight": "50 GM",
+    "specs": [
+      "Exceptional Flavour & Vibrant Colour",
+      "Super Fine Quality",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131873KCPL100GBOXP1",
+    "title": "RUCHI Kashmiri Chilli Powder",
+    "weight": "100 GM",
+    "specs": [
+      "Exceptional Flavour & Vibrant Colour",
+      "Super Fine Quality",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF130238TS50GPCHP1",
+    "title": "RUCHI Tezlal Red Hot Chilli Powder",
+    "weight": "50 GM",
+    "specs": [
+      "100% Natural & Pure Spice",
+      "Super Fine Quality",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131787BML50GBOXP1",
+    "title": "RUCHI Biryani Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Mix with Saffron",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131788CML50GBOXP1",
+    "title": "RUCHI Chhole Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic North Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131789CML50GBOXP1",
+    "title": "RUCHI Chaat Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Tangy & Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131790CML50GBOXP1",
+    "title": "RUCHI Chicken Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131791CML100GBOXP1",
+    "title": "RUCHI Chicken Masala",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131794CPL50GBOXP1",
+    "title": "RUCHI Curry Powder",
+    "weight": "50 GM",
+    "specs": [
+      "No Onion No Garlic",
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF130080CPL100GBOXP1",
+    "title": "RUCHI Curry Powder",
+    "weight": "100 GM",
+    "specs": [
+      "No Onion No Garlic",
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131796DPL50GBOXP1",
+    "title": "RUCHI Dalma Powder",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131797DML50GBOXP1",
+    "title": "RUCHI Dum Aloo Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131798ECML50GBOXP1",
+    "title": "RUCHI Egg Curry Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131799FML50GBOXP1",
+    "title": "RUCHI Fish Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131800GML25GBOXP1",
+    "title": "RUCHI Garam Masala",
+    "weight": "25 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF132255GML50GBOXP1",
+    "title": "RUCHI Garam Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF132615GML100GBOXP1",
+    "title": "RUCHI Garam Masala",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF132806J50GBOXP1",
+    "title": "RUCHI Jaljeera Powder",
+    "weight": "50 GM",
+    "specs": [
+      "For Delicious & Spicy Appetizer Drinks",
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131846KKM50GBOXP1",
+    "title": "RUCHI Kitchen King Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131801MML50GBOXP1",
+    "title": "RUCHI Meat Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF130097MML100GBOXP1",
+    "title": "RUCHI Meat Masala",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131845PML50GBOXP1",
+    "title": "RUCHI Paneer Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF132846PM50GBOXP1",
+    "title": "RUCHI Pani Puri Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Street-Style Tangy Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131802SPL50GBOXP1",
+    "title": "RUCHI Sambar Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic South Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF133027TML50GBOXP1",
+    "title": "RUCHI Tadka Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic North Indian Spice Blend",
+      "No Artificial Colors or Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131921A50GPCHP1",
+    "title": "RUCHI Whole Star Anise",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131804BL50GPCHP1",
+    "title": "RUCHI Bay Leaves",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131807BPW50GPCHP1",
+    "title": "RUCHI Whole Black Pepper",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131805CW50GPCHP1",
+    "title": "RUCHI Guntur Whole Chillies",
+    "weight": "50 GM",
+    "specs": [
+      "Super Fine Quality Dried Red Chilli",
+      "High Heat Authentic Spice",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF130117DG50GPCHP1",
+    "title": "RUCHI Whole Cinnamon Sticks",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131808DP100GPCHP1",
+    "title": "RUCHI Whole Coriander Seeds",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF130626BC50GPCHP1",
+    "title": "RUCHI Whole Big Cardamom",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131920SC25GPCHP1",
+    "title": "RUCHI Whole Small Cardamom",
+    "weight": "25 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131810JEERA50GPCHP1",
+    "title": "RUCHI Whole Cumin Seeds",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131811JEERA100GPCHP1",
+    "title": "RUCHI Whole Cumin Seeds",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF132200JEERA250GPCHP1",
+    "title": "RUCHI Whole Cumin Seeds",
+    "weight": "250 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131820JEERA500GPCHP1",
+    "title": "RUCHI Whole Cumin Seeds",
+    "weight": "500 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131813JUANI50GPCHP1",
+    "title": "RUCHI Whole Carom Seeds",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF130121J25GPCHP1",
+    "title": "RUCHI Whole Nutmeg",
+    "weight": "25 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131809J25GPCHP1",
+    "title": "RUCHI Whole Mace Blades",
+    "weight": "25 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF130138KC50GPCHP1",
+    "title": "RUCHI Whole Piper Cubeba",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131814KJ50GPCHP1",
+    "title": "RUCHI Whole Black Cumin Seeds",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131815KML25GBOXP1",
+    "title": "RUCHI Whole Dried Fenugreek Leaves",
+    "weight": "25 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "100% Natural Aroma"
+    ]
+  },
+  {
+    "sku": "RF131816KMP50GPCHP1",
+    "title": "RUCHI Whole Dried Fenugreek Leaves",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "100% Natural Aroma"
+    ]
+  },
+  {
+    "sku": "RF130139L25GPCHP1",
+    "title": "RUCHI Whole Cloves",
+    "weight": "25 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131817M50GPCHP1",
+    "title": "RUCHI Whole Fennel Seeds",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF130146M100GPCHP1",
+    "title": "RUCHI Whole Fenugreek Seeds",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131847M50GPCHP1",
+    "title": "RUCHI Whole Mustard Seeds",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131887M100GPCHP1",
+    "title": "RUCHI Whole Mustard Seeds",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian Whole Spices & Herbs",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131888M250GPCHP1",
+    "title": "RUCHI Whole Mustard Seeds",
+    "weight": "250 GM",
+    "specs": [
+      "Pure Whole Spices for Tempering & Cooking",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131889M500GPCHP1",
+    "title": "RUCHI Whole Mustard Seeds",
+    "weight": "500 GM",
+    "specs": [
+      "Pure Whole Spices for Tempering & Cooking",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131821PP500GPCHP1",
+    "title": "RUCHI Panch Phoran",
+    "weight": "500 GM",
+    "specs": [
+      "Authentic Indian 5-Spice Blend",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131886PP50GPCHP1",
+    "title": "RUCHI Panch Phoran",
+    "weight": "50 GM",
+    "specs": [
+      "Authentic Indian 5-Spice Blend",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131818PP100GPCHP1",
+    "title": "RUCHI Panch Phoran",
+    "weight": "100 GM",
+    "specs": [
+      "Authentic Indian 5-Spice Blend",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131819PP250GPCHP1",
+    "title": "RUCHI Panch Phoran",
+    "weight": "250 GM",
+    "specs": [
+      "Authentic Indian 5-Spice Blend",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF130162PPS50GPCHP1",
+    "title": "RUCHI Whole Poppy Seeds",
+    "weight": "50 GM",
+    "specs": [
+      "Pure Super Fine Khaskhas",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF130164PPS100GPCHP1",
+    "title": "RUCHI Whole Poppy Seeds",
+    "weight": "100 GM",
+    "specs": [
+      "Pure Super Fine Khaskhas",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF130809S0.5gBOXP1",
+    "title": "RUCHI Saffron",
+    "weight": "0.5g",
+    "specs": [
+      "100% Pure Azafran",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131516TD250GBOXP1",
+    "title": "RUCHI Seedless Dried Tamarind Bar",
+    "weight": "250 GM",
+    "specs": [
+      "Pure Tamarind Paste & Concentrate",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131843WBM50GPCHP1",
+    "title": "RUCHI Whole Biryani Masala",
+    "weight": "50 GM",
+    "specs": [
+      "Premium Whole Spice Blend",
+      "Pure & Natural",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131740F400GPCHP1",
+    "title": "RUCHI Gourmet Fusilli Pasta",
+    "weight": "400 GM",
+    "specs": [
+      "Made from 100% Durum Wheat Semolina",
+      "Authentic Italian Taste",
+      "No Cholesterol & Sugar"
+    ]
+  },
+  {
+    "sku": "RF131744MM400GPCHP1",
+    "title": "RUCHI Gourmet Macaroni Pasta",
+    "weight": "400 GM",
+    "specs": [
+      "Made from 100% Durum Wheat Semolina",
+      "Authentic Italian Taste",
+      "No Cholesterol & Sugar"
+    ]
+  },
+  {
+    "sku": "RF131750MS500GPCHP1",
+    "title": "RUCHI Gourmet Macaroni Pasta",
+    "weight": "500 GM",
+    "specs": [
+      "Made from 100% Durum Wheat Semolina",
+      "Authentic Italian Taste",
+      "No Cholesterol & Sugar"
+    ]
+  },
+  {
+    "sku": "RF131769P400GPCHP1",
+    "title": "RUCHI Gourmet Penne Pasta",
+    "weight": "400 GM",
+    "specs": [
+      "Made from 100% Durum Wheat Semolina",
+      "Authentic Italian Taste",
+      "No Cholesterol & Sugar"
+    ]
+  },
+  {
+    "sku": "RF131775RV175GPCHP1",
+    "title": "RUCHI Roasted Vermicelli",
+    "weight": "175 GM",
+    "specs": [
+      "Made from 100% Durum Wheat Semolina",
+      "Non-Sticky Sevai for Upma & Payasam"
+    ]
+  },
+  {
+    "sku": "RF131916RV900GPCHP1",
+    "title": "RUCHI Roasted Vermicelli",
+    "weight": "900 GM",
+    "specs": [
+      "Made from 100% Durum Wheat Semolina",
+      "Non-Sticky Sevai for Upma & Payasam"
+    ]
+  },
+  {
+    "sku": "RF131983SV400GPCHP1",
+    "title": "RUCHI Short Vermicelli",
+    "weight": "400 GM",
+    "specs": [
+      "Made from Pure Hard Wheat Sooji",
+      "Ideal for Sweet Payasam, Kheer & Savory Upma"
+    ]
+  },
+  {
+    "sku": "RF131986SV900GPCHP1",
+    "title": "RUCHI Short Vermicelli",
+    "weight": "900 GM",
+    "specs": [
+      "Made from Pure Hard Wheat Sooji",
+      "Ideal for Sweet Payasam, Kheer & Savory Upma"
+    ]
+  },
+  {
+    "sku": "RF131777SMVE200GPCHP1",
+    "title": "RUCHI Sun Made Vermicelli",
+    "weight": "200 GM",
+    "specs": [
+      "100% Pure Durum Wheat Semolina",
+      "Traditional Sun-Dried Sevai for Kheer & Sheer Khurma"
+    ]
+  },
+  {
+    "sku": "RF131761N200GPCHP1",
+    "title": "RUCHI 100% Veg Noodles with Taste Maker",
+    "weight": "200 GM",
+    "specs": [
+      "Quick & Easy Instant Snacks",
+      "No Artificial Preservatives"
+    ]
+  },
+  {
+    "sku": "RF131762N400GPCHP1",
+    "title": "RUCHI 100% Veg Noodles with Taste Maker",
+    "weight": "400 GM",
+    "specs": [
+      "Quick & Easy Instant Snacks",
+      "No Artificial Preservatives"
+    ]
+  },
+  {
+    "sku": "RF200011RET100GPCHP1",
+    "title": "RUCHI Elaichi Chai",
+    "weight": "100 GM",
+    "specs": [
+      "Premium Cardamom Flavored CTC Black Tea",
+      "Infused with Rich Aroma"
+    ]
+  },
+  {
+    "sku": "RF200006RET250GPCHP1",
+    "title": "RUCHI Elaichi Chai",
+    "weight": "250 GM",
+    "specs": [
+      "Premium Cardamom Flavored CTC Black Tea",
+      "Infused with Rich Aroma"
+    ]
+  },
+  {
+    "sku": "RF200001UDT250GPCHP1",
+    "title": "RUCHI Utkal Dust Chai",
+    "weight": "250 GM",
+    "specs": [
+      "Strong & Quick-Brewing Black Dust Tea",
+      "Unique Taste & Remarkable Aroma"
+    ]
+  },
+  {
+    "sku": "RF200002UDT1KGPCHP1",
+    "title": "RUCHI Utkal Dust Chai",
+    "weight": "1 KG",
+    "specs": [
+      "Strong & Quick-Brewing Black Dust Tea",
+      "Unique Taste & Remarkable Aroma for Family & Commercial Use"
+    ]
+  },
+  {
+    "sku": "RF200004UT250GPCHP1",
+    "title": "RUCHI Utkarsh Premium Kadak Chai",
+    "weight": "250 GM",
+    "specs": [
+      "Strong & Aromatic Black Tea",
+      "Rich Color & Energizing Full-Bodied Taste"
+    ]
+  },
+  {
+    "sku": "RF133035BG250GPCHP1",
+    "title": "RUCHI Gargara Besan",
+    "weight": "250 GM",
+    "specs": [
+      "Made From Finest Gram Dal",
+      "Wholesome & Healthy",
+      "Best For Authentic Indian Snacks & Sweets"
+    ]
+  },
+  {
+    "sku": "RF133034BG500GPCHP1",
+    "title": "RUCHI Gargara Besan",
+    "weight": "500 GM",
+    "specs": [
+      "Made From Finest Gram Dal",
+      "Wholesome & Healthy",
+      "Best For Authentic Indian Snacks & Sweets"
+    ]
+  },
+  {
+    "sku": "RF133021BG1KGPCHP1",
+    "title": "RUCHI Gargara Besan",
+    "weight": "1 KG",
+    "specs": [
+      "Made From Finest Gram Dal",
+      "Wholesome & Healthy",
+      "Best For Authentic Indian Snacks & Sweets"
+    ]
+  },
+  {
+    "sku": "RF133032BS500GPCHP1",
+    "title": "RUCHI Super Fine Besan",
+    "weight": "500 GM",
+    "specs": [
+      "Made from 100% Pure Chana Dal",
+      "Wholesome & Healthy",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF133033BS1KGPCHP1",
+    "title": "RUCHI Super Fine Besan",
+    "weight": "1 KG",
+    "specs": [
+      "Made from 100% Pure Chana Dal",
+      "Wholesome & Healthy",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF132660BM250GBOXP1",
+    "title": "RUCHI Bhaji Mix",
+    "weight": "250 GM",
+    "specs": [
+      "Instant Ready-To-Cook Pakoda Batter Mix",
+      "Authentic Indian Snacks with Natural Ingredients",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131784KM200GJARP1",
+    "title": "Ruchi Kheer Mix",
+    "weight": "200 GM",
+    "specs": [
+      "Authentic Indian Sweet Dessert & Payasam Mix",
+      "With Extra Nutrition",
+      "No Artificial Additives"
+    ]
+  },
+  {
+    "sku": "RF131919KM400GJARP1",
+    "title": "Ruchi Kheer Mix",
+    "weight": "400 GM",
+    "specs": [
+      "Authentic Indian Sweet Dessert & Payasam Mix",
+      "With Extra Nutrition",
+      "No Artificial Additives"
+    ]
+  }
+]

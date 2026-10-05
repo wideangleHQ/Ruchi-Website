@@ -31,7 +31,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const [cart, collections, recommendations] = await Promise.all([
     getCartFromCookies(),
     getCollections(),
-    getProducts({ first: 12 }),
+    // Cart add-ons must be strictly under ₹150 — ask Shopify to pre-filter,
+    // then cart-recommendations.tsx re-checks the price client-side as a
+    // safety net (Shopify's search-string filter can't express "< 150" as
+    // a hard numeric cutoff with full reliability across all variants).
+    getProducts({ query: "variants.price:<150", first: 20 }),
   ]);
 
   return (
