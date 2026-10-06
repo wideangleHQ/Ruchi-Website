@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import { Star, ChevronLeft, ChevronRight, Check } from "lucide-react";
+import React from "react";
+import { Star, Check } from "lucide-react";
 
 interface ReviewItem {
   id: string;
@@ -140,98 +140,51 @@ function getInitials(name: string): string {
 }
 
 export function CustomerStories() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const checkScroll = useCallback(() => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-  }, []);
-
-  useEffect(() => {
-    checkScroll();
-    const el = scrollRef.current;
-    if (el) {
-      el.addEventListener("scroll", checkScroll, { passive: true });
-      window.addEventListener("resize", checkScroll);
-    }
-    return () => {
-      if (el) el.removeEventListener("scroll", checkScroll);
-      window.removeEventListener("resize", checkScroll);
-    };
-  }, [checkScroll]);
-
-  const handleScroll = (direction: "left" | "right") => {
-    if (!scrollRef.current) return;
-    const cardWidth = scrollRef.current.querySelector<HTMLElement>(".review-card")?.offsetWidth ?? 340;
-    const gap = 20;
-    const scrollAmount = (cardWidth + gap) * (direction === "left" ? -1 : 1);
-    scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-  };
-
   const averageRating = REVIEWS.reduce((sum, r) => sum + r.rating, 0) / REVIEWS.length;
 
+  // Duplicate reviews array to create a seamless infinite loop
+  const duplicatedReviews = [...REVIEWS, ...REVIEWS];
+
   return (
-    <section className="py-10 sm:py-14 lg:py-16 bg-transparent" aria-label="Customer Reviews">
+    <section className="py-10 sm:py-14 lg:py-16 bg-transparent overflow-hidden" aria-label="Customer Reviews">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         
-        {/* Header Block: Centered Heading + Summary & Slider Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-8 sm:mb-10">
-          <div>
-            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
-              A Taste Worth Coming Back To
-            </h2>
-            <div className="flex items-center gap-2 mt-2.5">
-              <div className="flex items-center text-amber-500">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <span className="text-sm font-bold text-gray-900">{averageRating.toFixed(1)}</span>
+        {/* Header Block: Centered Editorial Heading & Rating (No Arrow Controls) */}
+        <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#168a4a] mb-2">
+            Real Stories, Real Trust
+          </span>
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
+            A Taste Worth Coming Back To
+          </h2>
+          <div className="flex items-center gap-2.5 mt-3 bg-amber-50/80 border border-amber-200/70 px-3.5 py-1.5 rounded-full">
+            <div className="flex items-center text-amber-500">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+              ))}
             </div>
-          </div>
-
-          {/* Slider Navigation Buttons */}
-          <div className="flex items-center gap-2.5 self-end sm:self-auto shrink-0">
-            <button
-              onClick={() => handleScroll("left")}
-              disabled={!canScrollLeft}
-              aria-label="Previous reviews"
-              className={`w-10 h-10 flex items-center justify-center rounded-full border transition-all ${
-                canScrollLeft
-                  ? "bg-white text-gray-800 border-gray-200 hover:bg-gray-50 hover:border-gray-300 shadow-xs cursor-pointer active:scale-95"
-                  : "bg-gray-100 text-gray-300 border-gray-200/50 cursor-not-allowed opacity-50"
-              }`}
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => handleScroll("right")}
-              disabled={!canScrollRight}
-              aria-label="Next reviews"
-              className={`w-10 h-10 flex items-center justify-center rounded-full border transition-all ${
-                canScrollRight
-                  ? "bg-white text-gray-800 border-gray-200 hover:bg-gray-50 hover:border-gray-300 shadow-xs cursor-pointer active:scale-95"
-                  : "bg-gray-100 text-gray-300 border-gray-200/50 cursor-not-allowed opacity-50"
-              }`}
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+            <span className="text-sm font-bold text-gray-900">
+              {averageRating.toFixed(1)} / 5.0
+            </span>
+            <span className="text-xs text-gray-500 font-medium border-l border-amber-200 pl-2">
+              From Verified Buyers
+            </span>
           </div>
         </div>
+      </div>
 
-        {/* Reviews Cards Slider */}
-        <div
-          ref={scrollRef}
-          className="flex items-stretch gap-4 sm:gap-5 overflow-x-auto scrollbar-none scroll-smooth pb-4 pt-1 snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0"
-        >
-          {REVIEWS.map((review) => (
+      {/* Continuous Infinite Slider Track with Edge Fading */}
+      <div className="relative w-full overflow-hidden py-2">
+        {/* Left & Right Soft Fade Masks */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-20 md:w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-20 md:w-32 bg-gradient-to-r from-transparent via-white/80 to-white z-10 pointer-events-none" />
+
+        {/* Continuous Marquee Track */}
+        <div className="animate-marquee flex items-stretch gap-4 sm:gap-5 hover:[animation-play-state:paused]">
+          {duplicatedReviews.map((review, idx) => (
             <div
-              key={review.id}
-              className="review-card w-[290px] sm:w-[330px] md:w-[350px] shrink-0 snap-start bg-white rounded-[15px] p-5 sm:p-6 border border-gray-200/80 shadow-xs hover:shadow-md hover:border-gray-300 transition-all duration-300 flex flex-col justify-between"
+              key={`${review.id}-${idx}`}
+              className="review-card w-[280px] xs:w-[310px] sm:w-[340px] md:w-[360px] shrink-0 bg-white rounded-[16px] p-5 sm:p-6 border border-gray-200/80 shadow-2xs hover:shadow-md hover:border-[#168a4a]/40 transition-all duration-300 flex flex-col justify-between select-none"
             >
               <div>
                 {/* 1. Star Rating + Numeric Badge */}
@@ -240,7 +193,7 @@ export function CustomerStories() {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
                           i < Math.floor(review.rating)
                             ? "fill-amber-400 text-amber-400"
                             : "fill-gray-200 text-gray-200"
@@ -248,7 +201,7 @@ export function CustomerStories() {
                       />
                     ))}
                   </div>
-                  <span className="inline-block px-2 py-0.5 text-xs font-bold bg-amber-50 text-amber-800 rounded-md border border-amber-200/60">
+                  <span className="inline-block px-2 py-0.5 text-[11px] font-bold bg-amber-50 text-amber-800 rounded-md border border-amber-200/60">
                     {review.rating.toFixed(1)}
                   </span>
                 </div>
@@ -265,9 +218,9 @@ export function CustomerStories() {
               </div>
 
               {/* 4. Reviewer Metadata & Verified Badge */}
-              <div className="pt-4 border-t border-gray-100 flex items-center justify-between gap-3 mt-auto">
+              <div className="pt-3.5 border-t border-gray-100 flex items-center justify-between gap-3 mt-auto">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-9 h-9 rounded-full bg-[#168a4a]/10 text-[#168a4a] text-xs font-bold flex items-center justify-center shrink-0 border border-[#168a4a]/20">
+                  <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-[#168a4a]/10 text-[#168a4a] text-xs font-bold flex items-center justify-center shrink-0 border border-[#168a4a]/20">
                     {getInitials(review.reviewer)}
                   </div>
                   <div className="min-w-0">
@@ -291,7 +244,6 @@ export function CustomerStories() {
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );

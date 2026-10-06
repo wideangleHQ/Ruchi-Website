@@ -73,8 +73,8 @@ export function AboutLegacySection() {
     >
       {/* Global Container — Exact same side padding and max-width as other sections */}
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Contained Cinematic Banner Container — 90vh single frame on mobile, balanced on desktop */}
-        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 shadow-xs h-[90svh] min-h-[480px] max-h-[720px] sm:h-auto sm:min-h-[440px] md:min-h-[480px] lg:min-h-[500px] flex items-center bg-stone-900">
+        {/* Contained Cinematic Banner Container — 70vh on all viewports */}
+        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 shadow-xs h-[70vh] min-h-[380px] flex items-center bg-stone-900">
           {/* 1. Slideshow Background Canvas using images from about section folder */}
           <div className="absolute inset-0 w-full h-full">
             {ABOUT_SLIDES.map((slide, index) => {

@@ -20,6 +20,7 @@ import {
 import type { Product, ProductVariant } from "@/lib/shopify/types";
 import { addItemAction, buyNowAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
+import { normalizeVariantCatalogue } from "@/utils/catalogue";
 import { SafeImage } from "@/components/ui/safe-image";
 
 interface ProductHeroProps {
@@ -78,50 +79,14 @@ function getCleanModelName(title: string): string {
     .trim();
 }
 
-/**
- * Infers product form factor from title/type
- */
-function inferFormFactor(product: Product): string {
-  const text = `${product.title} ${product.productType} ${product.description}`.toLowerCase();
-  if (text.includes("powder") || text.includes("masala") || text.includes("chilli") || text.includes("turmeric") || text.includes("coriander")) {
-    return "Powder";
-  }
-  if (text.includes("paste") || text.includes("ginger garlic")) {
-    return "Paste";
-  }
-  if (text.includes("whole") || text.includes("jeera") || text.includes("mustard") || text.includes("methi") || text.includes("clove") || text.includes("cardamom")) {
-    return "Whole Spice";
-  }
-  if (text.includes("pickle")) {
-    return "Pickle / Preserve";
-  }
-  if (text.includes("noodle") || text.includes("pasta") || text.includes("vermicelli")) {
-    return "Solid / Dry";
-  }
-  if (text.includes("oil")) {
-    return "Liquid";
-  }
-  if (text.includes("ready") || text.includes("mix")) {
-    return "Ready Mix";
-  }
-  return "Standard";
-}
-
-/**
- * Infers container type
- */
-function inferContainerType(product: Product): string {
-  const text = `${product.title} ${product.description}`.toLowerCase();
-  if (text.includes("jar") || text.includes("bottle") || text.includes("glass")) {
-    return "Jar / Bottle";
-  }
-  if (text.includes("pouch") || text.includes("bag")) {
-    return "Pouch";
-  }
-  if (text.includes("tin") || text.includes("can")) {
-    return "Tin / Can";
-  }
-  return "Box / Pack";
+function DetailRow({ label, value }: { label: string; value: string | null | undefined }) {
+  if (!value) return null;
+  return (
+    <div className="py-2 border-b border-border/60">
+      <span className="block text-[11px] text-muted-text font-medium">{label}</span>
+      <span className="font-bold text-text break-words">{value}</span>
+    </div>
+  );
 }
 
 export function ProductHero({ product }: ProductHeroProps) {
@@ -215,15 +180,13 @@ export function ProductHero({ product }: ProductHeroProps) {
 
   const errorMessage = addState?.error || buyState?.error;
 
-  // Product specification key-values for the 2-column highlights grid
+  // Catalogue content comes only from the selected variant's ruchi.* metafields (Excel source)
+  const catalogue = selectedVariant ? normalizeVariantCatalogue(selectedVariant) : null;
   const modelName = getCleanModelName(product.title);
-  const productType = product.productType || primaryCollection?.title || "Curry Masala / Spice";
-  const formFactor = inferFormFactor(product);
-  const containerType = inferContainerType(product);
   const currentQuantity = selectedVariant?.title && selectedVariant.title.toLowerCase() !== "default title"
     ? selectedVariant.title
-    : "100 g";
-  const fssaiNumber = "10012032000096";
+    : null;
+  const skuToShow = selectedVariant?.sku || catalogue?.sku || null;
 
   return (
     <>
@@ -282,12 +245,12 @@ export function ProductHero({ product }: ProductHeroProps) {
                     )}
 
                     {/* Vegetarian Emblem on the first product packaging view */}
-                    {isFirst && (
+                    {isFirst && catalogue?.foodType && (
                       <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm border border-emerald-600/30 px-2 py-0.5 rounded-[4px] shadow-2xs">
                         <div className="w-2.5 h-2.5 border border-emerald-600 flex items-center justify-center p-[1px]">
                           <div className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
                         </div>
-                        <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-tight">100% Vegetarian</span>
+                        <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-tight">{catalogue.foodType}</span>
                       </div>
                     )}
                   </div>
@@ -614,46 +577,24 @@ export function ProductHero({ product }: ProductHeroProps) {
 
             {isHighlightsOpen && (
               <div className="px-3.5 pb-3 pt-1 border-t border-border/60">
+                {catalogue && catalogue.keySpecifications.length > 0 && (
+                  <ul className="mb-3 space-y-1 text-xs font-semibold text-text">
+                    {catalogue.keySpecifications.map((spec) => (
+                      <li key={spec} className="relative pl-3 before:content-['•'] before:absolute before:left-0 before:text-primary-green">
+                        {spec}
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <div className="grid grid-cols-2 gap-x-4 text-xs font-semibold">
-                  {/* Row 1 */}
-                  <div className="py-2 border-b border-border/60">
-                    <span className="block text-[11px] text-muted-text font-medium">Pack of</span>
-                    <span className="font-bold text-text">1</span>
-                  </div>
-                  <div className="py-2 border-b border-border/60">
-                    <span className="block text-[11px] text-muted-text font-medium">Brand</span>
-                    <span className="font-bold text-text">RUCHI</span>
-                  </div>
-
-                  {/* Row 2 */}
-                  <div className="py-2 border-b border-border/60">
-                    <span className="block text-[11px] text-muted-text font-medium">Model Name</span>
-                    <span className="font-bold text-text line-clamp-1">{modelName}</span>
-                  </div>
-                  <div className="py-2 border-b border-border/60">
-                    <span className="block text-[11px] text-muted-text font-medium">Type</span>
-                    <span className="font-bold text-text line-clamp-1">{productType}</span>
-                  </div>
-
-                  {/* Row 3 */}
-                  <div className="py-2 border-b border-border/60 sm:border-b-0">
-                    <span className="block text-[11px] text-muted-text font-medium">Form Factor</span>
-                    <span className="font-bold text-text">{formFactor}</span>
-                  </div>
-                  <div className="py-2 border-b border-border/60 sm:border-b-0">
-                    <span className="block text-[11px] text-muted-text font-medium">Quantity</span>
-                    <span className="font-bold text-text">{currentQuantity}</span>
-                  </div>
-
-                  {/* Row 4 */}
-                  <div className="py-2">
-                    <span className="block text-[11px] text-muted-text font-medium">Container Type</span>
-                    <span className="font-bold text-text">{containerType}</span>
-                  </div>
-                  <div className="py-2">
-                    <span className="block text-[11px] text-muted-text font-medium">FSSAI Number</span>
-                    <span className="font-bold text-text">{fssaiNumber}</span>
-                  </div>
+                  <DetailRow label="Model Name" value={modelName} />
+                  <DetailRow label="Quantity" value={currentQuantity} />
+                  <DetailRow label="Pack of" value={catalogue?.packOf} />
+                  <DetailRow label="Total Weight" value={catalogue?.totalWeight} />
+                  <DetailRow label="Form Factor" value={catalogue?.formFactor} />
+                  <DetailRow label="Container Type" value={catalogue?.containerType} />
+                  <DetailRow label="FSSAI" value={catalogue?.fssai} />
+                  <DetailRow label="Food Type" value={catalogue?.foodType} />
                 </div>
               </div>
             )}
@@ -690,25 +631,35 @@ export function ProductHero({ product }: ProductHeroProps) {
                   />
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-border/60 font-semibold">
-                  <div>
-                    <span className="text-[11px] text-muted-text font-medium block">Food Type</span>
-                    <span className="font-bold text-emerald-700">100% Vegetarian</span>
+                {catalogue && catalogue.keyFeatures.length > 0 && (
+                  <div className="pt-2 border-t border-border/60">
+                    <span className="block text-xs font-bold text-text mb-1.5">Key features</span>
+                    <ul className="space-y-1 text-muted-text font-medium">
+                      {catalogue.keyFeatures.map((f) => (
+                        <li key={f} className="relative pl-3 before:content-['•'] before:absolute before:left-0 before:text-primary-green">
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <div>
-                    <span className="text-[11px] text-muted-text font-medium block">Country of Origin</span>
-                    <span className="font-bold text-text">India</span>
-                  </div>
-                  <div>
-                    <span className="text-[11px] text-muted-text font-medium block">Manufacturer</span>
-                    <span className="font-bold text-text">OM Oil &amp; Flour Mills Ltd.</span>
-                  </div>
-                  {selectedVariant?.sku && (
-                    <div>
-                      <span className="text-[11px] text-muted-text font-medium block">SKU</span>
-                      <span className="font-bold text-text">{selectedVariant.sku}</span>
-                    </div>
-                  )}
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 pt-2 border-t border-border/60 font-semibold">
+                  <DetailRow label="Ingredients" value={catalogue?.ingredients} />
+                  <DetailRow label="Storage Instructions" value={catalogue?.storageInstructions} />
+                  <DetailRow label="Shelf Life" value={catalogue?.shelfLife} />
+                  <DetailRow label="Country of Origin" value={catalogue?.countryOfOrigin} />
+                  <DetailRow label="Manufacturer" value={catalogue?.manufacturer} />
+                  <DetailRow label="Manufacture" value={catalogue?.manufacture} />
+                  <DetailRow label="Marketed By" value={catalogue?.marketedBy} />
+                  <DetailRow label="Address" value={catalogue?.address} />
+                  <DetailRow label="MRP (catalogue)" value={catalogue?.mrp ? `₹${catalogue.mrp}` : null} />
+                  <DetailRow label="HSN" value={catalogue?.hsn} />
+                  <DetailRow label="EAN" value={catalogue?.ean} />
+                  <DetailRow label="SKU" value={skuToShow} />
+                  <DetailRow label="Item Code" value={catalogue?.itemCode} />
+                  <DetailRow label="Material Description" value={catalogue?.materialDescription} />
+                  <DetailRow label="Unit" value={catalogue?.unit} />
                 </div>
               </div>
             )}

@@ -114,27 +114,27 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
         </div>
       </div>
 
-      {/* Mobile: Horizontal Product Slider with consistent side padding */}
-      <div className="flex sm:hidden items-stretch gap-2.5 xs:gap-3 overflow-x-auto scrollbar-none scroll-smooth pb-2 pt-1 snap-x snap-mandatory">
+      {/* Mobile: Horizontal Product Slider with increased card size */}
+      <div className="flex sm:hidden items-stretch gap-3 xs:gap-3.5 overflow-x-auto scrollbar-none scroll-smooth pb-2 pt-1 snap-x snap-mandatory">
         {products.map((product) => (
           <div
             key={product.id}
-            className="product-slide-card w-[155px] xs:w-[170px] shrink-0 snap-start flex flex-col self-stretch"
+            className="product-slide-card w-[185px] xs:w-[205px] shrink-0 snap-start flex flex-col self-stretch"
           >
             <ProductCard product={product} />
           </div>
         ))}
       </div>
 
-      {/* Desktop & Tablet: Product Cards Slider Track */}
+      {/* Desktop & Tablet: Product Cards Slider Track with increased card size */}
       <div
         ref={scrollRef}
-        className="hidden sm:flex items-stretch gap-3 sm:gap-4 lg:gap-5 overflow-x-auto scrollbar-none scroll-smooth pb-4 pt-1 snap-x snap-mandatory"
+        className="hidden sm:flex items-stretch gap-4 sm:gap-5 lg:gap-6 overflow-x-auto scrollbar-none scroll-smooth pb-4 pt-1 snap-x snap-mandatory"
       >
         {products.map((product) => (
           <div
             key={product.id}
-            className="product-slide-card w-[270px] md:w-[290px] lg:w-[310px] shrink-0 snap-start flex flex-col self-stretch"
+            className="product-slide-card w-[290px] md:w-[315px] lg:w-[335px] shrink-0 snap-start flex flex-col self-stretch"
           >
             <ProductCard product={product} />
           </div>

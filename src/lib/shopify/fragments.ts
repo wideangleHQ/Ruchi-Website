@@ -23,6 +23,40 @@ export const seoFragment = /* GraphQL */ `
   }
 `;
 
+export const RUCHI_CATALOGUE_KEYS = [
+  "sku",
+  "item_code",
+  "material_description",
+  "item_weight",
+  "key_specification_1",
+  "key_specification_2",
+  "key_specification_3",
+  "key_features",
+  "form_factor",
+  "ingredients",
+  "country_of_origin",
+  "shelf_life",
+  "storage_instructions",
+  "fssai",
+  "container_type",
+  "pack_of",
+  "total_weight",
+  "mrp",
+  "ean",
+  "hsn",
+  "food_type",
+  "manufacturer",
+  "marketed_by",
+  "address",
+  "keywords",
+  "unit",
+  "manufacture",
+] as const;
+
+const RUCHI_CATALOGUE_IDENTIFIERS = RUCHI_CATALOGUE_KEYS.map(
+  (key) => `{namespace: "ruchi", key: "${key}"}`
+).join(", ");
+
 export const productVariantFragment = /* GraphQL */ `
   fragment productVariant on ProductVariant {
     id
@@ -41,6 +75,10 @@ export const productVariantFragment = /* GraphQL */ `
     }
     image {
       ...image
+    }
+    metafields(identifiers: [${RUCHI_CATALOGUE_IDENTIFIERS}]) {
+      key
+      value
     }
   }
   ${moneyFragment}

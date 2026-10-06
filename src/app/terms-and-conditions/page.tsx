@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { LegalPageLayout, type LegalSection } from "@/components/legal/legal-page-layout";
-import { Scale, PackageCheck, AlertTriangle, Truck, RotateCcw, Building2 } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions",
@@ -29,7 +28,6 @@ export default function TermsAndConditionsPage() {
   return (
     <LegalPageLayout
       title="Terms & Conditions"
-      badge="E-Commerce & Consumer Protection Compliant"
       effectiveDate="September 25, 2026"
       version="3.0 (Comprehensive)"
       sections={SECTIONS}
@@ -37,10 +35,9 @@ export default function TermsAndConditionsPage() {
     >
       {/* Preamble / Summary Box */}
       <div className="bg-[#f7f6f2] border border-gray-200 rounded-xl p-5 sm:p-6 text-xs sm:text-sm text-gray-800 space-y-3">
-        <div className="flex items-center gap-2 text-[#0e6337] font-serif font-bold text-base">
-          <Scale className="w-5 h-5 text-[#168a4a]" />
-          <span>Statutory Terms of Service &amp; E-Commerce Contract</span>
-        </div>
+        <h2 className="text-[#0e6337] font-serif font-bold text-base">
+          Statutory Terms of Service &amp; E-Commerce Contract
+        </h2>
         <p className="leading-relaxed">
           These Terms &amp; Conditions (&apos;Terms&apos;) constitute a legally binding electronic contract between you (&apos;User&apos;, &apos;Customer&apos;, or &apos;You&apos;)
           and <strong>Om Oil &amp; Flour Mills Ltd.</strong> (&apos;Company&apos;, &apos;Ruchi Foodline&apos;, &apos;We&apos;, &apos;Us&apos;, or &apos;Our&apos;). Accessing, browsing,
@@ -174,14 +171,11 @@ export default function TermsAndConditionsPage() {
           <span className="text-sm font-mono text-[#168a4a]">06.</span>
           <span>Shipping, Delivery Logistics &amp; Title Transfer</span>
         </h2>
-        <div className="bg-[#f7f6f2] p-4.5 rounded-xl border border-gray-200 flex items-start gap-3 text-xs sm:text-sm text-gray-800">
-          <Truck className="w-5 h-5 text-[#168a4a] shrink-0 mt-0.5" />
-          <p className="leading-relaxed">
-            We ship products across serviceable PIN codes in India through contracted third-party logistics partners. Delivery timelines
-            stated at checkout are indicative estimates and not strict guarantees. Om Oil &amp; Flour Mills Ltd. shall not be held liable
-            for delivery delays caused by courier disruptions, regional strikes, bad weather, or force majeure events. Risk of loss and title
-            for purchased items pass to the customer upon physical delivery at the specified shipping address.
-          </p>
+        <div className="bg-[#f7f6f2] p-4.5 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-800 leading-relaxed">
+          We ship products across serviceable PIN codes in India through contracted third-party logistics partners. Delivery timelines
+          stated at checkout are indicative estimates and not strict guarantees. Om Oil &amp; Flour Mills Ltd. shall not be held liable
+          for delivery delays caused by courier disruptions, regional strikes, bad weather, or force majeure events. Risk of loss and title
+          for purchased items pass to the customer upon physical delivery at the specified shipping address.
         </div>
       </section>
 
@@ -194,8 +188,8 @@ export default function TermsAndConditionsPage() {
         
         <div className="space-y-4 pt-1">
           <div className="border border-gray-200 rounded-xl p-4 sm:p-5 bg-white space-y-2">
-            <h3 className="font-semibold text-sm text-gray-900 flex items-center gap-2">
-              <RotateCcw className="w-4 h-4 text-[#168a4a]" /> a) Order Cancellation Policy
+            <h3 className="font-semibold text-sm text-gray-900">
+              a) Order Cancellation Policy
             </h3>
             <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
               Customers may cancel orders prior to warehouse dispatch. Once an order is handed over to courier partners, cancellations cannot be processed.
@@ -203,8 +197,8 @@ export default function TermsAndConditionsPage() {
           </div>
 
           <div className="border border-rose-200 rounded-xl p-4 sm:p-5 bg-rose-50/40 space-y-2">
-            <h3 className="font-semibold text-sm text-rose-900 flex items-center gap-2">
-              <PackageCheck className="w-4 h-4 text-rose-700" /> b) Non-Returnable FMCG Policy
+            <h3 className="font-semibold text-sm text-rose-900">
+              b) Non-Returnable FMCG Policy
             </h3>
             <p className="text-xs sm:text-sm text-rose-950 leading-relaxed">
               Because Ruchi Foodline manufactures packaged consumable food items, <strong>delivered products are non-returnable due to health, hygiene, and contamination risks</strong>.
@@ -212,8 +206,8 @@ export default function TermsAndConditionsPage() {
           </div>
 
           <div className="border border-amber-200 rounded-xl p-4 sm:p-5 bg-amber-50/40 space-y-2">
-            <h3 className="font-semibold text-sm text-amber-900 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-700" /> c) Damaged / Defective Claim Protocol
+            <h3 className="font-semibold text-sm text-amber-900">
+              c) Damaged / Defective Claim Protocol
             </h3>
             <p className="text-xs sm:text-sm text-amber-950 leading-relaxed">
               If a shipment is delivered in a visibly damaged, tampered, expired, or incorrect state, the customer <strong>MUST report the issue to Customer Care within 48 hours of delivery</strong>:
@@ -315,10 +309,9 @@ export default function TermsAndConditionsPage() {
           <span>Corporate Contact Coordinates &amp; Legal Notices</span>
         </h2>
         <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 space-y-3 text-xs sm:text-sm text-gray-700">
-          <div className="flex items-center gap-2 text-gray-900 font-semibold text-base">
-            <Building2 className="w-5 h-5 text-[#168a4a]" />
-            <span>Om Oil &amp; Flour Mills Ltd. (Ruchi Foodline)</span>
-          </div>
+          <h3 className="text-gray-900 font-semibold text-base">
+            Om Oil &amp; Flour Mills Ltd. (Ruchi Foodline)
+          </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-gray-600">
             <div>
               <span className="text-gray-400 block text-[11px] uppercase font-semibold">Corporate Identity Number</span>

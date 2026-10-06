@@ -73,7 +73,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
   return (
     <section
       id="recipes"
-      className="relative w-full min-h-[100dvh] lg:h-[100dvh] bg-[#0e6337] text-white flex flex-col justify-center py-10 sm:py-14 lg:py-16 overflow-hidden"
+      className="relative w-full bg-[#0e6337] text-white flex flex-col justify-center py-14 sm:py-16 lg:py-20 overflow-hidden"
       aria-label="Stories, Flavours & Insights"
     >
       <Image
@@ -82,10 +82,10 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
         fill
         className="object-cover object-center opacity-100 pointer-events-none select-none"
       />
-      <div className="relative z-10 w-full flex flex-col justify-center my-auto py-2">
+      <div className="relative z-10 w-full flex flex-col">
 
         {/* Top Section Heading & Controls */}
-        <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-4 sm:mb-6 lg:mb-7">
+        <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-8 lg:mb-10">
           <div className="max-w-2xl text-left">
             <h2 className="font-serif text-2xl xs:text-3xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-white tracking-tight leading-tight">
               Stories, Flavours &amp; Insights
@@ -137,7 +137,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
         </div>
 
         {/* Category Tabs Switcher (Single row horizontal swipe on mobile) */}
-        <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto mb-5 sm:mb-7 lg:mb-8">
+        <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto mb-8 sm:mb-10 lg:mb-12">
           <div
             className="flex items-center gap-4 sm:gap-7 border-b border-white/20 overflow-x-auto scrollbar-none pb-px select-none whitespace-nowrap"
             role="tablist"
@@ -175,20 +175,20 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
           <div
             key={activeCategory}
             ref={scrollContainerRef}
-            className="w-full flex items-stretch gap-3.5 sm:gap-5 lg:gap-6 overflow-x-auto scrollbar-none scroll-smooth pb-2 snap-x snap-mandatory px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-[max(2rem,calc((100vw-1400px)/2+2rem))] animate-fade-in"
+            className="w-full flex items-stretch gap-3.5 sm:gap-5 lg:gap-6 overflow-x-auto scrollbar-none scroll-smooth pb-4 snap-x snap-mandatory px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-[max(2rem,calc((100vw-1400px)/2+2rem))] animate-fade-in"
           >
             {filteredPosts.map((post) => (
               <Link
                 key={post.id}
                 href={`/blog/${post.blog.handle}/${post.handle}`}
-                className="blog-card group relative block shrink-0 snap-start w-[80vw] xs:w-[75vw] sm:w-[290px] md:w-[310px] lg:w-[330px] xl:w-[350px] h-[310px] xs:h-[330px] sm:h-[330px] md:h-[360px] lg:h-[380px] rounded-[15px] overflow-hidden shadow-md transition-all duration-500 hover:-translate-y-1.5"
+                className="blog-card group relative block shrink-0 snap-start w-[82vw] xs:w-[78vw] sm:w-[320px] md:w-[340px] lg:w-[370px] xl:w-[400px] h-[420px] xs:h-[440px] sm:h-[460px] md:h-[500px] lg:h-[540px] rounded-[15px] overflow-hidden shadow-md transition-all duration-500 hover:-translate-y-1.5"
               >
                 {post.image ? (
                   <Image
                     src={post.image.url}
                     alt={post.image.altText ?? post.title}
                     fill
-                    sizes="(min-width: 1280px) 350px, (min-width: 1024px) 330px, (min-width: 640px) 290px, 80vw"
+                    sizes="(min-width: 1280px) 400px, (min-width: 1024px) 370px, (min-width: 640px) 340px, 82vw"
                     className="object-cover object-center w-full h-full transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                 ) : (
@@ -197,16 +197,16 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/15 z-10 transition-opacity duration-300 group-hover:from-black/95" />
 
-                <div className="absolute inset-0 z-20 flex flex-col justify-end p-4 xs:p-5 sm:p-6 lg:p-7">
+                <div className="absolute inset-0 z-20 flex flex-col justify-end p-5 xs:p-6 sm:p-7 lg:p-8">
                   <span className="text-emerald-300 text-[10px] sm:text-xs font-semibold tracking-wider uppercase mb-1 sm:mb-1.5 block">
                     {post.blog.title}
                   </span>
 
-                  <h3 className="font-sans font-bold text-sm xs:text-base sm:text-lg lg:text-xl text-white leading-snug line-clamp-2 group-hover:text-emerald-100 transition-colors drop-shadow-sm mb-1.5 sm:mb-2">
+                  <h3 className="font-sans font-bold text-sm xs:text-base sm:text-lg lg:text-2xl text-white leading-snug line-clamp-3 group-hover:text-emerald-100 transition-colors drop-shadow-sm mb-1.5 sm:mb-2">
                     {post.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-white/80 line-clamp-2 leading-relaxed mb-2.5 sm:mb-3 font-normal">
+                  <p className="text-xs sm:text-sm text-white/80 line-clamp-3 leading-relaxed mb-3 sm:mb-4 font-normal">
                     {post.excerpt || post.content.replace(/<[^>]*>/g, "").slice(0, 120)}
                   </p>
 

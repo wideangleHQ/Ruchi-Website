@@ -37,6 +37,7 @@ export type ProductVariant = {
   price: Money;
   compareAtPrice: Money | null;
   image: Image | null;
+  metafields: Array<{ key: string; value: string } | null>;
 };
 
 export type Product = {

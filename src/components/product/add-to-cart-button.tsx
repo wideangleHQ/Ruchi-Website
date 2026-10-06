@@ -94,20 +94,23 @@ export function AddToCartButton({ variants }: AddToCartButtonProps) {
       )}
 
       {/* Quantity Selector & Add to Cart Action */}
-      <div className="flex gap-3 pt-2">
-        <div className="flex items-center border border-border rounded-[12px] bg-white px-2">
+      <div className="flex gap-2.5 sm:gap-3.5 pt-2">
+        <div className="flex items-center border border-gray-200 rounded-xl bg-white px-1 sm:px-2 shrink-0 h-[46px] sm:h-[50px]">
           <button
             type="button"
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="px-2.5 py-2 text-muted-text hover:text-text text-sm font-bold"
+            className="w-8 h-full flex items-center justify-center text-gray-500 hover:text-[#168a4a] text-sm sm:text-base font-bold transition-colors cursor-pointer disabled:opacity-30"
+            aria-label="Decrease quantity"
+            disabled={quantity <= 1}
           >
             -
           </button>
-          <span className="px-3 text-xs font-bold text-text">{quantity}</span>
+          <span className="w-7 sm:w-8 text-center text-xs sm:text-sm font-bold text-gray-900 tabular-nums">{quantity}</span>
           <button
             type="button"
             onClick={() => setQuantity(quantity + 1)}
-            className="px-2.5 py-2 text-muted-text hover:text-text text-sm font-bold"
+            className="w-8 h-full flex items-center justify-center text-gray-500 hover:text-[#168a4a] text-sm sm:text-base font-bold transition-colors cursor-pointer"
+            aria-label="Increase quantity"
           >
             +
           </button>
@@ -117,19 +120,21 @@ export function AddToCartButton({ variants }: AddToCartButtonProps) {
           type="button"
           disabled={isSoldOut || isPending}
           onClick={handleAddToCart}
-          className={`flex-1 py-3.5 px-6 rounded-[12px] font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-xs ${
+          className={`flex-1 h-[46px] sm:h-[50px] py-3 px-4 sm:px-6 rounded-xl font-bold text-xs sm:text-sm md:text-base uppercase tracking-wide flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer active:scale-[0.99] ${
             added
               ? "bg-emerald-700 text-white"
-              : "bg-primary-green hover:bg-deep-green text-white"
+              : "bg-[#168a4a] hover:bg-[#0e6337] text-white"
           } ${isSoldOut || isPending ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {added ? (
             <>
-              <Check className="w-4 h-4" /> Added to Cart!
+              <Check className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+              <span className="whitespace-nowrap">Added to Cart!</span>
             </>
           ) : (
             <>
-              <ShoppingBag className="w-4 h-4" /> {isSoldOut ? "Sold Out" : isPending ? "Adding..." : "Add to Cart"}
+              <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+              <span className="whitespace-nowrap">{isSoldOut ? "Sold Out" : isPending ? "Adding…" : "Add to Cart"}</span>
             </>
           )}
         </button>

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ChevronRight, ShieldCheck, Scale, FileText, Menu, X } from "lucide-react";
 
 export interface LegalSection {
   id: string;
@@ -11,7 +10,7 @@ export interface LegalSection {
 
 interface LegalPageLayoutProps {
   title: string;
-  badge: string;
+  badge?: string;
   effectiveDate: string;
   version: string;
   sections: LegalSection[];
@@ -21,7 +20,6 @@ interface LegalPageLayoutProps {
 
 export function LegalPageLayout({
   title,
-  badge,
   effectiveDate,
   version,
   sections,
@@ -33,35 +31,23 @@ export function LegalPageLayout({
   return (
     <div className="bg-[#faf9f6] min-h-screen">
       {/* Header Banner */}
-      <section className="relative bg-[#0e6337] text-white py-12 sm:py-16 md:py-20 overflow-hidden border-b border-white/10">
-        <div
-          className="absolute inset-0 pointer-events-none opacity-10"
-          style={{
-            backgroundImage: `radial-gradient(#ffffff 0.8px, transparent 0.8px)`,
-            backgroundSize: `24px 24px`,
-          }}
-        />
-        <div className="relative z-10 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <section className="relative bg-[#0e6337] text-white py-10 sm:py-14 md:py-16 border-b border-white/10">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            {/* Breadcrumb */}
-            <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-2 text-xs sm:text-sm text-emerald-200">
+            {/* Plain Breadcrumb */}
+            <nav aria-label="Breadcrumb" className="mb-3 text-xs sm:text-sm text-emerald-200">
               <Link href="/" className="hover:text-white transition-colors">
                 Home
               </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
+              <span className="mx-2 text-emerald-400">/</span>
               <span className="text-white font-medium">Legal Documents</span>
             </nav>
 
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-emerald-300 text-xs font-semibold tracking-wider uppercase mb-4 border border-white/15">
-              {activeType === "privacy" ? <ShieldCheck className="w-3.5 h-3.5" /> : <Scale className="w-3.5 h-3.5" />}
-              {badge}
-            </div>
-
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight mb-4">
               {title}
             </h1>
 
-            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs sm:text-sm text-emerald-100/90 font-medium">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs sm:text-sm text-emerald-100 font-medium">
               <div>
                 <span className="text-white/70">Operating Entity:</span> Om Oil &amp; Flour Mills Ltd. (Ruchi Foodline)
               </div>
@@ -73,22 +59,22 @@ export function LegalPageLayout({
               </div>
             </div>
 
-            {/* Quick Switcher */}
-            <div className="mt-6 pt-4 border-t border-white/15 flex items-center gap-3 text-xs sm:text-sm">
+            {/* Plain Quick Switcher */}
+            <div className="mt-5 pt-4 border-t border-white/15 flex items-center gap-2 text-xs sm:text-sm">
               <span className="text-white/70">Related Document:</span>
               {activeType === "privacy" ? (
                 <Link
                   href="/terms-and-conditions"
-                  className="inline-flex items-center gap-1.5 text-white hover:text-emerald-300 font-semibold underline underline-offset-4 transition-colors"
+                  className="text-white hover:text-emerald-300 font-semibold underline underline-offset-4 transition-colors ml-1"
                 >
-                  <FileText className="w-3.5 h-3.5" /> View Terms &amp; Conditions
+                  View Terms &amp; Conditions
                 </Link>
               ) : (
                 <Link
                   href="/privacy-policy"
-                  className="inline-flex items-center gap-1.5 text-white hover:text-emerald-300 font-semibold underline underline-offset-4 transition-colors"
+                  className="text-white hover:text-emerald-300 font-semibold underline underline-offset-4 transition-colors ml-1"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5" /> View Privacy Policy
+                  View Privacy Policy
                 </Link>
               )}
             </div>
@@ -103,13 +89,13 @@ export function LegalPageLayout({
           <button
             type="button"
             onClick={() => setIsMobileTocOpen(!isMobileTocOpen)}
-            className="w-full flex items-center justify-between text-left font-semibold text-sm text-gray-900 focus:outline-none"
+            className="w-full flex items-center justify-between text-left font-semibold text-sm text-gray-900 focus:outline-none cursor-pointer"
             aria-expanded={isMobileTocOpen}
           >
-            <span className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-[#168a4a]" /> On this page ({sections.length} sections)
+            <span>On this page ({sections.length} sections)</span>
+            <span className="text-xs text-[#0e6337] font-bold uppercase tracking-wider">
+              {isMobileTocOpen ? "Hide" : "Show"}
             </span>
-            {isMobileTocOpen ? <X className="w-4 h-4 text-gray-600" /> : <Menu className="w-4 h-4 text-gray-600" />}
           </button>
 
           {isMobileTocOpen && (

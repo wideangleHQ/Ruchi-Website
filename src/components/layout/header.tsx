@@ -8,7 +8,7 @@ import { ShoppingBag, Menu, X, User, ArrowRight, Search, ChevronDown } from "luc
 import { useCartDrawer } from "@/context/cart-context";
 import { AnnouncementBar } from "./announcement-bar";
 import { HeaderSearch } from "./header-search";
-import ruchiLogo from "@/assets/Images/Ruchi-Logo.png";
+import ruchiLogoBlack from "@/assets/Images/Ruchi Logo Balck.png";
 
 const primaryNavLinks = [
   { label: "Home", href: "/" },
@@ -91,11 +91,11 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 sm:h-18 lg:h-20 items-center justify-between gap-3 sm:gap-4 lg:gap-6">
           
-          {/* LEFT: Ruchi Logo from src/assets/Images (Crisp & properly proportioned) */}
+          {/* LEFT: Ruchi Black Logo from src/assets/Images (Crisp & enlarged for mobile) */}
           <Link href="/" className="flex items-center group py-1 flex-shrink-0" aria-label="Ruchi Foodline Home">
-            <div className="relative w-14 sm:w-16 md:w-18 lg:w-20 h-10 sm:h-11 md:h-12 lg:h-13 flex items-center justify-start">
+            <div className="relative w-20 xs:w-24 sm:w-26 md:w-28 lg:w-30 h-12 xs:h-13 sm:h-14 md:h-14 lg:h-15 flex items-center justify-start">
               <Image
-                src={ruchiLogo}
+                src={ruchiLogoBlack}
                 alt="Ruchi Foodline Logo"
                 fill
                 className="object-contain object-left transition-opacity group-hover:opacity-90"
@@ -268,9 +268,9 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
                 className="flex items-center group py-1 flex-shrink-0"
                 aria-label="Ruchi Foodline Home"
               >
-                <div className="relative w-14 sm:w-16 h-10 sm:h-11 flex items-center justify-start">
+                <div className="relative w-20 xs:w-24 sm:w-26 h-12 xs:h-13 sm:h-14 flex items-center justify-start">
                   <Image
-                    src={ruchiLogo}
+                    src={ruchiLogoBlack}
                     alt="Ruchi Foodline Logo"
                     fill
                     className="object-contain object-left"

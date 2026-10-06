@@ -93,32 +93,32 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <div
       onClick={() => setIsQuickViewOpen(true)}
-      className="group relative flex flex-col justify-between h-full w-full rounded-[12px] sm:rounded-[15px] border border-gray-200/90 bg-white p-2 xs:p-2.5 sm:p-4 transition-all duration-300 hover:border-[#168a4a]/50 hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
+      className="group relative flex flex-col justify-between h-full w-full rounded-[14px] sm:rounded-[18px] border border-gray-200/90 bg-white p-2.5 xs:p-3 sm:p-4 md:p-4.5 transition-all duration-300 hover:border-[#168a4a]/60 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
     >
       <div className="flex flex-col flex-1">
         {/* Product Image Container */}
-        <div className="relative aspect-square w-full rounded-[8px] sm:rounded-[10px] overflow-hidden bg-[#f7f6f2] border border-gray-100 p-1.5 xs:p-2 sm:p-3 mb-1.5 sm:mb-3.5 flex items-center justify-center shrink-0">
+        <div className="relative aspect-square w-full rounded-[10px] sm:rounded-[12px] overflow-hidden bg-[#f7f6f2] border border-gray-100 p-2 xs:p-2.5 sm:p-3.5 mb-2 sm:mb-3.5 flex items-center justify-center shrink-0">
           {badgeText && (
-            <span className="absolute top-1 left-1 sm:top-2.5 sm:left-2.5 z-20 inline-block bg-[#168a4a] text-white text-[8px] xs:text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-[4px] sm:rounded-[6px] shadow-2xs">
+            <span className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-20 inline-block bg-[#168a4a] text-white text-[8.5px] xs:text-[9.5px] sm:text-[10.5px] font-bold tracking-wider uppercase px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-[4px] sm:rounded-[6px] shadow-2xs">
               {badgeText}
             </span>
           )}
 
           {/* Action Icons */}
-          <div className="absolute top-1 right-1 sm:top-2.5 sm:right-2.5 z-20 flex flex-col items-end gap-1 sm:gap-1.5">
+          <div className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-20 flex flex-col items-end gap-1 sm:gap-1.5">
             <button
               onClick={handleWishlist}
-              className="w-6.5 h-6.5 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#c62828] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+              className="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#c62828] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
               aria-label="Add to Wishlist"
             >
-              <Heart className={`w-3 h-3 sm:w-4 sm:h-4 ${isWishlisted ? "fill-[#c62828] text-[#c62828]" : ""}`} />
+              <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? "fill-[#c62828] text-[#c62828]" : ""}`} />
             </button>
             <button
               onClick={handleShare}
-              className="relative w-6.5 h-6.5 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+              className="relative w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/95 backdrop-blur-xs border border-gray-200/80 flex items-center justify-center text-gray-500 hover:text-[#168a4a] hover:border-gray-300 transition-all shadow-2xs cursor-pointer active:scale-95"
               aria-label="Share product"
             >
-              <Share2 className="w-3 h-3 sm:w-4 sm:h-4" />
+              <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               {copiedShare && (
                 <span className="absolute right-7 sm:right-9 top-0.5 bg-gray-900 text-white text-[8.5px] sm:text-[10px] font-medium px-1.5 sm:px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
                   Copied!
@@ -135,7 +135,7 @@ export function ProductCard({ product }: { product: Product }) {
                   alt={product.featuredImage.altText ?? product.title}
                   fallbackTitle={product.title}
                   fill
-                  sizes="(min-width: 1280px) 280px, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                  sizes="(min-width: 1280px) 320px, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 60vw"
                   className={`object-contain p-1.5 sm:p-2 transition-transform duration-500 group-hover:scale-105 ${
                     secondaryImage ? "group-hover:opacity-0" : ""
                   }`}
@@ -146,7 +146,7 @@ export function ProductCard({ product }: { product: Product }) {
                     alt={secondaryImage.altText ?? product.title}
                     fallbackTitle={product.title}
                     fill
-                    sizes="(min-width: 1280px) 280px, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                    sizes="(min-width: 1280px) 320px, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 60vw"
                     className="object-contain p-1.5 sm:p-2 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
                   />
                 )}
@@ -162,11 +162,11 @@ export function ProductCard({ product }: { product: Product }) {
         {/* Category Tag - Reserved height for vertical consistency */}
         <div className="min-h-[18px] sm:min-h-[22px] flex items-center justify-between gap-1.5 sm:gap-2 mb-1 sm:mb-1.5">
           {categoryTag ? (
-            <span className="text-[9.5px] sm:text-[11px] font-bold uppercase tracking-wider text-[#168a4a] truncate">
+            <span className="text-[10px] sm:text-[11.5px] font-bold uppercase tracking-wider text-[#168a4a] truncate">
               {categoryTag}
             </span>
           ) : (
-            <span className="text-[9.5px] sm:text-[11px] font-bold uppercase tracking-wider text-[#168a4a]/70">
+            <span className="text-[10px] sm:text-[11.5px] font-bold uppercase tracking-wider text-[#168a4a]/70">
               Ruchi Spices
             </span>
           )}
@@ -174,7 +174,7 @@ export function ProductCard({ product }: { product: Product }) {
 
         {/* Product Name */}
         <div className="block mb-1 sm:mb-1.5 cursor-pointer">
-          <h3 className="font-sans text-xs sm:text-base font-bold text-gray-900 uppercase tracking-wide leading-snug line-clamp-2 min-h-[2rem] sm:min-h-[2.75rem] group-hover:text-[#168a4a] transition-colors">
+          <h3 className="font-sans text-[12.5px] xs:text-[13.5px] sm:text-[15px] md:text-base font-bold text-gray-900 uppercase tracking-wide leading-snug line-clamp-2 min-h-[2.1rem] sm:min-h-[2.75rem] group-hover:text-[#168a4a] transition-colors">
             {product.title}
           </h3>
         </div>
@@ -185,14 +185,14 @@ export function ProductCard({ product }: { product: Product }) {
             {specs.slice(0, 3).map((spec) => (
               <li
                 key={spec}
-                className="font-sans text-[10px] xs:text-[11px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-1 pl-2.5 relative before:content-['•'] before:absolute before:left-0 before:text-[#168a4a]"
+                className="font-sans text-[10.5px] xs:text-[11.5px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-1 pl-2.5 relative before:content-['•'] before:absolute before:left-0 before:text-[#168a4a]"
               >
                 {spec}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="font-sans text-[10px] xs:text-[11px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 mb-1.5 sm:mb-3 min-h-[1.75rem] sm:min-h-[2.5rem]">
+          <p className="font-sans text-[10.5px] xs:text-[11.5px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 mb-1.5 sm:mb-3 min-h-[1.75rem] sm:min-h-[2.5rem]">
             {product.description || "Masterfully crafted heritage spice blend for authentic cooking."}
           </p>
         )}
@@ -201,7 +201,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="min-h-[38px] sm:min-h-[52px] mb-2 sm:mb-3 flex flex-col justify-start">
           {hasCustomVariants && variants.length > 1 ? (
             <div>
-              <span className="block mb-0.5 sm:mb-1 text-[9px] sm:text-[10px] font-bold tracking-wider text-gray-500 uppercase">
+              <span className="block mb-0.5 sm:mb-1 text-[9.5px] sm:text-[10.5px] font-bold tracking-wider text-gray-500 uppercase">
                 Pack Size
               </span>
               <div className="flex flex-wrap gap-1 sm:gap-1.5">
@@ -217,7 +217,7 @@ export function ProductCard({ product }: { product: Product }) {
                         e.stopPropagation();
                         setSelectedVariantId(v.id);
                       }}
-                      className={`px-1.5 sm:px-2 py-0.5 rounded-[4px] sm:rounded-[5px] border text-[9.5px] sm:text-[11px] font-semibold transition-all ${
+                      className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-[4px] sm:rounded-[6px] border text-[10px] sm:text-[11.5px] font-semibold transition-all ${
                         !v.availableForSale
                           ? "border-gray-200 bg-gray-50 text-gray-300 line-through cursor-not-allowed"
                           : isSelected
@@ -233,10 +233,10 @@ export function ProductCard({ product }: { product: Product }) {
             </div>
           ) : (
             <div>
-              <span className="block mb-0.5 sm:mb-1 text-[9px] sm:text-[10px] font-bold tracking-wider text-gray-400 uppercase">
+              <span className="block mb-0.5 sm:mb-1 text-[9.5px] sm:text-[10.5px] font-bold tracking-wider text-gray-400 uppercase">
                 Pack Size
               </span>
-              <span className="inline-block px-1.5 sm:px-2 py-0.5 rounded-[4px] sm:rounded-[5px] border border-gray-200/70 bg-gray-50/60 text-gray-600 text-[9.5px] sm:text-[11px] font-medium">
+              <span className="inline-block px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-[4px] sm:rounded-[6px] border border-gray-200/70 bg-gray-50/60 text-gray-600 text-[10px] sm:text-[11.5px] font-medium">
                 {variants[0]?.title && variants[0].title.toLowerCase() !== "default title"
                   ? variants[0].title
                   : "Standard Pack"}
@@ -250,7 +250,7 @@ export function ProductCard({ product }: { product: Product }) {
         {/* Price Row */}
         <div className="flex items-center justify-between mb-2 sm:mb-3 pt-1.5 sm:pt-2.5 border-t border-gray-100 min-h-[28px] sm:min-h-[34px]">
           <div className="flex items-baseline gap-1.5 sm:gap-2">
-            <span className="text-sm sm:text-xl font-bold text-gray-900">
+            <span className="text-sm xs:text-base sm:text-xl font-bold text-gray-900">
               {formatMoney(priceMoney)}
             </span>
             {compareAtMoney && compareAtPrice && compareAtPrice > price && (
@@ -260,7 +260,7 @@ export function ProductCard({ product }: { product: Product }) {
             )}
           </div>
           {selectedVariant?.title && selectedVariant.title.toLowerCase() !== "default title" && (
-            <span className="text-[9.5px] sm:text-[11px] text-gray-500 font-semibold uppercase truncate max-w-[70px] sm:max-w-none">
+            <span className="text-[10px] sm:text-[11.5px] text-gray-500 font-semibold uppercase truncate max-w-[80px] sm:max-w-none">
               ({selectedVariant.title})
             </span>
           )}
@@ -270,7 +270,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="flex items-stretch gap-1.5 sm:gap-2">
           {!isSoldOut && (
             <div
-              className="flex items-center border border-gray-200 rounded-[6px] sm:rounded-[8px] shrink-0"
+              className="flex items-center border border-gray-200 rounded-[6px] sm:rounded-[8px] shrink-0 bg-white"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -278,15 +278,15 @@ export function ProductCard({ product }: { product: Product }) {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setQuantity((q) => Math.max(1, q - 1));
+                  setQuantity((q: number) => Math.max(1, q - 1));
                 }}
                 disabled={quantity <= 1}
                 aria-label="Decrease quantity"
-                className="w-6 h-full sm:w-8 flex items-center justify-center text-gray-500 hover:text-[#168a4a] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                className="w-5.5 xs:w-6.5 sm:w-7.5 md:w-8.5 h-full flex items-center justify-center text-gray-500 hover:text-[#168a4a] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
               >
-                <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <Minus className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5" />
               </button>
-              <span className="w-5 sm:w-6 text-center text-[11px] sm:text-xs font-bold text-gray-900 tabular-nums">
+              <span className="w-4 xs:w-5 sm:w-6 text-center text-[10.5px] xs:text-[11.5px] sm:text-xs font-bold text-gray-900 tabular-nums select-none">
                 {quantity}
               </span>
               <button
@@ -294,12 +294,12 @@ export function ProductCard({ product }: { product: Product }) {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setQuantity((q) => q + 1);
+                  setQuantity((q: number) => q + 1);
                 }}
                 aria-label="Increase quantity"
-                className="w-6 h-full sm:w-8 flex items-center justify-center text-gray-500 hover:text-[#168a4a] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                className="w-5.5 xs:w-6.5 sm:w-7.5 md:w-8.5 h-full flex items-center justify-center text-gray-500 hover:text-[#168a4a] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
               >
-                <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <Plus className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5" />
               </button>
             </div>
           )}
@@ -307,7 +307,7 @@ export function ProductCard({ product }: { product: Product }) {
           <button
             onClick={handleAddToCart}
             disabled={isSoldOut || isPending}
-            className={`flex-1 min-w-0 py-2 sm:py-3 px-2 whitespace-nowrap rounded-[6px] sm:rounded-[8px] font-bold text-[11px] sm:text-sm tracking-wide sm:tracking-wider uppercase transition-all shadow-xs flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer active:scale-[0.99] ${
+            className={`flex-1 min-w-0 h-[36px] xs:h-[38px] sm:h-[42px] md:h-[44px] px-1.5 xs:px-2.5 sm:px-3.5 md:px-4 rounded-[6px] sm:rounded-[8px] font-bold text-[11px] xs:text-[12px] sm:text-xs md:text-sm tracking-tight xs:tracking-normal sm:tracking-wide uppercase transition-all shadow-2xs flex items-center justify-center gap-1 xs:gap-1.5 sm:gap-2 cursor-pointer active:scale-[0.99] ${
               isSoldOut
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
                 : added
@@ -317,16 +317,19 @@ export function ProductCard({ product }: { product: Product }) {
             aria-label="Add to cart"
           >
             {isSoldOut ? (
-              "Sold Out"
+              <span className="truncate">Sold Out</span>
             ) : added ? (
               <>
-                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Added
+                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-white" />
+                <span className="truncate">Added</span>
               </>
             ) : isPending ? (
-              "Adding…"
+              <span className="truncate">Adding…</span>
             ) : (
               <>
-                <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Add to Cart
+                <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span className="truncate xs:hidden">Add</span>
+                <span className="truncate hidden xs:inline">Add to Cart</span>
               </>
             )}
           </button>

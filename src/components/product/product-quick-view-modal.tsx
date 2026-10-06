@@ -301,7 +301,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                     type="button"
                     disabled={isSoldOut || isAdding}
                     onClick={handleAddToCart}
-                    className={`flex-1 h-[44px] sm:h-[48px] md:h-[50px] px-5 rounded-xl font-bold text-xs sm:text-sm md:text-base uppercase tracking-wide flex items-center justify-center gap-2 border-2 transition-all cursor-pointer ${
+                    className={`flex-1 h-[44px] sm:h-[48px] md:h-[50px] px-3 sm:px-5 rounded-xl font-bold text-xs sm:text-sm md:text-base uppercase tracking-wide flex items-center justify-center gap-1.5 sm:gap-2 border-2 transition-all cursor-pointer ${
                       added
                         ? "border-[#168a4a] bg-emerald-50 text-[#0e6337]"
                         : "border-[#168a4a] text-[#0e6337] hover:bg-[#168a4a] hover:text-white bg-white shadow-xs"
@@ -309,11 +309,13 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                   >
                     {added ? (
                       <>
-                        <Check className="w-4 h-4 sm:w-5 sm:h-5" /> Added to Cart
+                        <Check className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                        <span className="whitespace-nowrap">Added to Cart</span>
                       </>
                     ) : (
                       <>
-                        <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" /> {isSoldOut ? "Out of Stock" : isAdding ? "Adding…" : "Add to Cart"}
+                        <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                        <span className="whitespace-nowrap">{isSoldOut ? "Out of Stock" : isAdding ? "Adding…" : "Add to Cart"}</span>
                       </>
                     )}
                   </button>
@@ -324,11 +326,12 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                   type="button"
                   disabled={isSoldOut || isBuying}
                   onClick={handleBuyNow}
-                  className={`w-full h-[44px] sm:h-[48px] md:h-[50px] px-5 rounded-xl font-bold text-xs sm:text-sm md:text-base uppercase tracking-wide flex items-center justify-center gap-2 bg-[#168a4a] hover:bg-[#0e6337] text-white shadow-xs transition-all cursor-pointer ${
+                  className={`w-full h-[44px] sm:h-[48px] md:h-[50px] px-3 sm:px-5 rounded-xl font-bold text-xs sm:text-sm md:text-base uppercase tracking-wide flex items-center justify-center gap-1.5 sm:gap-2 bg-[#168a4a] hover:bg-[#0e6337] text-white shadow-xs transition-all cursor-pointer ${
                     isSoldOut || isBuying ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"
                   }`}
                 >
-                  <Zap className="w-4 h-4 sm:w-5 sm:h-5" /> {isBuying ? "Redirecting to Checkout…" : "Buy Now"}
+                  <Zap className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                  <span className="whitespace-nowrap">{isBuying ? "Redirecting to Checkout…" : "Buy Now"}</span>
                 </button>
               </div>
 

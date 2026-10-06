@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { LegalPageLayout, type LegalSection } from "@/components/legal/legal-page-layout";
-import { ShieldCheck, Lock, FileCheck, Phone, Mail, MapPin, Building2, AlertCircle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -28,7 +27,6 @@ export default function PrivacyPolicyPage() {
   return (
     <LegalPageLayout
       title="Statutory Privacy Policy"
-      badge="DPDP Act 2023 & IT Act 2000 Compliant"
       effectiveDate="September 25, 2026"
       version="3.0 (Comprehensive)"
       sections={SECTIONS}
@@ -36,10 +34,9 @@ export default function PrivacyPolicyPage() {
     >
       {/* Preamble / Summary Box */}
       <div className="bg-[#f7f6f2] border border-gray-200 rounded-xl p-5 sm:p-6 text-xs sm:text-sm text-gray-800 space-y-3">
-        <div className="flex items-center gap-2 text-[#0e6337] font-serif font-bold text-base">
-          <ShieldCheck className="w-5 h-5 text-[#168a4a]" />
-          <span>Commitment to Data Privacy &amp; Consumer Trust</span>
-        </div>
+        <h2 className="text-[#0e6337] font-serif font-bold text-base">
+          Commitment to Data Privacy &amp; Consumer Trust
+        </h2>
         <p className="leading-relaxed">
           This Privacy Policy explains how <strong>Om Oil &amp; Flour Mills Ltd.</strong> (“Company”, “we”, “our” or “us”),
           operating under the brand <strong>RUCHI &amp; FROZIT</strong>, collects, uses, processes, stores, shares, and protects
@@ -275,21 +272,18 @@ export default function PrivacyPolicyPage() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
           <div className="bg-[#f7f6f2] p-4 rounded-xl border border-gray-200">
-            <Lock className="w-5 h-5 text-[#168a4a] mb-2" />
             <h3 className="font-semibold text-sm text-gray-900 mb-1">SSL 256-Bit Encryption</h3>
             <p className="text-xs text-gray-600">
               All website communications and checkout transactions are encrypted using industry-standard Secure Socket Layer (SSL) 256-bit encryption.
             </p>
           </div>
           <div className="bg-[#f7f6f2] p-4 rounded-xl border border-gray-200">
-            <ShieldCheck className="w-5 h-5 text-[#168a4a] mb-2" />
             <h3 className="font-semibold text-sm text-gray-900 mb-1">Multi-Layer Firewalls</h3>
             <p className="text-xs text-gray-600">
               Corporate databases operate behind multi-layered firewalls with strict role-based access restrictions limited to authorized personnel.
             </p>
           </div>
           <div className="bg-[#f7f6f2] p-4 rounded-xl border border-gray-200">
-            <FileCheck className="w-5 h-5 text-[#168a4a] mb-2" />
             <h3 className="font-semibold text-sm text-gray-900 mb-1">Corporate Governance</h3>
             <p className="text-xs text-gray-600">
               ISO 22000:2018 and ISO 9002 certifications alongside a CRISIL SME 2 financial rating, reinforcing integrity across operations.
@@ -359,14 +353,11 @@ export default function PrivacyPolicyPage() {
           <span className="text-sm font-mono text-[#168a4a]">11.</span>
           <span>Children&apos;s Data Protection Policy</span>
         </h2>
-        <div className="bg-amber-50/50 border border-amber-200 rounded-xl p-4 flex items-start gap-3 text-xs sm:text-sm text-amber-900">
-          <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-          <p className="leading-relaxed">
-            The Ruchi Foodline website is designed for general commercial audiences and is intended for use by individuals
-            aged <strong>18 years or older</strong>. We do not knowingly collect or process personal data belonging to minors
-            without verifiable parental consent. If a parent or guardian discovers that a minor has submitted personal data,
-            please contact our Grievance Officer immediately for prompt data erasure.
-          </p>
+        <div className="bg-amber-50/50 border border-amber-200 rounded-xl p-4 text-xs sm:text-sm text-amber-900 leading-relaxed">
+          The Ruchi Foodline website is designed for general commercial audiences and is intended for use by individuals
+          aged <strong>18 years or older</strong>. We do not knowingly collect or process personal data belonging to minors
+          without verifiable parental consent. If a parent or guardian discovers that a minor has submitted personal data,
+          please contact our Grievance Officer immediately for prompt data erasure.
         </div>
       </section>
 
@@ -415,21 +406,17 @@ export default function PrivacyPolicyPage() {
           <span>Corporate Entity &amp; Official Contact Coordinates</span>
         </h2>
         <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 space-y-3 text-xs sm:text-sm text-gray-700">
-          <div className="flex items-center gap-2 text-gray-900 font-semibold text-base">
-            <Building2 className="w-5 h-5 text-[#168a4a]" />
-            <span>Om Oil &amp; Flour Mills Ltd. (Ruchi Foodline)</span>
-          </div>
+          <h3 className="text-gray-900 font-semibold text-base">
+            Om Oil &amp; Flour Mills Ltd. (Ruchi Foodline)
+          </h3>
           <div className="space-y-1.5 pt-1 text-gray-600">
-            <div className="flex items-start gap-2">
-              <MapPin className="w-4 h-4 text-[#168a4a] shrink-0 mt-0.5" />
-              <span>Type-II, No. 8 &amp; B/18 Industrial Estate, Khapuria, Cuttack - 753010, Odisha, India</span>
+            <div>
+              <span>Address: Type-II, No. 8 &amp; B/18 Industrial Estate, Khapuria, Cuttack - 753010, Odisha, India</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-[#168a4a] shrink-0" />
+            <div>
               <span>Toll-Free: <a href="tel:18003454439" className="text-gray-900 font-semibold hover:underline">1800 345 4439</a></span>
             </div>
-            <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-[#168a4a] shrink-0" />
+            <div>
               <span>Email: <a href="mailto:info@ruchifoodline.com" className="text-gray-900 font-semibold hover:underline">info@ruchifoodline.com</a></span>
             </div>
           </div>

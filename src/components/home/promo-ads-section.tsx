@@ -55,49 +55,49 @@ export function PromoAdsSection() {
     <section className="py-5 sm:py-8 lg:py-10 bg-transparent" aria-label="Promotions and Strip Ads">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 space-y-3.5 sm:space-y-6 lg:space-y-8">
 
-        {/* 1. Mobile: Horizontal Swipeable Slider (Single row with smooth swipe & snap) */}
+        {/* 1. Mobile: Horizontal Swipeable Slider with Original 2:1 Image Ratio & No White Borders */}
         <div className="flex md:hidden items-stretch gap-3 overflow-x-auto scrollbar-none scroll-smooth snap-x snap-mandatory py-0.5">
           {portraitAds.map((ad) => (
             <Link
               key={ad.id}
               href={ad.href}
-              className="group relative block aspect-[4/3] w-[75%] xs:w-[70%] max-w-[320px] shrink-0 snap-start overflow-hidden rounded-xl border border-gray-200/60 bg-white shadow-2xs transition-all duration-300 active:scale-[0.99]"
+              className="group relative block aspect-[2/1] w-[88%] xs:w-[85%] max-w-[400px] shrink-0 snap-start overflow-hidden rounded-xl border border-gray-200/70 bg-stone-100 shadow-2xs transition-all duration-300 active:scale-[0.99]"
             >
               <Image
                 src={ad.image}
                 alt={ad.alt}
                 fill
-                sizes="(max-width: 768px) 75vw, 320px"
-                className="object-cover object-center w-full h-full transition-transform duration-500 group-hover:scale-[1.03]"
+                sizes="(max-width: 768px) 88vw, 400px"
+                className="object-cover object-center w-full h-full transition-transform duration-500 group-hover:scale-[1.02]"
                 priority
               />
             </Link>
           ))}
         </div>
 
-        {/* 1. Desktop & Tablet: 2-Column Ads Grid (Keep only 2 ads on desktop) */}
+        {/* 1. Desktop & Tablet: 2-Column Ads Grid with Original 2:1 Image Ratio & No White Borders */}
         <div className="hidden md:grid md:grid-cols-2 gap-4 sm:gap-6 lg:gap-7">
           {portraitAds.slice(0, 2).map((ad) => (
             <Link
               key={ad.id}
               href={ad.href}
-              className="group relative block aspect-[2/1] w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 bg-white shadow-2xs transition-all duration-300 transform hover:-translate-y-0.5"
+              className="group relative block aspect-[2/1] w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/70 bg-stone-100 shadow-2xs transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
             >
               <Image
                 src={ad.image}
                 alt={ad.alt}
                 fill
                 sizes="(min-width: 768px) 50vw, 50vw"
-                className="object-cover object-center w-full h-full transition-transform duration-500 group-hover:scale-[1.03]"
+                className="object-cover object-center w-full h-full transition-transform duration-500 group-hover:scale-[1.02]"
                 priority
               />
             </Link>
           ))}
         </div>
 
-        {/* 2. Strip Ad (Displays the complete image without cropping on any viewport) */}
+        {/* 2. Strip Ad (Displays the complete strip banner in its original ratio) */}
         <div
-          className="relative w-full aspect-[1920/420] overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 bg-transparent transition-all duration-300 shadow-2xs"
+          className="relative w-full aspect-[1920/420] overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 bg-stone-100 transition-all duration-300 shadow-2xs"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -114,7 +114,7 @@ export function PromoAdsSection() {
                 alt={strip.alt}
                 fill
                 sizes="(min-width: 1400px) 1336px, (min-width: 1024px) 95vw, 100vw"
-                className="object-contain sm:object-cover object-center w-full h-full transition-transform duration-700 ease-out hover:scale-[1.015]"
+                className="object-cover object-center w-full h-full transition-transform duration-700 ease-out hover:scale-[1.01]"
                 priority={idx === 0}
               />
             </Link>
