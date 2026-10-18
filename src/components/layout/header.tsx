@@ -84,7 +84,10 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
   }, [isMobileMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200/80 transition-all shadow-2xs">
+    <header
+      id="site-header"
+      className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200/80 transition-all shadow-2xs"
+    >
       <AnnouncementBar />
 
       {/* TOP ROW: Logo (Far Left) | Desktop Search (Center) | Desktop Utils / Mobile Hamburger (Far Right) */}
@@ -93,11 +96,12 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
           
           {/* LEFT: Ruchi Black Logo from src/assets/Images (Crisp & enlarged for mobile) */}
           <Link href="/" className="flex items-center group py-1 flex-shrink-0" aria-label="Ruchi Foodline Home">
-            <div className="relative w-20 xs:w-24 sm:w-26 md:w-28 lg:w-30 h-12 xs:h-13 sm:h-14 md:h-14 lg:h-15 flex items-center justify-start">
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16 lg:w-[72px] lg:h-[72px] flex items-center justify-start">
               <Image
                 src={ruchiLogoBlack}
                 alt="Ruchi Foodline Logo"
                 fill
+                sizes="(min-width: 1024px) 72px, (min-width: 640px) 64px, 56px"
                 className="object-contain object-left transition-opacity group-hover:opacity-90"
                 priority
               />
@@ -114,7 +118,7 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
             
             {/* Desktop Account Icon */}
             <Link
-              href="/#account"
+              href="/account"
               className="hidden lg:flex p-1.5 text-gray-800 hover:text-[#168a4a] hover:bg-gray-100 rounded-full transition-colors"
               aria-label="Account"
             >
@@ -138,7 +142,7 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
 
             {/* Desktop Sign In / Sign Up */}
             <Link
-              href="/#account"
+              href="/account"
               className="hidden lg:inline-flex items-center text-[13px] font-semibold text-gray-700 hover:text-[#168a4a] transition-colors ml-1 whitespace-nowrap"
             >
               Sign In / Sign Up

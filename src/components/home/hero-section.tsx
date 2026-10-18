@@ -72,6 +72,18 @@ export function HeroSection() {
         })}
       </div>
 
+      {/* 50-year celebration identity — approved lockup, sits top-right clear of the headline and CTAs */}
+      <div className="pointer-events-none absolute right-2 top-2 z-20 sm:right-4 sm:top-3 lg:right-8 lg:top-4 rounded-md sm:rounded-lg bg-white/85 p-1 sm:p-1.5 shadow-sm backdrop-blur-xs">
+        <Image
+          src="/images/ruchi-50yrs-logo.png"
+          alt="Ruchi Foodline — celebrating 50 years, 50 Saal Aapke Sehat Ke Saath"
+          width={2615}
+          height={1232}
+          sizes="(min-width: 1024px) 160px, (min-width: 640px) 120px, 72px"
+          className="h-auto w-[72px] sm:w-[120px] lg:w-[160px]"
+        />
+      </div>
+
       {/* Subtle Slide Indicators */}
       <div
         className="absolute bottom-1.5 sm:bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 sm:gap-1.5 md:gap-2 px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-full bg-black/20 backdrop-blur-xs pointer-events-auto"

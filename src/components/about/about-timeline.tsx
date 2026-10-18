@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Calendar, CheckCircle2, History } from "lucide-react";
 
 interface Milestone {
   period: string;
@@ -43,10 +42,10 @@ const MILESTONES: Milestone[] = [
     description:
       "Incorporation as Om Oil & Flour Mills Ltd. Awarded the Spices House Certificate by the Spices Board of India (1998). Established Eastern India's first Italian Pasta manufacturing plant in Cuttack with imported machinery from Italy and South Korea. Established RUCHI Prativa Foundation.",
     highlights: [
+      "Establishment of RUCHI Prativa Foundation (1997)",
       "Corporate Incorporation as Limited Company",
       "Eastern India's 1st Italian Pasta Plant in Cuttack",
       "Spices Board of India Spices House Certificate (1998)",
-      "Establishment of RUCHI Prativa Foundation (1997)",
     ],
   },
   {
@@ -95,8 +94,9 @@ const MILESTONES: Milestone[] = [
     description:
       "Conferred the FICCI FLO Odisha Women's Award (2021), Spice Icon Award (2022), and Times Icons of Odisha (2024). Commenced commercial production at the modern Ramdaspur facility (June 2025) and celebrated 50 years under '50 Saal Aapke Sehat Ke Saath'.",
     highlights: [
-      "Times Icons of Odisha Award (2024)",
+      "FICCI FLO Odisha Women's Award (2021)",
       "Spice Icon Award & Most Promising Brand Award (2022)",
+      "Times Icons of Odisha Award (2024)",
       "Ramdaspur Modern Manufacturing Unit (June 2025)",
       "50 Saal Aapke Sehat Ke Saath Golden Jubilee",
     ],
@@ -104,17 +104,22 @@ const MILESTONES: Milestone[] = [
 ];
 
 export function AboutTimeline() {
-  const [activeIdx, setActiveIdx] = useState(6); // Default to current milestone
+  const [activeIdx, setActiveIdx] = useState(0); // Start at 1976 so the story reads forward
+
+  const onStepKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    e.preventDefault();
+    const next = Math.min(MILESTONES.length - 1, Math.max(0, activeIdx + (e.key === "ArrowRight" ? 1 : -1)));
+    setActiveIdx(next);
+    document.getElementById(`journey-step-${next}`)?.focus();
+  };
 
   return (
-    <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-[#faf9f6] border-b border-gray-200/80" aria-label="50-Year Journey Timeline">
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+    <section className="relative min-h-[100svh] flex flex-col justify-center py-12 sm:py-16 md:py-20 bg-[#faf9f6] border-b border-gray-200/80" aria-label="50-Year Journey Timeline">
+      <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <div className="max-w-2xl mb-8 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#eef6ec] text-[#0e6337] text-xs font-bold uppercase tracking-wider mb-2.5">
-            <History className="w-3.5 h-3.5 text-[#168a4a]" /> 1976 – 2026
-          </div>
           <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
             Our 50-Year Journey of Taste &amp; Trust
           </h2>
@@ -128,50 +133,71 @@ export function AboutTimeline() {
             ============================================================ */}
         <div className="hidden lg:block space-y-8">
           {/* Progress Timeline Stepper Bar */}
-          <div className="relative flex items-center justify-between pb-4 border-b border-gray-200">
-            {MILESTONES.map((m, idx) => {
-              const isCurrent = idx === activeIdx;
-              return (
-                <button
-                  key={m.period}
-                  type="button"
-                  onClick={() => setActiveIdx(idx)}
-                  className={`relative flex flex-col items-center group cursor-pointer focus:outline-hidden transition-all text-left ${
-                    isCurrent ? "scale-105" : "opacity-75 hover:opacity-100"
-                  }`}
-                  aria-label={`View milestone for ${m.period}`}
-                >
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all shadow-xs ${
-                      isCurrent
-                        ? "bg-[#0e6337] text-white ring-4 ring-emerald-100 scale-110"
-                        : "bg-white text-gray-700 border border-gray-300 group-hover:border-[#168a4a]"
-                    }`}
+          <div className="relative pb-4 border-b border-gray-200">
+            {/* Track + progress fill (decorative) */}
+            <div className="absolute left-5 right-5 top-5 h-0.5 bg-gray-200" aria-hidden="true">
+              <div
+                className="h-full bg-[#168a4a] motion-safe:transition-[width] motion-safe:duration-500"
+                style={{ width: `${(activeIdx / (MILESTONES.length - 1)) * 100}%` }}
+              />
+            </div>
+            <div
+              role="tablist"
+              aria-label="Ruchi journey milestones, 1976 to 2026"
+              onKeyDown={onStepKeyDown}
+              className="relative flex items-start justify-between"
+            >
+              {MILESTONES.map((m, idx) => {
+                const isCurrent = idx === activeIdx;
+                const isPast = idx < activeIdx;
+                return (
+                  <button
+                    key={m.period}
+                    id={`journey-step-${idx}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={isCurrent}
+                    aria-controls="journey-panel"
+                    tabIndex={isCurrent ? 0 : -1}
+                    onClick={() => setActiveIdx(idx)}
+                    className="group flex flex-col items-center rounded-md px-1 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a]"
                   >
-                    {idx + 1}
-                  </div>
-                  <span
-                    className={`mt-2 text-xs font-semibold tracking-tight transition-colors ${
-                      isCurrent ? "text-[#0e6337] font-bold" : "text-gray-600 group-hover:text-gray-900"
-                    }`}
-                  >
-                    {m.period}
-                  </span>
-                </button>
-              );
-            })}
+                    <span
+                      className={`flex h-10 w-10 items-center justify-center rounded-full font-mono text-xs font-bold transition-colors ${
+                        isCurrent
+                          ? "bg-[#0e6337] text-white ring-4 ring-emerald-100"
+                          : isPast
+                            ? "bg-[#168a4a] text-white"
+                            : "border border-gray-300 bg-white text-gray-700 group-hover:border-[#168a4a]"
+                      }`}
+                    >
+                      {idx + 1}
+                    </span>
+                    <span
+                      className={`mt-2 text-xs tracking-tight transition-colors ${
+                        isCurrent ? "font-bold text-[#0e6337]" : "font-semibold text-gray-600 group-hover:text-gray-900"
+                      }`}
+                    >
+                      {m.period}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Active Milestone Highlight Card */}
           {(() => {
             const active = MILESTONES[activeIdx];
             return (
-              <div className="bg-white rounded-2xl border border-gray-200/90 p-8 lg:p-10 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center transition-all animate-fade-in">
+              <div
+                key={activeIdx}
+                id="journey-panel"
+                role="tabpanel"
+                aria-labelledby={`journey-step-${activeIdx}`}
+                className="bg-white rounded-2xl border border-gray-200/90 p-8 lg:p-10 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center motion-safe:animate-fade-in"
+              >
                 <div className="lg:col-span-8 space-y-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#eef6ec] text-[#0e6337] text-xs font-bold">
-                    <Calendar className="w-3.5 h-3.5 text-[#168a4a]" />
-                    <span>Period: {active.yearLabel}</span>
-                  </div>
                   <h3 className="font-serif text-2xl lg:text-3xl font-bold text-gray-900 leading-snug">
                     {active.headline}
                   </h3>
@@ -185,8 +211,7 @@ export function AboutTimeline() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-medium text-gray-800">
                       {active.highlights.map((h, i) => (
-                        <div key={i} className="flex items-start gap-2 bg-[#f7f6f2] p-2.5 rounded-lg border border-gray-100">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#168a4a] shrink-0 mt-0.5" />
+                        <div key={i} className="bg-[#f7f6f2] p-2.5 rounded-lg border border-gray-100">
                           <span>{h}</span>
                         </div>
                       ))}
@@ -196,10 +221,7 @@ export function AboutTimeline() {
 
                 <div className="lg:col-span-4 bg-[#0e6337] text-white p-6 rounded-xl flex flex-col justify-between h-full space-y-4">
                   <div>
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-300">
-                      Milestone {activeIdx + 1} of {MILESTONES.length}
-                    </span>
-                    <div className="font-serif text-3xl font-bold mt-1 text-white">{active.period}</div>
+                    <div className="font-serif text-3xl font-bold text-white">{active.period}</div>
                     <p className="text-xs text-emerald-100/90 mt-2 leading-relaxed">
                       50 Saal Aapke Sehat Ke Saath — Pure Ingredients, Zero Compromise.
                     </p>
@@ -209,7 +231,8 @@ export function AboutTimeline() {
                       type="button"
                       disabled={activeIdx === 0}
                       onClick={() => setActiveIdx((prev) => Math.max(0, prev - 1))}
-                      className="text-white hover:text-emerald-300 disabled:opacity-40 disabled:hover:text-white font-medium cursor-pointer"
+                      aria-label="Previous milestone"
+                      className="rounded px-1 text-white hover:text-emerald-300 disabled:opacity-40 disabled:hover:text-white font-medium cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                     >
                       ← Previous
                     </button>
@@ -217,7 +240,8 @@ export function AboutTimeline() {
                       type="button"
                       disabled={activeIdx === MILESTONES.length - 1}
                       onClick={() => setActiveIdx((prev) => Math.min(MILESTONES.length - 1, prev + 1))}
-                      className="text-white hover:text-emerald-300 disabled:opacity-40 disabled:hover:text-white font-medium cursor-pointer"
+                      aria-label="Next milestone"
+                      className="rounded px-1 text-white hover:text-emerald-300 disabled:opacity-40 disabled:hover:text-white font-medium cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                     >
                       Next →
                     </button>
@@ -231,34 +255,33 @@ export function AboutTimeline() {
         {/* ============================================================
             MOBILE / TABLET VERTICAL TIMELINE (below lg)
             ============================================================ */}
-        <div className="lg:hidden space-y-6 relative before:absolute before:inset-0 before:left-4 before:w-0.5 before:bg-gray-200">
+        <ol className="lg:hidden space-y-6 relative before:absolute before:inset-y-0 before:left-[9px] before:w-0.5 before:bg-gray-200" aria-label="Ruchi journey, 1976 to 2026">
           {MILESTONES.map((m) => (
-            <div key={m.period} className="relative pl-10">
+            <li key={m.period} className="relative pl-9">
               {/* Timeline Dot */}
-              <div className="absolute left-2.5 top-1 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#168a4a] ring-4 ring-[#eef6ec]" />
+              <div className="absolute left-[10px] top-1.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#168a4a] ring-4 ring-[#eef6ec]" aria-hidden="true" />
               
               <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-2xs space-y-2.5">
-                <span className="inline-block font-mono text-xs font-bold text-[#168a4a] bg-[#eef6ec] px-2.5 py-0.5 rounded-full">
+                <span className="block font-mono text-xs font-bold uppercase tracking-wider text-[#0e6337]">
                   {m.yearLabel}
                 </span>
                 <h3 className="font-serif text-lg font-bold text-gray-900 leading-snug">
                   {m.headline}
                 </h3>
-                <p className="text-xs text-gray-700 leading-relaxed font-medium">
+                <p className="text-sm text-gray-700 leading-relaxed">
                   {m.description}
                 </p>
-                <div className="pt-2 border-t border-gray-100 space-y-1.5 text-xs text-gray-600">
+                <div className="pt-2 border-t border-gray-100 space-y-1.5 text-[13px] text-gray-600">
                   {m.highlights.map((h, i) => (
-                    <div key={i} className="flex items-start gap-1.5">
-                      <CheckCircle2 className="w-3 h-3 text-[#168a4a] shrink-0 mt-0.5" />
+                    <div key={i}>
                       <span>{h}</span>
                     </div>
                   ))}
                 </div>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ol>
 
       </div>
     </section>

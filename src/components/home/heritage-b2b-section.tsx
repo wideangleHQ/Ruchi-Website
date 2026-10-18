@@ -7,10 +7,41 @@ export function HeritageB2BSection() {
   const [isB2BSubmitted, setIsB2BSubmitted] = useState(false);
   const [b2bData, setB2BData] = useState({ name: "", company: "", phone: "", email: "", type: "Distributor" });
 
-  const handleB2BSubmit = (e: React.FormEvent) => {
+  const [b2bError, setB2BError] = useState("");
+  const [b2bSending, setB2BSending] = useState(false);
+
+  const handleB2BSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsB2BSubmitted(true);
-    setTimeout(() => setIsB2BSubmitted(false), 4000);
+    if (b2bSending) return;
+    setB2BSending(true);
+    setB2BError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          formType: "partner",
+          fullName: b2bData.name.trim(),
+          email: b2bData.email.trim(),
+          phone: b2bData.phone.trim() || undefined,
+          companyName: b2bData.company.trim(),
+          businessType: b2bData.type,
+          message: "B2B catalog & bulk pricing request",
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setB2BError(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+      setB2BData({ name: "", company: "", phone: "", email: "", type: "Distributor" });
+      setIsB2BSubmitted(true);
+      setTimeout(() => setIsB2BSubmitted(false), 4000);
+    } catch {
+      setB2BError("Could not reach the server. Please try again.");
+    } finally {
+      setB2BSending(false);
+    }
   };
 
   return (
@@ -82,6 +113,14 @@ export function HeritageB2BSection() {
                       onChange={(e) => setB2BData({ ...b2bData, phone: e.target.value })}
                       className="px-3.5 py-2.5 rounded-[8px] border border-border bg-white text-xs text-text focus:outline-none focus:border-primary-green"
                     />
+                    <input
+                      type="email"
+                      placeholder="Email *"
+                      required
+                      value={b2bData.email}
+                      onChange={(e) => setB2BData({ ...b2bData, email: e.target.value })}
+                      className="px-3.5 py-2.5 rounded-[8px] border border-border bg-white text-xs text-text focus:outline-none focus:border-primary-green sm:col-span-2"
+                    />
                     <select
                       value={b2bData.type}
                       onChange={(e) => setB2BData({ ...b2bData, type: e.target.value })}
@@ -95,10 +134,12 @@ export function HeritageB2BSection() {
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-[8px] bg-primary-green text-white font-semibold text-xs hover:bg-deep-green transition-colors flex items-center justify-center gap-2 shadow-xs"
+                    disabled={b2bSending}
+                    className="w-full disabled:opacity-60 py-3 rounded-[8px] bg-primary-green text-white font-semibold text-xs hover:bg-deep-green transition-colors flex items-center justify-center gap-2 shadow-xs"
                   >
-                    <Send className="w-3.5 h-3.5" /> Submit Commercial Inquiry
+                    <Send className="w-3.5 h-3.5" /> {b2bSending ? "Sending…" : "Submit Commercial Inquiry"}
                   </button>
+                  {b2bError && <p className="text-xs font-semibold text-brand-red">{b2bError}</p>}
                 </form>
               )}
             </div>

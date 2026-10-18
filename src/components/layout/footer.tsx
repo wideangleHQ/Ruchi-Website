@@ -21,6 +21,7 @@ interface FooterProps {
 const primaryFooterNav = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
+  { label: "Hampers", href: "/collections/hampers" },
   { label: "About Us", href: "/about" },
   { label: "Blog", href: "/#recipes" },
   { label: "Contact Us", href: "/contact/queries" },
@@ -64,8 +65,11 @@ export function Footer({ collections = [] }: FooterProps) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [newsletterError, setNewsletterError] = useState<string | null>(null);
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     const trimmed = email.trim();
     if (!trimmed) {
       setNewsletterError("Please enter your email address.");
@@ -78,8 +82,25 @@ export function Footer({ collections = [] }: FooterProps) {
     }
 
     setNewsletterError(null);
-    setIsSubscribed(true);
-    setEmail("");
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setNewsletterError(data.error || "Could not subscribe. Please try again.");
+        return;
+      }
+      setIsSubscribed(true);
+      setEmail("");
+    } catch {
+      setNewsletterError("Could not reach the server. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

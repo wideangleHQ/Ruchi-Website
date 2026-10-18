@@ -76,7 +76,7 @@ export function SocialMediaSection() {
 
   return (
     <section
-      className="relative w-full min-h-[90svh] min-h-[90vh] lg:h-[90dvh] flex flex-col justify-center py-4 sm:py-6 lg:py-8 bg-transparent overflow-hidden"
+      className="relative w-full min-h-[100svh] flex flex-col justify-center py-4 sm:py-6 lg:py-8 bg-transparent overflow-hidden"
       aria-label="Follow the Ruchi journey on social media"
     >
       {/* Global Centered Container */}

@@ -1,5 +1,4 @@
 import React from "react";
-import { Trophy } from "lucide-react";
 
 interface AwardItem {
   year: string;
@@ -62,14 +61,11 @@ const AWARDS: AwardItem[] = [
 
 export function AboutAwards() {
   return (
-    <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-white border-b border-gray-200/80" aria-label="Awards and Recognitions">
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+    <section className="relative min-h-[100svh] flex flex-col justify-center py-8 sm:py-12 bg-white border-b border-gray-200/80" aria-label="Awards and Recognitions">
+      <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-2xl mb-10 sm:mb-14">
-          <span className="text-xs font-bold text-[#168a4a] uppercase tracking-wider block mb-1.5">
-            Eminence &amp; Credentials
-          </span>
+        <div className="max-w-2xl mb-8 sm:mb-10">
           <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
             Awards &amp; Institutional Recognitions
           </h2>
@@ -78,34 +74,28 @@ export function AboutAwards() {
           </p>
         </div>
 
-        {/* Refined Awards Grid / List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-          {AWARDS.map((award, idx) => (
-            <div
-              key={idx}
-              className="bg-[#f7f6f2] hover:bg-white rounded-xl p-5 border border-gray-200/80 shadow-2xs hover:shadow-sm hover:border-emerald-300 transition-all duration-300 flex items-start gap-4"
+        {/* Awards list — year, title, conferring body; newest first */}
+        <ol className="grid grid-cols-1 md:grid-cols-2 gap-x-10 border-t border-gray-200">
+          {AWARDS.map((award) => (
+            <li
+              key={`${award.year}-${award.title}`}
+              className="grid grid-cols-[3.25rem_1fr] sm:grid-cols-[4rem_1fr] gap-x-4 py-4 sm:py-5 border-b border-gray-200"
             >
-              <div className="w-10 h-10 rounded-lg bg-[#eef6ec] text-[#0e6337] flex items-center justify-center shrink-0 mt-0.5">
-                <Trophy className="w-5 h-5 text-[#168a4a]" />
-              </div>
-
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-[#168a4a] bg-white px-2 py-0.5 rounded border border-gray-200">
-                    {award.year}
-                  </span>
-                  <span className="text-[11px] font-medium text-gray-500">Conferred by</span>
-                </div>
+              <span className="font-mono text-sm sm:text-base font-bold text-[#0e6337] tabular-nums pt-0.5">
+                {award.year}
+              </span>
+              <div className="min-w-0">
                 <h3 className="font-serif text-base sm:text-lg font-bold text-gray-900 leading-snug">
                   {award.title}
                 </h3>
-                <p className="text-xs text-gray-600 font-medium">
+                <p className="mt-1 text-xs sm:text-[13px] text-gray-600 font-medium leading-relaxed">
+                  <span className="text-gray-500">Conferred by </span>
                   {award.conferredBy}
                 </p>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ol>
 
       </div>
     </section>

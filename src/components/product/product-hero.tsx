@@ -20,7 +20,7 @@ import {
 import type { Product, ProductVariant } from "@/lib/shopify/types";
 import { addItemAction, buyNowAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
-import { normalizeVariantCatalogue } from "@/utils/catalogue";
+import { getKeyFeatures, getKeySpecs, getPackCatalogue, productMetafield } from "@/utils/catalogue";
 import { SafeImage } from "@/components/ui/safe-image";
 
 interface ProductHeroProps {
@@ -68,27 +68,6 @@ function calculateUnitPrice(variant: ProductVariant): string | null {
   return `(₹${unitPrice}/${benchmarkLabel})`;
 }
 
-/**
- * Cleans the product title to get a clean Model/Product Name without pack size
- */
-function getCleanModelName(title: string): string {
-  return title
-    .replace(/^RUCHI\s+/i, "")
-    .replace(/\s*\(\s*\d+[^)]*\)/g, "")
-    .replace(/\s*-\s*\d+.*$/g, "")
-    .trim();
-}
-
-function DetailRow({ label, value }: { label: string; value: string | null | undefined }) {
-  if (!value) return null;
-  return (
-    <div className="py-2 border-b border-border/60">
-      <span className="block text-[11px] text-muted-text font-medium">{label}</span>
-      <span className="font-bold text-text break-words">{value}</span>
-    </div>
-  );
-}
-
 export function ProductHero({ product }: ProductHeroProps) {
   const images = product.images.edges.map((e) => e.node);
   const variants = product.variants.edges.map((e) => e.node);
@@ -105,8 +84,6 @@ export function ProductHero({ product }: ProductHeroProps) {
 
   // Accordion expansion states
   const [isOffersOpen, setIsOffersOpen] = useState(true);
-  const [isHighlightsOpen, setIsHighlightsOpen] = useState(true);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   // Follow selected variant's media when Shopify provides variant-specific image
   const [lastVariantId, setLastVariantId] = useState(selectedVariantId);
@@ -181,12 +158,63 @@ export function ProductHero({ product }: ProductHeroProps) {
   const errorMessage = addState?.error || buyState?.error;
 
   // Catalogue content comes only from the selected variant's ruchi.* metafields (Excel source)
-  const catalogue = selectedVariant ? normalizeVariantCatalogue(selectedVariant) : null;
-  const modelName = getCleanModelName(product.title);
-  const currentQuantity = selectedVariant?.title && selectedVariant.title.toLowerCase() !== "default title"
-    ? selectedVariant.title
-    : null;
+  const catalogue = getPackCatalogue(product, selectedVariant);
   const skuToShow = selectedVariant?.sku || catalogue?.sku || null;
+  // Combo/hamper content: product-level subtitle & key features, per-pack included items
+  const subtitle = productMetafield(product, "subtitle");
+  const keyFeatures = getKeyFeatures(product, selectedVariant);
+  const keySpecs = getKeySpecs(product, selectedVariant).slice(0, 3);
+  const isHamper = product.productType === "Hamper";
+
+  type Row = [string, string];
+  type Section = { title: string; bullets?: string[]; text?: string; rows?: Row[] };
+  const rows = (list: Array<[string, string | null | undefined]>): Row[] =>
+    list.filter((r): r is Row => !!r[1]);
+  const accordions: Section[] = (
+    [
+      { title: "Key Features", bullets: keyFeatures },
+      { title: "Ingredients", text: catalogue?.ingredients ?? undefined },
+      {
+        title: "Specifications",
+        rows: rows([
+          ["Form", catalogue?.formFactor],
+          ["Container Type", catalogue?.containerType],
+          ["Pack Of", catalogue?.packOf],
+          ["Total Weight", catalogue?.totalWeight],
+          ["Food Type", catalogue?.foodType],
+        ]),
+      },
+      {
+        title: "Storage & Shelf Life",
+        rows: rows([
+          ["Storage Instructions", catalogue?.storageInstructions],
+          ["Shelf Life", catalogue?.shelfLife],
+        ]),
+      },
+      {
+        title: "Manufacturer & Compliance",
+        rows: rows([
+          ["Manufacturer", catalogue?.manufacturer ?? catalogue?.manufacture],
+          ["Marketed By", catalogue?.marketedBy],
+          ["Address", catalogue?.address],
+          ["FSSAI", catalogue?.fssai],
+          ["HSN", catalogue?.hsn],
+          ["Country of Origin", catalogue?.countryOfOrigin],
+        ]),
+      },
+      {
+        title: "Additional Information",
+        rows: rows([
+          ["SKU", skuToShow],
+          ["EAN", catalogue?.ean],
+          ["MRP (catalogue)", catalogue?.mrp ? `₹${catalogue.mrp}` : null],
+          ["Item Code", catalogue?.itemCode],
+          ["Material Description", catalogue?.materialDescription],
+          ["Unit", catalogue?.unit],
+        ]),
+      },
+    ] as Section[]
+  ).filter((a) => a.bullets?.length || a.text || a.rows?.length);
 
   return (
     <>
@@ -194,104 +222,10 @@ export function ProductHero({ product }: ProductHeroProps) {
         {/* ============================================================ */}
         {/* LEFT COLUMN — MARKETPLACE MULTI-IMAGE GALLERY (~58%)        */}
         {/* ============================================================ */}
-        <div className="lg:col-span-7 flex flex-col gap-3">
-          {/* Desktop Multi-Image Grid (2-column layout matching reference when 2+ images exist) */}
-          <div className="hidden sm:grid sm:grid-cols-2 gap-3.5">
-            {images.length > 0 ? (
-              images.slice(0, 4).map((img, idx) => {
-                const isFirst = idx === 0;
-                const isSecond = idx === 1;
-
-                return (
-                  <div
-                    key={img.url + idx}
-                    onClick={() => setActiveImageIdx(idx)}
-                    className={`relative aspect-[4/4] sm:aspect-[4/4.5] w-full rounded-brand overflow-hidden bg-[#F8F9FA] border transition-all cursor-pointer group flex items-center justify-center p-4 ${
-                      activeImageIdx === idx
-                        ? "border-primary-green/80 shadow-[0_2px_12px_rgba(22,138,74,0.08)] ring-1 ring-primary-green/30"
-                        : "border-border/80 hover:border-primary-green/50 hover:shadow-sm"
-                    }`}
-                  >
-                    <SafeImage
-                      src={img.url}
-                      alt={img.altText ?? `${product.title} - view ${idx + 1}`}
-                      fallbackTitle={product.title}
-                      fill
-                      priority={isFirst}
-                      sizes="(min-width: 1024px) 28vw, (min-width: 640px) 45vw, 95vw"
-                      className="object-contain transition-transform duration-300 group-hover:scale-[1.03]"
-                    />
-
-                    {/* Top-Left: Discount Badge (on 1st image) */}
-                    {isFirst && discountPct !== null && discountPct > 0 && (
-                      <span className="absolute top-3 left-3 z-10 bg-brand-red text-white text-[11px] font-bold px-2.5 py-1 rounded-[6px] shadow-sm">
-                        {discountPct}% OFF
-                      </span>
-                    )}
-
-                    {/* Top-Right: Share Button (on 2nd image or 1st if only 1 image) */}
-                    {(isSecond || (isFirst && images.length === 1)) && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleShare();
-                        }}
-                        aria-label="Share product"
-                        className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/95 backdrop-blur-sm border border-border/80 shadow-sm flex items-center justify-center text-muted-text hover:text-primary-green hover:bg-white transition-all active:scale-95"
-                      >
-                        <Share2 className="w-4 h-4" />
-                      </button>
-                    )}
-
-                    {/* Vegetarian Emblem on the first product packaging view */}
-                    {isFirst && catalogue?.foodType && (
-                      <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm border border-emerald-600/30 px-2 py-0.5 rounded-[4px] shadow-2xs">
-                        <div className="w-2.5 h-2.5 border border-emerald-600 flex items-center justify-center p-[1px]">
-                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
-                        </div>
-                        <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-tight">{catalogue.foodType}</span>
-                      </div>
-                    )}
-                  </div>
-                );
-              })
-            ) : (
-              <div className="col-span-2 aspect-[4/3] rounded-brand bg-[#F8F9FA] border border-border/80 flex items-center justify-center">
-                <span className="font-serif text-2xl font-bold text-primary-green">Ruchi Foodline</span>
-              </div>
-            )}
-          </div>
-
-          {/* Desktop thumbnail strip if there are more than 4 images */}
-          {images.length > 4 && (
-            <div className="hidden sm:flex items-center gap-2 overflow-x-auto pb-1">
-              {images.map((img, idx) => (
-                <button
-                  key={img.url + idx}
-                  type="button"
-                  onClick={() => setActiveImageIdx(idx)}
-                  className={`relative w-16 h-16 rounded-[8px] overflow-hidden border bg-[#F8F9FA] p-1 shrink-0 transition-all ${
-                    activeImageIdx === idx
-                      ? "border-primary-green ring-2 ring-primary-green/30"
-                      : "border-border hover:border-primary-green/40"
-                  }`}
-                >
-                  <SafeImage
-                    src={img.url}
-                    alt={img.altText ?? `${product.title} thumbnail ${idx + 1}`}
-                    fallbackTitle={product.title}
-                    fill
-                    className="object-contain"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-
+        <div className="lg:col-span-7 lg:col-start-1 lg:row-start-1 flex flex-col gap-3">
           {/* Mobile Single-Card Main View + Swipe/Thumbnails (< 640px) */}
-          <div className="sm:hidden flex flex-col gap-2.5">
-            <div className="relative aspect-square w-full rounded-brand overflow-hidden bg-[#F8F9FA] border border-border/80 p-4 flex items-center justify-center">
+          <div className="flex flex-col gap-2.5 lg:gap-3.5">
+            <div className="relative aspect-square w-full max-w-[min(640px,calc(80svh-6rem))] mx-auto rounded-brand overflow-hidden bg-[#F8F9FA] border border-border/80 p-4 sm:p-6 flex items-center justify-center">
               {images[activeImageIdx] ? (
                 <SafeImage
                   key={images[activeImageIdx].url}
@@ -300,7 +234,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                   fallbackTitle={product.title}
                   fill
                   priority
-                  sizes="100vw"
+                  sizes="(min-width: 1024px) 40vw, 100vw"
                   className="object-contain"
                 />
               ) : (
@@ -328,13 +262,16 @@ export function ProductHero({ product }: ProductHeroProps) {
 
             {/* Mobile Thumbnails */}
             {images.length > 1 && (
-              <div className="flex items-center gap-2 overflow-x-auto px-1 py-1">
+              <div className="flex items-center justify-center sm:justify-start gap-2 overflow-x-auto px-1 py-1 max-w-[min(640px,calc(80svh-6rem))] mx-auto w-full" role="tablist" aria-label="Product images">
                 {images.map((img, idx) => (
                   <button
                     key={img.url + idx}
                     type="button"
                     onClick={() => setActiveImageIdx(idx)}
-                    className={`relative w-14 h-14 rounded-[8px] overflow-hidden border bg-[#F8F9FA] p-1 shrink-0 transition-all ${
+                    role="tab"
+                    aria-selected={activeImageIdx === idx}
+                    aria-label={img.altText ?? `View image ${idx + 1}`}
+                    className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-[8px] overflow-hidden border bg-[#F8F9FA] p-1 shrink-0 transition-all ${
                       activeImageIdx === idx
                         ? "border-primary-green ring-2 ring-primary-green/30"
                         : "border-border"
@@ -363,11 +300,11 @@ export function ProductHero({ product }: ProductHeroProps) {
         {/* ============================================================ */}
         {/* RIGHT COLUMN — INFORMATION & SPECIFICATIONS                 */}
         {/* ============================================================ */}
-        <div className="lg:col-span-5 flex flex-col gap-4">
+        <div className="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2 flex flex-col gap-4">
           {/* Category breadcrumb */}
           {primaryCollection && (
             <Link
-              href={`/products?category=${primaryCollection.handle}`}
+              href={isHamper ? `/collections/${primaryCollection.handle}` : `/products?category=${primaryCollection.handle}`}
               className="text-[11px] font-bold uppercase tracking-wider text-primary-green hover:underline w-fit"
             >
               {primaryCollection.title}
@@ -378,6 +315,12 @@ export function ProductHero({ product }: ProductHeroProps) {
           <h1 className="font-sans text-xl sm:text-2xl font-bold text-text tracking-tight leading-snug">
             {product.title}
           </h1>
+
+          {subtitle && (
+            <p className="-mt-2 text-xs sm:text-sm font-semibold text-muted-text leading-relaxed">
+              {subtitle}
+            </p>
+          )}
 
           {/* 2. Price Display */}
           {selectedVariant && (
@@ -448,6 +391,46 @@ export function ProductHero({ product }: ProductHeroProps) {
                 })}
               </div>
             </div>
+          )}
+
+          {/* Included items & net weight for the selected pack (combos / hampers) */}
+          {catalogue && catalogue.includedItems.length > 0 && (
+            <div className="rounded-[10px] border border-border/80 bg-[#FAFBF9] p-3.5" data-testid="included-items">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <span className="text-xs font-bold text-text uppercase tracking-wider">
+                  Included in this pack
+                </span>
+                {catalogue.totalWeight && (
+                  <span className="text-[11px] font-bold text-primary-green">
+                    Net Weight: {catalogue.totalWeight}
+                  </span>
+                )}
+              </div>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-xs font-semibold text-text">
+                {catalogue.includedItems.map((item) => (
+                  <li key={item} className="relative pl-3 before:content-['•'] before:absolute before:left-0 before:text-primary-green">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              {catalogue.mrp && (
+                <p className="mt-2 pt-2 border-t border-border/60 text-[11px] font-semibold text-muted-text">
+                  MRP ₹{catalogue.mrp}
+                  {catalogue.discountPercentage ? ` · ${catalogue.discountPercentage}% discount` : ""}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Key specifications — max 3, straight from the Excel catalogue */}
+          {keySpecs.length > 0 && (
+            <ul className="space-y-1 text-xs sm:text-sm font-semibold text-text" data-testid="pdp-key-specs">
+              {keySpecs.map((spec) => (
+                <li key={spec} className="relative pl-3.5 before:content-['•'] before:absolute before:left-0 before:text-primary-green">
+                  {spec}
+                </li>
+              ))}
+            </ul>
           )}
 
           {/* 4. In-Page Purchase Controls */}
@@ -558,113 +541,6 @@ export function ProductHero({ product }: ProductHeroProps) {
             )}
           </div>
 
-          {/* 6. Product Highlights (2-Column Specification Grid) */}
-          <div className="rounded-[10px] border border-border/80 bg-white overflow-hidden transition-all">
-            <button
-              type="button"
-              onClick={() => setIsHighlightsOpen(!isHighlightsOpen)}
-              className="w-full px-3.5 py-3 flex items-center justify-between text-left hover:bg-black/[0.02] transition-colors"
-            >
-              <span className="text-xs sm:text-sm font-bold text-text">
-                Product highlights
-              </span>
-              {isHighlightsOpen ? (
-                <ChevronUp className="w-4 h-4 text-muted-text" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-muted-text" />
-              )}
-            </button>
-
-            {isHighlightsOpen && (
-              <div className="px-3.5 pb-3 pt-1 border-t border-border/60">
-                {catalogue && catalogue.keySpecifications.length > 0 && (
-                  <ul className="mb-3 space-y-1 text-xs font-semibold text-text">
-                    {catalogue.keySpecifications.map((spec) => (
-                      <li key={spec} className="relative pl-3 before:content-['•'] before:absolute before:left-0 before:text-primary-green">
-                        {spec}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <div className="grid grid-cols-2 gap-x-4 text-xs font-semibold">
-                  <DetailRow label="Model Name" value={modelName} />
-                  <DetailRow label="Quantity" value={currentQuantity} />
-                  <DetailRow label="Pack of" value={catalogue?.packOf} />
-                  <DetailRow label="Total Weight" value={catalogue?.totalWeight} />
-                  <DetailRow label="Form Factor" value={catalogue?.formFactor} />
-                  <DetailRow label="Container Type" value={catalogue?.containerType} />
-                  <DetailRow label="FSSAI" value={catalogue?.fssai} />
-                  <DetailRow label="Food Type" value={catalogue?.foodType} />
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* 7. All Details Accordion */}
-          <div className="rounded-[10px] border border-border/80 bg-white overflow-hidden transition-all">
-            <button
-              type="button"
-              onClick={() => setIsDetailsOpen(!isDetailsOpen)}
-              className="w-full px-3.5 py-3 flex items-center justify-between text-left hover:bg-black/[0.02] transition-colors"
-            >
-              <div>
-                <span className="block text-xs sm:text-sm font-bold text-text">
-                  All details
-                </span>
-                <span className="block text-[11px] text-muted-text font-semibold">
-                  Features, description and more
-                </span>
-              </div>
-              {isDetailsOpen ? (
-                <ChevronUp className="w-4 h-4 text-muted-text" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-muted-text" />
-              )}
-            </button>
-
-            {isDetailsOpen && (
-              <div className="px-3.5 pb-3.5 pt-2 border-t border-border/60 space-y-3 text-xs text-text">
-                {product.descriptionHtml && (
-                  <div
-                    className="text-muted-text leading-relaxed font-medium max-h-[250px] overflow-y-auto pr-2 scrollbar-thin [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1 [&_ul]:mb-2 [&_h4]:font-bold [&_h4]:text-text [&_h4]:mt-3 [&_h4]:mb-1 [&_strong]:text-text"
-                    dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
-                  />
-                )}
-
-                {catalogue && catalogue.keyFeatures.length > 0 && (
-                  <div className="pt-2 border-t border-border/60">
-                    <span className="block text-xs font-bold text-text mb-1.5">Key features</span>
-                    <ul className="space-y-1 text-muted-text font-medium">
-                      {catalogue.keyFeatures.map((f) => (
-                        <li key={f} className="relative pl-3 before:content-['•'] before:absolute before:left-0 before:text-primary-green">
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 pt-2 border-t border-border/60 font-semibold">
-                  <DetailRow label="Ingredients" value={catalogue?.ingredients} />
-                  <DetailRow label="Storage Instructions" value={catalogue?.storageInstructions} />
-                  <DetailRow label="Shelf Life" value={catalogue?.shelfLife} />
-                  <DetailRow label="Country of Origin" value={catalogue?.countryOfOrigin} />
-                  <DetailRow label="Manufacturer" value={catalogue?.manufacturer} />
-                  <DetailRow label="Manufacture" value={catalogue?.manufacture} />
-                  <DetailRow label="Marketed By" value={catalogue?.marketedBy} />
-                  <DetailRow label="Address" value={catalogue?.address} />
-                  <DetailRow label="MRP (catalogue)" value={catalogue?.mrp ? `₹${catalogue.mrp}` : null} />
-                  <DetailRow label="HSN" value={catalogue?.hsn} />
-                  <DetailRow label="EAN" value={catalogue?.ean} />
-                  <DetailRow label="SKU" value={skuToShow} />
-                  <DetailRow label="Item Code" value={catalogue?.itemCode} />
-                  <DetailRow label="Material Description" value={catalogue?.materialDescription} />
-                  <DetailRow label="Unit" value={catalogue?.unit} />
-                </div>
-              </div>
-            )}
-          </div>
-
           {/* Reassurance Footer */}
           <div className="flex items-center justify-between text-xs text-muted-text font-semibold pt-2 border-t border-border/60">
             <span className="flex items-center gap-1.5">
@@ -680,6 +556,56 @@ export function ProductHero({ product }: ProductHeroProps) {
               FSSAI Certified
             </span>
           </div>
+        </div>
+
+        {/* Below gallery: Excel description + accordions */}
+        <div className="lg:col-span-7 lg:col-start-1 lg:row-start-2 flex flex-col gap-5" data-testid="pdp-details">
+          {product.descriptionHtml && (
+            <section aria-labelledby="pdp-desc-heading">
+              <h2 id="pdp-desc-heading" className="font-serif text-lg sm:text-xl font-semibold text-text mb-2">
+                About this product
+              </h2>
+              <div
+                className="text-sm text-muted-text leading-relaxed font-medium [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_ul]:mb-3 [&_h4]:font-bold [&_h4]:text-text [&_h4]:mt-3 [&_h4]:mb-1 [&_strong]:text-text"
+                dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+              />
+            </section>
+          )}
+
+          {accordions.length > 0 && (
+            <div className="border-t border-border/70">
+              {accordions.map((sec) => (
+                <details key={sec.title} className="group border-b border-border/70">
+                  <summary className="flex cursor-pointer list-none items-center justify-between py-3.5 text-sm font-bold text-text [&::-webkit-details-marker]:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green rounded-[4px]">
+                    {sec.title}
+                    <ChevronDown className="w-4 h-4 text-muted-text transition-transform group-open:rotate-180" />
+                  </summary>
+                  <div className="pb-4 text-sm">
+                    {sec.bullets && (
+                      <ul className="space-y-1.5 text-muted-text font-medium">
+                        {sec.bullets.map((f) => (
+                          <li key={f} className="relative pl-3.5 before:content-['•'] before:absolute before:left-0 before:text-primary-green">
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {sec.text && <p className="text-muted-text font-medium whitespace-pre-line">{sec.text}</p>}
+                    {sec.rows && (
+                      <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                        {sec.rows.map(([label, value]) => (
+                          <div key={label} className="py-1.5 border-b border-border/50">
+                            <dt className="text-[11px] text-muted-text font-medium">{label}</dt>
+                            <dd className="font-semibold text-text break-words">{value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    )}
+                  </div>
+                </details>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

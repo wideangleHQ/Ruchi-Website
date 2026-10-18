@@ -1,6 +1,6 @@
 export function BestSellersSkeleton() {
   return (
-    <section className="py-5 sm:py-7 lg:py-9 bg-transparent" aria-label="Best sellers loading">
+    <section className="h-[100svh] min-h-[560px] overflow-hidden flex flex-col justify-center py-3 sm:py-4 lg:py-5 bg-transparent" aria-label="Best sellers loading">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4 sm:mb-6 lg:mb-7">
           <div>

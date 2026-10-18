@@ -137,7 +137,7 @@ export async function getCollectionProducts({
   handle,
   sortKey,
   reverse,
-  first = 24,
+  first = 100,
 }: {
   handle: string;
   sortKey?: string;

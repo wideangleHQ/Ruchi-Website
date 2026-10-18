@@ -57,6 +57,7 @@ export type Product = {
   images: Connection<Image>;
   variants: Connection<ProductVariant>;
   seo: SEO;
+  metafields?: Array<{ key: string; value: string } | null>;
   tags: string[];
   updatedAt: string;
   collections: Connection<{ handle: string; title: string }>;

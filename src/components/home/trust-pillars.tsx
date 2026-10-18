@@ -61,15 +61,16 @@ export function TrustPillars() {
 
   return (
     <section
-      className="py-5 sm:py-7 lg:py-9 bg-transparent"
-      aria-label="Manufacturing Standards and Crafted With Care"
+      id="quality-standards"
+      className="min-h-[100svh] flex flex-col justify-center py-5 sm:py-7 lg:py-9 bg-transparent"
+      aria-label="Quality That Meets Its Standards"
     >
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         
         {/* 1. Left-Aligned Section Header */}
         <div className="mb-4 sm:mb-6 lg:mb-7 text-left">
           <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
-            Where Quality Becomes a Standard
+            Quality That Meets Its Standards
           </h2>
           <p className="mt-1.5 text-sm text-gray-600 max-w-xl leading-relaxed">
             From the ingredients we choose to the care we put into every pack, quality is part of the Ruchi way.

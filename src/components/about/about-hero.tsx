@@ -3,12 +3,11 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
 import aboutImg1 from "@/assets/Images/about section/1.png";
 
 export function AboutHero() {
   return (
-    <section className="relative w-full bg-[#12100e] text-white overflow-hidden" aria-label="About Ruchi Foodline Hero">
+    <section className="relative w-full min-h-[100svh] flex flex-col justify-center bg-[#12100e] text-white overflow-hidden py-16 sm:py-20" aria-label="About Ruchi Foodline Hero">
       {/* Background Image Canvas with Editorial Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -24,14 +23,8 @@ export function AboutHero() {
         <div className="absolute inset-0 bg-radial-at-t from-emerald-950/30 via-transparent to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-16 sm:py-24 md:py-28 lg:py-32">
+      <div className="relative z-10 mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="max-w-4xl">
-          {/* Brand Tagline Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-emerald-300 text-xs sm:text-sm font-semibold tracking-wide uppercase mb-6 animate-fade-in shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-[#e6a817]" />
-            <span>Karlo Dosti Sehat Se! — Since 1976</span>
-          </div>
-
           {/* Main Headline */}
           <h1 className="font-serif text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-6">
             50 Years of Bringing <br className="hidden sm:inline" />
@@ -50,10 +43,9 @@ export function AboutHero() {
           <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm font-semibold">
             <a
               href="#heritage-story"
-              className="px-6 py-3.5 rounded-full bg-[#168a4a] hover:bg-[#0e6337] text-white transition-all shadow-md hover:shadow-lg flex items-center gap-2 group cursor-pointer active:scale-95"
+              className="px-6 py-3.5 rounded-full bg-[#168a4a] hover:bg-[#0e6337] text-white transition-all shadow-md hover:shadow-lg flex items-center justify-center cursor-pointer active:scale-95"
             >
               <span>Explore Our Story</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-emerald-200" />
             </a>
             <Link
               href="/products"

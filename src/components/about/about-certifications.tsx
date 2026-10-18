@@ -1,5 +1,4 @@
 import React from "react";
-import { CheckCircle2, Building2 } from "lucide-react";
 
 export function AboutCertifications() {
   const certifications = [
@@ -42,14 +41,11 @@ export function AboutCertifications() {
   ];
 
   return (
-    <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-white border-b border-gray-200/80" aria-label="Quality and Certifications">
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+    <section className="relative min-h-[100svh] flex flex-col justify-center py-8 sm:py-12 bg-white border-b border-gray-200/80" aria-label="Quality and Certifications">
+      <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-2xl mb-10 sm:mb-14">
-          <span className="text-xs font-bold text-[#168a4a] uppercase tracking-wider block mb-1.5">
-            Verified Standards
-          </span>
+        <div className="max-w-2xl mb-8 sm:mb-10">
           <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
             Quality Assurance &amp; Certifications
           </h2>
@@ -66,11 +62,8 @@ export function AboutCertifications() {
               className="bg-[#f7f6f2] hover:bg-white rounded-xl p-5 sm:p-6 border border-gray-200/80 shadow-2xs hover:shadow-sm hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-xs font-bold text-[#0e6337] bg-[#eef6ec] px-2.5 py-1 rounded-md border border-[#c4d7c0]">
-                    {cert.code}
-                  </span>
-                  <CheckCircle2 className="w-4 h-4 text-[#168a4a]" />
+                <div className="font-mono text-xs font-bold text-[#0e6337] mb-2">
+                  {cert.code}
                 </div>
                 <h3 className="font-serif text-base sm:text-lg font-bold text-gray-900 mb-1 leading-snug">
                   {cert.name}
@@ -88,8 +81,7 @@ export function AboutCertifications() {
 
         {/* Corporate Legal Footer Note */}
         <div className="mt-8 p-4 rounded-xl bg-white border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-600">
-          <div className="flex items-center gap-2">
-            <Building2 className="w-4 h-4 text-[#168a4a] shrink-0" />
+          <div>
             <span>
               <strong>Om Oil &amp; Flour Mills Ltd.</strong> | CIN: U15495OR1997PLC004861
             </span>

@@ -51,7 +51,15 @@ export const RUCHI_CATALOGUE_KEYS = [
   "keywords",
   "unit",
   "manufacture",
+  "included_items",
+  "discount_percentage",
 ] as const;
+
+export const RUCHI_PRODUCT_KEYS = ["subtitle", "key_features"] as const;
+
+const RUCHI_PRODUCT_IDENTIFIERS = RUCHI_PRODUCT_KEYS.map(
+  (key) => `{namespace: "ruchi", key: "${key}"}`
+).join(", ");
 
 const RUCHI_CATALOGUE_IDENTIFIERS = RUCHI_CATALOGUE_KEYS.map(
   (key) => `{namespace: "ruchi", key: "${key}"}`
@@ -109,7 +117,7 @@ export const productFragment = /* GraphQL */ `
     featuredImage {
       ...image
     }
-    images(first: 20) {
+    images(first: 30) {
       edges {
         node {
           ...image
@@ -125,6 +133,10 @@ export const productFragment = /* GraphQL */ `
     }
     seo {
       ...seo
+    }
+    metafields(identifiers: [${RUCHI_PRODUCT_IDENTIFIERS}]) {
+      key
+      value
     }
     tags
     updatedAt

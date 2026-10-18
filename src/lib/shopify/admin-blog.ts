@@ -2,46 +2,47 @@ import "server-only";
 import { shopifyAdminFetch } from "./admin-client";
 import type { BlogComment, BlogRatingData } from "@/types/blog";
 
-// ---- Metafield-based comments & ratings ----
+// ---- Comments & ratings, stored in an app-owned metaobject (one entry per article) ----
+// (The Admin token has no article write access, so article metafields are not an option.)
 
-async function getArticleMetafield(articleId: string, namespace: string, key: string): Promise<string | null> {
+const ENGAGEMENT_TYPE = "$app:blog_engagement";
+const engagementHandle = (articleId: string) => `article-${articleId.split("/").pop()}`;
+
+async function getArticleMetafield(articleId: string, _namespace: string, key: string): Promise<string | null> {
   const data = await shopifyAdminFetch<{
-    article: { metafield: { value: string } | null } | null;
+    metaobjectByHandle: { fields: { key: string; value: string | null }[] } | null;
   }>({
     query: /* GraphQL */ `
-      query GetArticleMetafield($id: ID!, $namespace: String!, $key: String!) {
-        article(id: $id) {
-          metafield(namespace: $namespace, key: $key) {
-            value
-          }
+      query GetEngagement($handle: MetaobjectHandleInput!) {
+        metaobjectByHandle(handle: $handle) {
+          fields { key value }
         }
       }
     `,
-    variables: { id: articleId, namespace, key },
+    variables: { handle: { type: ENGAGEMENT_TYPE, handle: engagementHandle(articleId) } },
   });
-  return data.article?.metafield?.value ?? null;
+  return data.metaobjectByHandle?.fields.find((f) => f.key === key)?.value ?? null;
 }
 
-async function setArticleMetafield(articleId: string, namespace: string, key: string, value: string): Promise<void> {
-  await shopifyAdminFetch<unknown>({
+async function setArticleMetafield(articleId: string, _namespace: string, key: string, value: string): Promise<void> {
+  const data = await shopifyAdminFetch<{
+    metaobjectUpsert: { metaobject: { id: string } | null; userErrors: { message: string }[] };
+  }>({
     query: /* GraphQL */ `
-      mutation SetMetafield($metafields: [MetafieldsSetInput!]!) {
-        metafieldsSet(metafields: $metafields) {
-          metafields { id }
-          userErrors { field message }
+      mutation UpsertEngagement($handle: MetaobjectHandleInput!, $metaobject: MetaobjectUpsertInput!) {
+        metaobjectUpsert(handle: $handle, metaobject: $metaobject) {
+          metaobject { id }
+          userErrors { message }
         }
       }
     `,
     variables: {
-      metafields: [{
-        ownerId: articleId,
-        namespace,
-        key,
-        type: "json",
-        value,
-      }],
+      handle: { type: ENGAGEMENT_TYPE, handle: engagementHandle(articleId) },
+      metaobject: { fields: [{ key: "article_id", value: articleId }, { key, value }] },
     },
   });
+  const errors = data.metaobjectUpsert.userErrors;
+  if (errors.length > 0) throw new Error(`Shopify metaobject error: ${errors.map((e) => e.message).join("; ")}`);
 }
 
 // ---- Comments ----

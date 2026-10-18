@@ -17,11 +17,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!product) return {};
 
+  const seoTitle = product.seo?.title || product.title;
+  const seoDescription = product.seo?.description || product.description || "Authentic pure Indian spice from Ruchi Foodline.";
+
   return {
-    title: `${product.title} | Ruchi Foodline`,
-    description: product.description || "Authentic pure Indian spice from Ruchi Foodline.",
-    openGraph: product.featuredImage
-      ? {
+    title: `${seoTitle} | Ruchi Foodline`,
+    description: seoDescription,
+    alternates: { canonical: `/products/${product.handle}` },
+    openGraph: {
+      title: seoTitle,
+      description: seoDescription,
+      ...(product.featuredImage
+        ? {
           images: [
             {
               url: product.featuredImage.url,
@@ -31,7 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             },
           ],
         }
-      : undefined,
+        : {}),
+    },
   };
 }
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getProducts, getCollections } from "@/lib/shopify";
 import type { Product } from "@/lib/shopify/types";
+import { HAMPERS_HANDLE, isHamper, orderCategories, productsForCategory } from "@/utils/categories";
 import { ShopPageClient, type SortKey } from "@/components/shop/shop-page-client";
 
 export const metadata: Metadata = {
@@ -30,9 +31,9 @@ const SORT_MAP: Record<string, { sortKey: string; reverse: boolean }> = {
 };
 
 function buildShopifyQuery(freeText: string | undefined, availability: string | undefined): string {
-  // Hampers are excluded from the customer-facing Shop catalog at the data
-  // layer via the real Shopify productType field (never CSS, never a title guess).
-  const clauses = ["-product_type:Hamper"];
+  // Hampers are fetched with everything else and split out in JS from the real Shopify
+  // productType field (see productsForCategory): hidden from "All Products", shown under Hampers.
+  const clauses: string[] = [];
   if (freeText?.trim()) clauses.push(freeText.trim());
   if (availability === "in") clauses.push("available_for_sale:true");
   if (availability === "out") clauses.push("available_for_sale:false");
@@ -49,15 +50,23 @@ export default async function ProductsCatalogPage({ searchParams }: Props) {
   const { sortKey, reverse } = SORT_MAP[sort ?? "featured"] ?? SORT_MAP.featured;
   const shopifyQuery = buildShopifyQuery(query, avail);
 
-  const [baseProducts, collections] = await Promise.all([
-    getProducts({ query: shopifyQuery, sortKey, reverse, first: 250 }),
+  const [fetchedProducts, collections] = await Promise.all([
+    getProducts({ query: shopifyQuery || undefined, sortKey, reverse, first: 250 }),
     getCollections(),
   ]);
 
+  const activeCategory = category ?? "all";
+  const baseProducts = productsForCategory(fetchedProducts, activeCategory);
+
   // Facet option lists reflect the query/availability-filtered set so counts stay
   // meaningful, but options don't disappear as the customer narrows further.
-  const availableCategories = collections.filter((c) =>
-    baseProducts.some((p) => p.collections.edges.some((e) => e.node.handle === c.handle))
+  // Hampers is listed whenever any hamper matches; every other category needs a non-hamper product.
+  const availableCategories = orderCategories(
+    collections.filter((c) =>
+      c.handle === HAMPERS_HANDLE
+        ? fetchedProducts.some(isHamper)
+        : fetchedProducts.some((p) => !isHamper(p) && p.collections.edges.some((e) => e.node.handle === c.handle))
+    )
   );
 
   const packSizes = Array.from(

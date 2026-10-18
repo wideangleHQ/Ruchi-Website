@@ -5,11 +5,11 @@ import { ShoppingBag, Heart, Share2, Check, Minus, Plus } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { addItemAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
-import { getProductSpecs } from "@/utils/product-specs";
+import { getKeyFeatures, splitFeature } from "@/utils/catalogue";
 import { SafeImage } from "../ui/safe-image";
 import { ProductQuickViewModal } from "./product-quick-view-modal";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
   const [state, formAction, isPending] = useActionState(addItemAction, undefined);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
@@ -59,7 +59,8 @@ export function ProductCard({ product }: { product: Product }) {
   // Real Shopify collection membership only
   const categoryTag = product.collections.edges[0]?.node.title ?? null;
 
-  const specs = getProductSpecs(product.title, selectedVariant?.title);
+  const keyFeatures = getKeyFeatures(product, selectedVariant);
+  const visibleFeatures = keyFeatures.slice(0, 2);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -93,11 +94,11 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <div
       onClick={() => setIsQuickViewOpen(true)}
-      className="group relative flex flex-col justify-between h-full w-full rounded-[14px] sm:rounded-[18px] border border-gray-200/90 bg-white p-2.5 xs:p-3 sm:p-4 md:p-4.5 transition-all duration-300 hover:border-[#168a4a]/60 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
+      className={`group relative flex flex-col justify-between h-full w-full rounded-[14px] sm:rounded-[18px] border border-gray-200/90 bg-white ${compact ? "p-2 sm:p-2.5" : "p-2.5 xs:p-3 sm:p-4 md:p-4.5"} transition-all duration-300 hover:border-[#168a4a]/60 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer`}
     >
       <div className="flex flex-col flex-1">
         {/* Product Image Container */}
-        <div className="relative aspect-square w-full rounded-[10px] sm:rounded-[12px] overflow-hidden bg-[#f7f6f2] border border-gray-100 p-2 xs:p-2.5 sm:p-3.5 mb-2 sm:mb-3.5 flex items-center justify-center shrink-0">
+        <div className={`relative w-full rounded-[10px] sm:rounded-[12px] overflow-hidden bg-white flex items-center justify-center shrink-0 aspect-square ${compact ? "mb-1.5 sm:mb-2" : "mb-2 sm:mb-3"}`}>
           {badgeText && (
             <span className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-20 inline-block bg-[#168a4a] text-white text-[8.5px] xs:text-[9.5px] sm:text-[10.5px] font-bold tracking-wider uppercase px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-[4px] sm:rounded-[6px] shadow-2xs">
               {badgeText}
@@ -136,7 +137,7 @@ export function ProductCard({ product }: { product: Product }) {
                   fallbackTitle={product.title}
                   fill
                   sizes="(min-width: 1280px) 320px, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 60vw"
-                  className={`object-contain p-1.5 sm:p-2 transition-transform duration-500 group-hover:scale-105 ${
+                  className={`object-contain !bg-white p-1 transition-transform duration-500 group-hover:scale-105 ${
                     secondaryImage ? "group-hover:opacity-0" : ""
                   }`}
                 />
@@ -147,12 +148,12 @@ export function ProductCard({ product }: { product: Product }) {
                     fallbackTitle={product.title}
                     fill
                     sizes="(min-width: 1280px) 320px, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 60vw"
-                    className="object-contain p-1.5 sm:p-2 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
+                    className="object-contain !bg-white p-1 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
                   />
                 )}
               </>
             ) : (
-              <div className="w-full h-full bg-emerald-50 flex items-center justify-center text-[#168a4a] font-serif font-bold text-lg sm:text-xl">
+              <div className="w-full h-full bg-white flex items-center justify-center text-[#168a4a] font-serif font-bold text-lg sm:text-xl">
                 Ruchi
               </div>
             )}
@@ -160,7 +161,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Category Tag - Reserved height for vertical consistency */}
-        <div className="min-h-[18px] sm:min-h-[22px] flex items-center justify-between gap-1.5 sm:gap-2 mb-1 sm:mb-1.5">
+        <div className={`flex items-center justify-between gap-1.5 sm:gap-2 ${compact ? "min-h-[14px] mb-0.5" : "min-h-[18px] sm:min-h-[22px] mb-1 sm:mb-1.5"}`}>
           {categoryTag ? (
             <span className="text-[10px] sm:text-[11.5px] font-bold uppercase tracking-wider text-[#168a4a] truncate">
               {categoryTag}
@@ -174,38 +175,51 @@ export function ProductCard({ product }: { product: Product }) {
 
         {/* Product Name */}
         <div className="block mb-1 sm:mb-1.5 cursor-pointer">
-          <h3 className="font-sans text-[12.5px] xs:text-[13.5px] sm:text-[15px] md:text-base font-bold text-gray-900 uppercase tracking-wide leading-snug line-clamp-2 min-h-[2.1rem] sm:min-h-[2.75rem] group-hover:text-[#168a4a] transition-colors">
+          <h3 className={`font-sans font-bold text-gray-900 uppercase tracking-wide leading-snug line-clamp-2 group-hover:text-[#168a4a] transition-colors ${compact ? "text-[12px] sm:text-[13px] min-h-[2rem] sm:min-h-[2.2rem]" : "text-[12.5px] xs:text-[13.5px] sm:text-[15px] md:text-base min-h-[2.1rem] sm:min-h-[2.75rem]"}`}>
             {product.title}
           </h3>
         </div>
 
-        {/* Key Specifications (from product catalogue) — falls back to the generic description */}
-        {specs.length > 0 ? (
-          <ul className="mb-1.5 sm:mb-3 min-h-[1.75rem] sm:min-h-[2.5rem] space-y-0.5">
-            {specs.slice(0, 3).map((spec) => (
-              <li
-                key={spec}
-                className="font-sans text-[10.5px] xs:text-[11.5px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-1 pl-2.5 relative before:content-['•'] before:absolute before:left-0 before:text-[#168a4a]"
-              >
-                {spec}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="font-sans text-[10.5px] xs:text-[11.5px] sm:text-xs text-gray-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 mb-1.5 sm:mb-3 min-h-[1.75rem] sm:min-h-[2.5rem]">
-            {product.description || "Masterfully crafted heritage spice blend for authentic cooking."}
-          </p>
-        )}
+        {/* Key Features only — verbatim from the product catalogue. The wrapper reserves a fixed
+            height (also when a product has none) so pack size, price and actions align across a grid row. */}
+        <div className={`${compact ? "mb-1.5 min-h-[3.4rem] sm:min-h-[3.6rem]" : "mb-2 sm:mb-3 min-h-[6.25rem] sm:min-h-[6.75rem]"}`}>
+          {visibleFeatures.length > 0 && (
+            <>
+              <span className="block mb-0.5 text-[9.5px] sm:text-[10.5px] font-bold tracking-wider text-gray-500 uppercase">
+                Key Features
+              </span>
+              <ul className="space-y-0.5 sm:space-y-1" data-testid="card-key-features">
+                {visibleFeatures.map((f) => {
+                  const { head, body } = splitFeature(f);
+                  return (
+                    <li
+                      key={f}
+                      className={`font-sans text-[10.5px] xs:text-[11.5px] sm:text-xs text-gray-600 font-medium leading-snug ${compact ? "line-clamp-1" : "line-clamp-2"} pl-2.5 relative before:content-['•'] before:absolute before:left-0 before:text-[#168a4a]`}
+                    >
+                      {head ? <strong className="font-bold text-gray-800">{head} </strong> : null}
+                      {body}
+                    </li>
+                  );
+                })}
+              </ul>
+              {!compact && keyFeatures.length > visibleFeatures.length && (
+                <span className="mt-0.5 block text-[10px] sm:text-[11px] font-bold text-[#168a4a]">
+                  +{keyFeatures.length - visibleFeatures.length} more — view all
+                </span>
+              )}
+            </>
+          )}
+        </div>
 
         {/* Pack Size Variant Selector Area - Fixed min-height for uniform alignment */}
-        <div className="min-h-[38px] sm:min-h-[52px] mb-2 sm:mb-3 flex flex-col justify-start">
+        <div className={`flex flex-col justify-start ${compact ? "min-h-[34px] mb-1 sm:mb-1.5" : "min-h-[38px] sm:min-h-[52px] mb-2 sm:mb-3"}`}>
           {hasCustomVariants && variants.length > 1 ? (
             <div>
               <span className="block mb-0.5 sm:mb-1 text-[9.5px] sm:text-[10.5px] font-bold tracking-wider text-gray-500 uppercase">
                 Pack Size
               </span>
               <div className="flex flex-wrap gap-1 sm:gap-1.5">
-                {variants.slice(0, 3).map((v) => {
+                {variants.map((v) => {
                   const isSelected = selectedVariantId === v.id;
                   return (
                     <button
@@ -248,7 +262,7 @@ export function ProductCard({ product }: { product: Product }) {
 
       <div className="mt-auto">
         {/* Price Row */}
-        <div className="flex items-center justify-between mb-2 sm:mb-3 pt-1.5 sm:pt-2.5 border-t border-gray-100 min-h-[28px] sm:min-h-[34px]">
+        <div className={`flex items-center justify-between border-t border-gray-100 ${compact ? "mb-1.5 pt-1.5 min-h-[24px]" : "mb-2 sm:mb-3 pt-1.5 sm:pt-2.5 min-h-[28px] sm:min-h-[34px]"}`}>
           <div className="flex items-baseline gap-1.5 sm:gap-2">
             <span className="text-sm xs:text-base sm:text-xl font-bold text-gray-900">
               {formatMoney(priceMoney)}
@@ -307,7 +321,7 @@ export function ProductCard({ product }: { product: Product }) {
           <button
             onClick={handleAddToCart}
             disabled={isSoldOut || isPending}
-            className={`flex-1 min-w-0 h-[36px] xs:h-[38px] sm:h-[42px] md:h-[44px] px-1.5 xs:px-2.5 sm:px-3.5 md:px-4 rounded-[6px] sm:rounded-[8px] font-bold text-[11px] xs:text-[12px] sm:text-xs md:text-sm tracking-tight xs:tracking-normal sm:tracking-wide uppercase transition-all shadow-2xs flex items-center justify-center gap-1 xs:gap-1.5 sm:gap-2 cursor-pointer active:scale-[0.99] ${
+            className={`flex-1 min-w-0 ${compact ? "h-[32px] sm:h-[34px]" : "h-[36px] xs:h-[38px] sm:h-[42px] md:h-[44px]"} px-1.5 xs:px-2.5 sm:px-3.5 md:px-4 rounded-[6px] sm:rounded-[8px] font-bold text-[11px] xs:text-[12px] sm:text-xs md:text-sm tracking-tight xs:tracking-normal sm:tracking-wide uppercase transition-all shadow-2xs flex items-center justify-center gap-1 xs:gap-1.5 sm:gap-2 cursor-pointer active:scale-[0.99] ${
               isSoldOut
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
                 : added

@@ -73,7 +73,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
   return (
     <section
       id="recipes"
-      className="relative w-full bg-[#0e6337] text-white flex flex-col justify-center py-14 sm:py-16 lg:py-20 overflow-hidden"
+      className="relative w-full min-h-[100svh] bg-[#0e6337] text-white flex flex-col justify-center py-14 sm:py-16 lg:py-20 overflow-hidden"
       aria-label="Stories, Flavours & Insights"
     >
       <Image

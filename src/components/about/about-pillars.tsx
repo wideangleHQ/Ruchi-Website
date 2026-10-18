@@ -55,14 +55,11 @@ const PILLARS: Pillar[] = [
 
 export function AboutPillars() {
   return (
-    <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-[#faf9f6] border-b border-gray-200/80" aria-label="Four Foundational Pillars">
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+    <section className="relative min-h-[100svh] flex flex-col justify-center py-10 sm:py-14 bg-[#faf9f6] border-b border-gray-200/80" aria-label="Four Foundational Pillars">
+      <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-2xl mb-8 sm:mb-12">
-          <span className="text-xs font-bold text-[#168a4a] uppercase tracking-wider block mb-1.5">
-            Core Values
-          </span>
+        <div className="max-w-2xl mb-6 sm:mb-10">
           <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
             The Four Foundational Pillars
           </h2>
@@ -76,7 +73,7 @@ export function AboutPillars() {
           {PILLARS.map((p) => (
             <div
               key={p.number}
-              className="group relative h-[360px] sm:h-[420px] md:h-[460px] rounded-2xl overflow-hidden border border-gray-200/90 shadow-2xs hover:shadow-xl transition-all duration-500 bg-stone-900 flex flex-col justify-end p-6"
+              className="group relative h-[320px] sm:h-[360px] lg:h-[400px] rounded-2xl overflow-hidden border border-gray-200/90 shadow-2xs hover:shadow-xl transition-all duration-500 bg-stone-900 flex flex-col justify-end p-5 sm:p-6"
             >
               {/* Background Canvas Image */}
               <Image
@@ -89,11 +86,6 @@ export function AboutPillars() {
 
               {/* Gradient Dark Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/20 group-hover:from-black/95 group-hover:via-black/70 transition-colors" />
-
-              {/* Pillar Number Tag */}
-              <div className="relative z-10 font-mono text-xs font-bold text-emerald-400 mb-2">
-                Pillar {p.number}
-              </div>
 
               {/* Title & Subtitle */}
               <div className="relative z-10">

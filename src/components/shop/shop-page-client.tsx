@@ -389,9 +389,9 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(172px,1fr))] gap-2.5 sm:gap-3.5 lg:gap-4">
                   {visibleProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCard key={product.id} product={product} compact />
                   ))}
                 </div>
 

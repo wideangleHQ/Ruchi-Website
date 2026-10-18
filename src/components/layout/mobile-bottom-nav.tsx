@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useCartDrawer } from "@/context/cart-context";
 import type { Collection } from "@/lib/shopify/types";
+import { categoryHref } from "@/utils/categories";
 
 import basicSpicesImg from "@/assets/Images/Categories/Basic Spices.png";
 import blendedSpicesImg from "@/assets/Images/Categories/Blended Spices.png";
@@ -261,7 +262,7 @@ export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBo
                   return (
                     <Link
                       key={cat.id}
-                      href={`/products?category=${cat.handle}`}
+                      href={categoryHref(cat.handle)}
                       onClick={() => setIsCategorySheetOpen(false)}
                       className="flex items-center gap-2.5 p-2.5 rounded-xl border border-gray-200/80 bg-white hover:border-[#168a4a]/40 hover:bg-emerald-50/30 transition-all shadow-2xs"
                     >

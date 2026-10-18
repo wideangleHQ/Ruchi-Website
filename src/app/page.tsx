@@ -7,8 +7,10 @@ import { CategoryCardsSection } from "@/components/home/category-cards-section";
 import { BestSellersSection } from "@/components/home/best-sellers-section";
 import { BestSellersSkeleton } from "@/components/home/best-sellers-skeleton";
 import { PromoAdsSection } from "@/components/home/promo-ads-section";
-import { AboutLegacySection } from "@/components/home/about-legacy-section";
+import { TrustBanner } from "@/components/home/trust-banner";
+import { IndianMapSection } from "@/components/home/indian-map-section";
 import { TrustPillars } from "@/components/home/trust-pillars";
+import { FarmToKitchenSection } from "@/components/home/farm-to-kitchen-section";
 import { CustomerStories } from "@/components/home/customer-stories";
 import { RecipeShowcase } from "@/components/home/recipe-showcase";
 import { SocialMediaSection } from "@/components/home/social-media-section";
@@ -53,11 +55,17 @@ export default async function HomePage() {
         {/* 4. Home Page Ads (2 Portrait Ads + 1 Strip Ad below) */}
         <PromoAdsSection />
 
-        {/* 5. About Ruchi — Legacy, Trust & Belief */}
-        <AboutLegacySection />
+        {/* Trust Banner — Legacy & Reach Statistics */}
+        <TrustBanner />
 
-        {/* 6. Manufacturing Standards */}
+        {/* Indian Map & Brand Story Section — 100vh Editorial */}
+        <IndianMapSection />
+
+        {/* Quality That Meets Its Standards */}
         <TrustPillars />
+
+        {/* 5. Farm to Kitchen — Cinematic Scroll Story */}
+        <FarmToKitchenSection />
 
         {/* 7. Customer Reviews */}
         <CustomerStories />

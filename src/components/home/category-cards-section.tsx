@@ -1,6 +1,8 @@
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
+import { Gift } from "lucide-react";
 import type { Collection } from "@/lib/shopify/types";
+import { categoryHref, HAMPERS_HANDLE, orderCategories } from "@/utils/categories";
 
 import basicSpicesImg from "@/assets/Images/Categories/Basic Spices.png";
 import blendedSpicesImg from "@/assets/Images/Categories/Blended Spices.png";
@@ -30,18 +32,6 @@ const CATEGORY_IMAGE_MAP: Record<string, StaticImageData> = {
   "ready-mix": flourReadyMixImg,
 };
 
-// Required category order per the site's approved category list
-const ORDERED_CATEGORY_HANDLES = [
-  "basic-spices",
-  "blended-spices",
-  "whole-spices",
-  "pasta",
-  "vermicelli",
-  "noodles",
-  "tea",
-  "flour-ready-mix-spices",
-];
-
 function getCategoryImage(handle: string): StaticImageData | null {
   if (CATEGORY_IMAGE_MAP[handle]) return CATEGORY_IMAGE_MAP[handle];
   const normalized = handle.toLowerCase().replace(/[^a-z0-9]/g, "-");
@@ -52,18 +42,7 @@ function getCategoryImage(handle: string): StaticImageData | null {
 }
 
 export function CategoryCardsSection({ collections }: CategoryCardsSectionProps) {
-  const map = new Map(collections.map((c) => [c.handle, c]));
-  const orderedCollections: Collection[] = [];
-  for (const handle of ORDERED_CATEGORY_HANDLES) {
-    const col = map.get(handle);
-    if (col) {
-      orderedCollections.push(col);
-      map.delete(handle);
-    }
-  }
-  for (const col of map.values()) {
-    if (col.handle && col.title) orderedCollections.push(col);
-  }
+  const orderedCollections = orderCategories(collections);
 
   if (orderedCollections.length === 0) return null;
 
@@ -81,7 +60,7 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
             return (
               <Link
                 key={collection.handle}
-                href={`/products?category=${collection.handle}`}
+                href={categoryHref(collection.handle)}
                 className="group flex flex-col items-center text-center shrink-0 snap-start focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-green rounded-full p-1"
                 style={{ width: "clamp(68px, 20vw, 84px)" }}
               >
@@ -96,7 +75,7 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-soft-green text-primary-green font-serif font-bold text-base">
-                      {collection.title.charAt(0)}
+                      {collection.handle === HAMPERS_HANDLE ? <Gift className="h-1/2 w-1/2" aria-hidden="true" /> : collection.title.charAt(0)}
                     </div>
                   )}
                 </div>
@@ -109,13 +88,13 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
         </div>
 
         {/* Desktop & Tablet: Rectangular Cards Grid */}
-        <div className="hidden sm:grid sm:grid-cols-8 gap-3.5 lg:gap-5">
+        <div className="hidden sm:grid sm:grid-cols-5 md:grid-cols-9 gap-3.5 lg:gap-5">
           {orderedCollections.map((collection) => {
             const imageSrc = getCategoryImage(collection.handle);
             return (
               <Link
                 key={collection.handle}
-                href={`/products?category=${collection.handle}`}
+                href={categoryHref(collection.handle)}
                 className="group flex flex-col items-center text-center focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-green rounded-[16px] p-0.5"
               >
                 <div className="relative aspect-square w-full rounded-[16px] overflow-hidden bg-soft-neutral/80 border border-gray-200/80 transition-all duration-300 group-hover:border-primary-green/50 group-hover:shadow-md">
@@ -129,7 +108,7 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-soft-green text-primary-green font-serif font-bold text-lg">
-                      {collection.title.charAt(0)}
+                      {collection.handle === HAMPERS_HANDLE ? <Gift className="h-1/2 w-1/2" aria-hidden="true" /> : collection.title.charAt(0)}
                     </div>
                   )}
                 </div>

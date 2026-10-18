@@ -8,6 +8,7 @@ import type { Product } from "@/lib/shopify/types";
 import { addItemAction, buyNowAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
 import { SafeImage } from "../ui/safe-image";
+import { getKeyFeatures, splitFeature } from "@/utils/catalogue";
 
 interface ProductQuickViewModalProps {
   product: Product;
@@ -215,6 +216,27 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                   </p>
                 )}
               </div>
+
+              {/* Key Features — all points, verbatim from the catalogue */}
+              {(() => {
+                const features = getKeyFeatures(product, selectedVariant);
+                return features.length > 0 ? (
+                  <div>
+                    <span className="block mb-1.5 text-[11px] font-extrabold tracking-wider text-gray-600 uppercase">Key Features</span>
+                    <ul className="space-y-1.5 max-h-[220px] overflow-y-auto pr-1" data-testid="quickview-key-features">
+                      {features.map((f) => {
+                        const { head, body } = splitFeature(f);
+                        return (
+                          <li key={f} className="text-xs sm:text-sm text-gray-700 font-semibold leading-relaxed pl-3 relative before:content-['•'] before:absolute before:left-0 before:text-[#168a4a] before:font-bold">
+                            {head ? <strong className="font-extrabold text-gray-900">{head} </strong> : null}
+                            {body}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ) : null;
+              })()}
 
               {/* Price Display */}
               {selectedVariant && (
