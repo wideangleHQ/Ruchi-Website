@@ -159,9 +159,9 @@ export function TrustBanner() {
       className="py-3 sm:py-6 lg:py-8 bg-transparent"
       aria-label="Ruchi Foodline Trust & Legacy Statistics"
     >
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-6 lg:px-8">
         {/* Contained, unified editorial banner canvas */}
-        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-stone-200/80 bg-[#fbfaf7] shadow-2xs min-h-[170px] sm:min-h-[240px] md:min-h-[30vh] lg:min-h-[35vh] flex items-center justify-center">
+        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-stone-200/80 bg-[#fbfaf7] shadow-2xs min-h-[105px] xs:min-h-[120px] sm:min-h-[200px] md:min-h-[260px] lg:min-h-[32vh] flex items-center justify-center">
           {/* Accessible Static Content for Screen Readers */}
           <div className="sr-only">
             <h2>Ruchi Foodline Trust Statistics</h2>
@@ -172,9 +172,9 @@ export function TrustBanner() {
             </ul>
           </div>
 
-          {/* Three-column statistics grid */}
+          {/* Three-column statistics grid — strictly single row across all mobile & desktop viewports */}
           <div
-            className="w-full grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-y-0 sm:divide-x divide-stone-200/80 py-4 sm:py-9 lg:py-12"
+            className="w-full grid grid-cols-3 divide-x divide-stone-200/80 py-3 xs:py-4 sm:py-8 lg:py-11"
             role="list"
           >
             {STATISTICS.map((stat) => {
@@ -184,20 +184,20 @@ export function TrustBanner() {
                 <div
                   key={stat.id}
                   role="listitem"
-                  className="flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-10 py-3 sm:py-2"
+                  className="min-w-0 flex-1 flex flex-col items-center justify-center text-center px-1 xs:px-2 sm:px-6 lg:px-10 py-1.5 sm:py-3"
                 >
-                  {/* Oversized, bold, maximalist numeral */}
+                  {/* Oversized, bold, maximalist numeral with fluid responsive sizing */}
                   <div
                     aria-hidden="true"
-                    className="font-serif font-bold text-[#0e6337] tracking-tight leading-none text-4xl sm:text-5xl lg:text-[clamp(3.25rem,5.5vw,5.75rem)] select-text flex items-baseline justify-center"
+                    className="font-serif font-bold text-[#0e6337] tracking-tight leading-none text-[clamp(1.25rem,5.5vw,4.75rem)] select-text flex items-baseline justify-center"
                   >
                     <span className="tabular-nums">{currentVal}</span>
                     <span className="select-text">{stat.suffix}</span>
                   </div>
 
-                  {/* Supporting text with controlled line breaks and baseline alignment */}
-                  <div className="mt-1 sm:mt-3.5 lg:mt-4 min-h-auto sm:min-h-[2.75rem] flex flex-col justify-start">
-                    <p className="font-sans text-xs sm:text-sm lg:text-base font-medium text-stone-700 leading-snug tracking-normal">
+                  {/* Supporting text with fluid typography and controlled line wrapping */}
+                  <div className="mt-1 sm:mt-2.5 lg:mt-3.5 flex flex-col justify-start w-full px-0.5">
+                    <p className="font-sans text-[clamp(0.5625rem,2vw,0.95rem)] font-medium text-stone-700 leading-[1.2] sm:leading-snug tracking-tight text-center break-words hyphens-auto">
                       {stat.lines.map((line, idx) => (
                         <span key={idx} className="block">
                           {line}

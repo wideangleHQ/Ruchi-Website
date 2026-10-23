@@ -24,6 +24,7 @@ import noodlesImg from "@/assets/Images/Categories/Noodles.png";
 import teaImg from "@/assets/Images/Categories/tea.png";
 import wholeSpicesImg from "@/assets/Images/Categories/Whole Spices (2).png";
 import flourReadyMixImg from "@/assets/Images/Categories/Flour and Ready Mix.png";
+import hampersImg from "@/assets/Images/Categories/hampers.png";
 
 const CATEGORY_IMAGE_MAP: Record<string, StaticImageData> = {
   "basic-spices": basicSpicesImg,
@@ -38,6 +39,9 @@ const CATEGORY_IMAGE_MAP: Record<string, StaticImageData> = {
   "flour-and-ready-mix": flourReadyMixImg,
   "flour-ready-mix": flourReadyMixImg,
   "ready-mix": flourReadyMixImg,
+  hampers: hampersImg,
+  hamper: hampersImg,
+  "gift-hampers": hampersImg,
 };
 
 interface MobileBottomNavProps {

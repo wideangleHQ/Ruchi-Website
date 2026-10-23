@@ -1,80 +1,152 @@
 "use client";
 
-import React from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import aboutImg1 from "@/assets/Images/about section/1.png";
+import aboutImg2 from "@/assets/Images/about section/2.png";
+import aboutImg3 from "@/assets/Images/about section/3.png";
+
+// About page photography slides with responsive focal points (focal points bias right on mobile so subject is visible on right 40%)
+const SLIDES = [
+  {
+    id: "factory-floor",
+    src: aboutImg1,
+    alt: "Ruchi Foodline team packing spices and pasta on the production line beneath a 50 Years of Legacy banner",
+    position: "object-[72%_center] md:object-center",
+  },
+  {
+    id: "quality-check",
+    src: aboutImg2,
+    alt: "Ruchi Foodline team member weighing and checking a Biryani Masala pack on the factory floor",
+    position: "object-[68%_center] md:object-center",
+  },
+  {
+    id: "product-range",
+    src: aboutImg3,
+    alt: "The Ruchi Foodline range of masalas, whole spices, and tea displayed in a warm kitchen setting",
+    position: "object-[65%_center] md:object-center",
+  },
+];
+
+const SLIDE_INTERVAL_MS = 6000;
 
 export function AboutHero() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  // Measure sticky header height so hero occupies the viewable screen space
+  useLayoutEffect(() => {
+    const el = sectionRef.current;
+    const header = document.querySelector("header");
+    if (!el || !header) return;
+    const apply = () => el.style.setProperty("--hero-offset", `${header.getBoundingClientRect().height}px`);
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(header);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduceMotion(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const next = useCallback(() => setIndex((i) => (i + 1) % SLIDES.length), []);
+
+  useEffect(() => {
+    if (paused || reduceMotion) return;
+    const t = setInterval(next, SLIDE_INTERVAL_MS);
+    return () => clearInterval(t);
+  }, [paused, reduceMotion, next]);
+
   return (
-    <section className="relative w-full min-h-[100svh] flex flex-col justify-center bg-[#12100e] text-white overflow-hidden py-16 sm:py-20" aria-label="About Ruchi Foodline Hero">
-      {/* Background Image Canvas with Editorial Overlay */}
+    <section
+      ref={sectionRef}
+      className="relative flex w-full min-h-[calc(100vh-var(--hero-offset,0px))] min-h-[calc(100svh-var(--hero-offset,0px))] h-[calc(100vh-var(--hero-offset,0px))] h-[calc(100svh-var(--hero-offset,0px))] overflow-hidden bg-[#0a0908] text-white"
+      aria-label="About Ruchi Foodline Hero"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* Background Image Slideshow */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src={aboutImg1}
-          alt="Ruchi Foodline Heritage Spice Processing"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-35 scale-105 transition-transform duration-1000 ease-out"
+        {SLIDES.map((slide, i) => (
+          <Image
+            key={slide.id}
+            src={slide.src}
+            alt={slide.alt}
+            fill
+            priority={i === 0}
+            sizes="100vw"
+            aria-hidden={i !== index}
+            className={`object-cover ${slide.position} transition-all duration-1200 ease-in-out motion-reduce:transition-none ${
+              i === index
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-105 pointer-events-none"
+            }`}
+          />
+        ))}
+
+        {/* 1. MOBILE DARK GRADIENT: Starts solid black on the left and fades smoothly across (covers ~72% width) */}
+        <div
+          className="absolute inset-y-0 left-0 w-[72%] sm:w-[68%] z-[2] pointer-events-none md:hidden"
+          style={{
+            background:
+              "linear-gradient(to right, #000000 0%, rgba(0,0,0,0.96) 52%, rgba(0,0,0,0.72) 78%, transparent 100%)",
+          }}
         />
-        {/* Cinematic Multi-layer Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#12100e] via-[#12100e]/75 to-[#12100e]/90" />
-        <div className="absolute inset-0 bg-radial-at-t from-emerald-950/30 via-transparent to-transparent" />
+
+        {/* 2. DESKTOP DARK GRADIENT: Strictly covers bottom 40% of the screen */}
+        <div
+          className="hidden md:block absolute inset-x-0 bottom-0 h-[40%] z-[2] pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to top, #000000 0%, rgba(0,0,0,0.96) 42%, rgba(0,0,0,0.7) 75%, transparent 100%)",
+          }}
+        />
+
+        {/* Subtle top vignette for clean header navigation */}
+        <div
+          className="absolute inset-x-0 top-0 h-20 sm:h-28 z-[2] pointer-events-none"
+          style={{
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%)",
+          }}
+        />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="max-w-4xl">
-          {/* Main Headline */}
-          <h1 className="font-serif text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-6">
-            50 Years of Bringing <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-amber-200 to-amber-400">
-              Goodness to Every Kitchen.
-            </span>
-          </h1>
+      {/* =========================================================================
+          MOBILE VIEW: Left-aligned, content covers ONLY 60% of the screen width
+          ========================================================================= */}
+      <div className="md:hidden relative z-10 w-[60%] max-w-[60%] h-full px-4 sm:px-6 py-8 flex flex-col justify-center items-start text-left">
+        <span className="inline-block text-[11px] font-bold uppercase tracking-widest text-amber-300 mb-2">
+          Brand Tagline
+        </span>
+        <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
+          Karlo Dosti Sehat Se!
+        </h1>
+        <div className="w-10 h-0.5 bg-amber-400/60 my-3 rounded-full" />
+        <p className="text-xs sm:text-sm text-stone-200 font-medium leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          Bringing Authentic Taste, Uncompromised Purity, and Culinary Innovation to Kitchens Across the Globe Since 1976.
+        </p>
+      </div>
 
-          {/* Subtitle / Story Lead */}
-          <p className="text-base sm:text-lg md:text-xl text-stone-300 font-normal leading-relaxed max-w-2xl mb-8 sm:mb-10">
-            From a humble flour and oil mill in Cuttack to Eastern India&apos;s pioneering food processing enterprise,
-            Ruchi Foodline has spent five decades upholding authentic taste, uncompromised purity, and continuous food innovation.
-          </p>
-
-          {/* Action Row */}
-          <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm font-semibold">
-            <a
-              href="#heritage-story"
-              className="px-6 py-3.5 rounded-full bg-[#168a4a] hover:bg-[#0e6337] text-white transition-all shadow-md hover:shadow-lg flex items-center justify-center cursor-pointer active:scale-95"
-            >
-              <span>Explore Our Story</span>
-            </a>
-            <Link
-              href="/products"
-              className="px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all backdrop-blur-xs flex items-center gap-2 active:scale-95"
-            >
-              <span>Explore Products</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Floating Heritage Proof Metric Badge in bottom corner */}
-        <div className="mt-12 sm:mt-16 pt-8 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-stone-300 text-xs sm:text-sm">
-          <div>
-            <div className="font-serif text-2xl sm:text-3xl font-bold text-white">1976</div>
-            <div className="text-stone-400 text-[11px] sm:text-xs mt-0.5">Founded in Cuttack, Odisha</div>
-          </div>
-          <div>
-            <div className="font-serif text-2xl sm:text-3xl font-bold text-white">50+</div>
-            <div className="text-stone-400 text-[11px] sm:text-xs mt-0.5">Years of Consumer Trust</div>
-          </div>
-          <div>
-            <div className="font-serif text-2xl sm:text-3xl font-bold text-white">100%</div>
-            <div className="text-stone-400 text-[11px] sm:text-xs mt-0.5">Purity &amp; Zero Maida Promise</div>
-          </div>
-          <div>
-            <div className="font-serif text-2xl sm:text-3xl font-bold text-white">10+</div>
-            <div className="text-stone-400 text-[11px] sm:text-xs mt-0.5">Global Export Nations</div>
-          </div>
-        </div>
+      {/* =========================================================================
+          DESKTOP VIEW: Centered, strictly in bottom 40% of screen height
+          ========================================================================= */}
+      <div className="hidden md:flex absolute bottom-0 inset-x-0 z-10 w-full h-[40%] min-h-[40%] max-h-[40%] mx-auto max-w-4xl px-6 lg:px-8 pb-8 pt-4 flex-col items-center justify-center text-center">
+        <span className="text-xs lg:text-sm font-bold uppercase tracking-widest text-amber-300 mb-2 block">
+          Brand Tagline
+        </span>
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] xl:text-[3.65rem] font-bold text-white tracking-tight leading-[1.14] drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)]">
+          Karlo Dosti Sehat Se!
+        </h1>
+        <p className="mt-3 sm:mt-4 font-sans font-medium text-sm sm:text-base md:text-lg lg:text-xl text-stone-200/95 leading-relaxed sm:leading-[1.75] max-w-3xl mx-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+          Bringing Authentic Taste, Uncompromised Purity, and Culinary Innovation to Kitchens Across the Globe Since 1976.
+        </p>
       </div>
     </section>
   );

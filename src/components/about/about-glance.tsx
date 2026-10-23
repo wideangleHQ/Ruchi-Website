@@ -1,80 +1,97 @@
 import React from "react";
 
-// Every figure below is taken from content already published elsewhere on the site
-// (hero, heritage, global reach, certifications). Nothing is derived or estimated.
-const PROOF_POINTS = [
-  { figure: "1976", label: "Founded in Cuttack, Odisha" },
-  { figure: "50+", label: "Years of RUCHI" },
-  { figure: "200+", label: "Authorised dealers in Odisha" },
-  { figure: "40+", label: "Super stockists nationwide" },
-  { figure: "10+", label: "Global export markets" },
-];
+// Impact & Credentials at a Glance — typography-led cards. Figures are exactly as approved.
+const BIG = "font-sans font-semibold leading-none tracking-tight text-[#8B0000] text-[clamp(2rem,3.2vw,3rem)]";
+const LABEL = "mt-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1A1A1A]";
+const BODY = "mt-2.5 font-sans text-xs leading-relaxed text-[#1A1A1A]/75";
 
-const CREDENTIALS = [
-  {
-    title: "Certified food safety",
-    description:
-      "ISO 22000:2018 and ISO 9002 certified processes, with a CRISIL SME 2 financial rating.",
-  },
-  {
-    title: "100% pure, zero maida",
-    description:
-      "Farm-sourced pure spices and durum wheat suji pasta made with zero maida.",
-  },
-];
+const CARD =
+  "flex h-full w-[260px] shrink-0 snap-start flex-col rounded-2xl border border-[#1A1A1A]/10 bg-white p-6 shadow-[0_1px_2px_rgba(26,26,26,0.04)] motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 hover:border-[#168a4a] hover:shadow-[0_8px_24px_rgba(26,26,26,0.08)] motion-safe:hover:-translate-y-0.5 sm:w-[280px] lg:w-auto lg:p-5 xl:p-6";
 
 export function AboutGlance() {
   return (
     <section
-      className="relative min-h-[100svh] flex flex-col justify-center py-12 sm:py-16 lg:py-20 bg-[#f7f6f2] border-b border-gray-200/80"
+      className="w-full bg-[#F8F5F0] py-10 sm:py-14 lg:py-16"
       aria-labelledby="glance-heading"
     >
-      <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
-        {/* Heading + supporting copy */}
-        <div className="max-w-2xl">
+      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-6 sm:mb-8 lg:mb-10 max-w-3xl text-center">
           <h2
             id="glance-heading"
-            className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight tracking-tight text-gray-900"
+            className="font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-bold leading-tight tracking-tight text-[#1A1A1A]"
           >
-            Ruchi at a Glance
+            Impact &amp; Credentials at a Glance
           </h2>
-          <p className="mt-3 text-sm sm:text-base leading-relaxed text-gray-600">
-            Five decades of certified quality, pure ingredients and a distribution network that
-            reaches kitchens across India and abroad.
+          <p className="mx-auto mt-3 max-w-2xl font-sans text-sm leading-relaxed text-[#1A1A1A]/75 sm:text-base">
+            Five decades of quality, trust, and culinary expertise — reaching households and markets across the globe.
           </p>
         </div>
 
-        {/* Proof points: one figure, one clear label */}
-        <dl className="mt-8 sm:mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-6 sm:gap-x-6 border-t border-gray-300/70 pt-6 sm:pt-8">
-          {PROOF_POINTS.map((p) => (
-            <div key={p.label} className="flex min-w-0 flex-col">
-              <dt className="order-2 mt-1.5 text-xs sm:text-sm font-medium leading-snug text-gray-600">
-                {p.label}
-              </dt>
-              <dd className="order-1 font-serif text-3xl sm:text-4xl font-bold leading-none text-[#0e6337]">
-                {p.figure}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        {/* One line of five cards: grid on desktop, swipeable single row on narrower screens */}
+        <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-[1fr_1.05fr_1fr_1.3fr_1.35fr] lg:gap-4 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
+          {/* 1 — Legacy */}
+          <article className={`${CARD}`}>
+            <p className={BIG}>50+</p>
+            <h3 className={LABEL}>Years of Excellence</h3>
+            <p className={BODY}>Built on five decades of consumer trust, innovation, and culinary heritage.</p>
+          </article>
 
-        {/* Credentials */}
-        <div className="mt-8 sm:mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {CREDENTIALS.map((c) => (
-            <article
-              key={c.title}
-              className="flex items-start rounded-xl border border-gray-200/90 bg-white p-5 sm:p-6"
-            >
-              <div>
-                <h3 className="font-serif text-lg sm:text-xl font-bold leading-snug text-gray-900">
-                  {c.title}
-                </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-gray-600">{c.description}</p>
+          {/* 2 — Certifications */}
+          <article className={`${CARD}`}>
+            <p className="font-sans text-[clamp(1.375rem,2.2vw,1.75rem)] font-semibold leading-tight tracking-tight text-[#8B0000]">
+              CRISIL SME 2
+            </p>
+            <p className="mt-2 font-sans text-[clamp(1rem,1.5vw,1.25rem)] font-semibold leading-tight tracking-tight text-[#1A1A1A] break-words">
+              ISO 22000:2018
+            </p>
+            <h3 className={LABEL}>Rated &amp; Certified</h3>
+            <p className={BODY}>Adhering to high food safety and financial governance standards.</p>
+          </article>
+
+          {/* 3 — Product Quality */}
+          <article className={`${CARD}`}>
+            <p className={BIG}>100%</p>
+            <h3 className={LABEL}>Purity Guarantee</h3>
+            <p className={BODY}>
+              Farm-sourced spices, 100% durum wheat suji pasta with zero maida, non-sticky vermicelli, and strong-bodied tea.
+            </p>
+          </article>
+
+          {/* 4 — Global Reach */}
+          <article className={`${CARD}`}>
+            <p className={BIG}>10+</p>
+            <h3 className={LABEL}>Export Markets</h3>
+            <p className={BODY}>
+              Supplying international markets across the USA, UK, Canada, Italy, Germany, Australia, Singapore, Dubai, Muscat,
+              Kuwait, Tanzania, Nepal, and Bangladesh.
+            </p>
+          </article>
+
+          {/* 5 — Distribution Network */}
+          <article className={`${CARD}`}>
+            <dl className="grid grid-cols-2 gap-3 xl:gap-5">
+              <div className="flex min-w-0 flex-col-reverse justify-end">
+                <dt className="mt-2.5 font-sans text-[10px] font-semibold uppercase leading-snug tracking-[0.1em] text-[#1A1A1A]">
+                  Authorized Dealers in Odisha
+                </dt>
+                <dd className={BIG}>200+</dd>
               </div>
-            </article>
-          ))}
+              <div className="flex min-w-0 flex-col-reverse justify-end border-l border-[#1A1A1A]/10 pl-3 xl:pl-5">
+                <dt className="mt-2.5 font-sans text-[10px] font-semibold uppercase leading-snug tracking-[0.1em] text-[#1A1A1A]">
+                  Super Stockists Nationwide
+                </dt>
+                <dd className={BIG}>40+</dd>
+              </div>
+            </dl>
+            <h3 className="sr-only">Distribution Network</h3>
+            <p className={BODY}>
+              Supported by over 200 authorized dealers in Odisha and more than 40 super stockists nationwide.
+            </p>
+          </article>
         </div>
       </div>
     </section>
   );
 }
+
+export const AboutLegacyQuality = AboutGlance;

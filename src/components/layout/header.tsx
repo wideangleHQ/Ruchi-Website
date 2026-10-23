@@ -27,7 +27,7 @@ const contactNav = {
   ],
 };
 
-export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
+export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?: number; isSignedIn?: boolean }) {
   const pathname = usePathname();
   const { openCart } = useCartDrawer();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -117,13 +117,13 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
           <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
             
             {/* Desktop Account Icon */}
-            <Link
-              href="/account"
+            <a
+              href={isSignedIn ? "/account" : "/account/login"}
               className="hidden lg:flex p-1.5 text-gray-800 hover:text-[#168a4a] hover:bg-gray-100 rounded-full transition-colors"
-              aria-label="Account"
+              aria-label={isSignedIn ? "My account" : "Sign in"}
             >
               <User className="w-4.5 h-4.5" />
-            </Link>
+            </a>
 
             {/* Desktop Cart Button — Opens Slide-over Drawer */}
             <button
@@ -140,13 +140,26 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
               )}
             </button>
 
-            {/* Desktop Sign In / Sign Up */}
-            <Link
-              href="/account"
-              className="hidden lg:inline-flex items-center text-[13px] font-semibold text-gray-700 hover:text-[#168a4a] transition-colors ml-1 whitespace-nowrap"
-            >
-              Sign In / Sign Up
-            </Link>
+            {/* Desktop Sign In / Sign Up: straight to Shopify's hosted login; "My Account / Sign Out" once signed in */}
+            {isSignedIn ? (
+              <div className="hidden lg:flex items-center gap-3 ml-1 whitespace-nowrap">
+                <Link href="/account" className="text-[13px] font-semibold text-gray-700 hover:text-[#168a4a] transition-colors">
+                  My Account
+                </Link>
+                <form action="/account/logout" method="post">
+                  <button type="submit" className="text-[13px] font-semibold text-gray-500 hover:text-[#c62828] transition-colors cursor-pointer">
+                    Sign Out
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <a
+                href="/account/login"
+                className="hidden lg:inline-flex items-center text-[13px] font-semibold text-gray-700 hover:text-[#168a4a] transition-colors ml-1 whitespace-nowrap"
+              >
+                Sign In / Sign Up
+              </a>
+            )}
 
             {/* Mobile/Tablet Search Toggle */}
             <button
@@ -340,6 +353,36 @@ export function Header({ cartQuantity = 0 }: { cartQuantity?: number }) {
                   </div>
                 )}
               </div>
+
+              {/* Mobile account actions */}
+              {isSignedIn ? (
+                <>
+                  <Link
+                    href="/account"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-base font-bold text-gray-900 hover:text-[#c62828] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
+                  >
+                    <span>My Account</span>
+                    <ArrowRight className="w-4.5 h-4.5 text-gray-400" />
+                  </Link>
+                  <form action="/account/logout" method="post">
+                    <button
+                      type="submit"
+                      className="w-full text-left text-base font-bold text-gray-900 hover:text-[#c62828] py-3.5 border-b border-gray-100/90 cursor-pointer transition-colors"
+                    >
+                      Sign Out
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <a
+                  href="/account/login"
+                  className="text-base font-bold text-gray-900 hover:text-[#c62828] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
+                >
+                  <span>Sign In / Sign Up</span>
+                  <ArrowRight className="w-4.5 h-4.5 text-gray-400" />
+                </a>
+              )}
             </div>
           </div>
 

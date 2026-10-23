@@ -1,17 +1,12 @@
 import "server-only";
-import { createHash, randomBytes } from "node:crypto";
 import { cookies } from "next/headers";
 
 // Shopify-hosted login via the Customer Account API (OAuth 2.0 + PKCE, public client).
 // Requires SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID (Shopify admin → Headless/Hydrogen → Customer Account API).
 
-export const CA_COOKIES = {
-  access: "ca_access",
-  refresh: "ca_refresh",
-  idToken: "ca_id",
-  state: "ca_state",
-  verifier: "ca_verifier",
-} as const;
+import { authorizeParams, CA_COOKIES, newPkce } from "./customer-account-core";
+
+export { CA_COOKIES };
 
 type Discovery = {
   authorization_endpoint: string;
@@ -26,30 +21,43 @@ const shopHost = () => {
   return d.startsWith("http") ? d : `https://${d}`;
 };
 
-async function discover() {
-  const [oidc, api] = await Promise.all([
-    fetch(`${shopHost()}/.well-known/openid-configuration`, { next: { revalidate: 3600 } }).then((r) => r.json()),
-    fetch(`${shopHost()}/.well-known/customer-account-api`, { next: { revalidate: 3600 } }).then((r) => r.json()),
-  ]);
+async function discover(fresh = false) {
+  const opts: RequestInit & { next?: { revalidate: number } } = fresh ? { cache: "no-store" } : { next: { revalidate: 3600 } };
+  const get = async (path: string) => {
+    const res = await fetch(`${shopHost()}${path}`, opts);
+    if (!res.ok) throw new Error(`${path} returned HTTP ${res.status}`);
+    return res.json();
+  };
+  const [oidc, api] = await Promise.all([get("/.well-known/openid-configuration"), get("/.well-known/customer-account-api")]);
   return { oidc: oidc as Discovery, graphqlUrl: api.graphql_api as string };
 }
 
-const b64url = (b: Buffer) => b.toString("base64url");
+/** Non-secret connectivity report used by /account/debug: which Shopify endpoints this site will talk to. */
+export async function authDiagnostics() {
+  const base = { clientIdSet: Boolean(clientId()), storeDomainSet: Boolean(process.env.SHOPIFY_STORE_DOMAIN) };
+  if (!base.storeDomainSet) return { ...base, discovery: { ok: false, error: "SHOPIFY_STORE_DOMAIN is not set" } };
+  try {
+    const { oidc, graphqlUrl } = await discover(true);
+    return {
+      ...base,
+      discovery: {
+        ok: true,
+        authorizeEndpoint: oidc.authorization_endpoint,
+        tokenEndpoint: oidc.token_endpoint,
+        endSessionEndpoint: oidc.end_session_endpoint,
+        customerAccountApi: graphqlUrl,
+      },
+    };
+  } catch (error) {
+    return { ...base, discovery: { ok: false, error: error instanceof Error ? error.message : "discovery failed" } };
+  }
+}
 
 export async function buildAuthorizeUrl(redirectUri: string) {
   const { oidc } = await discover();
-  const verifier = b64url(randomBytes(32));
-  const state = b64url(randomBytes(16));
+  const { verifier, challenge, state } = newPkce();
   const url = new URL(oidc.authorization_endpoint);
-  url.search = new URLSearchParams({
-    scope: "openid email customer-account-api:full",
-    client_id: clientId()!,
-    response_type: "code",
-    redirect_uri: redirectUri,
-    state,
-    code_challenge: b64url(createHash("sha256").update(verifier).digest()),
-    code_challenge_method: "S256",
-  }).toString();
+  url.search = authorizeParams({ clientId: clientId()!, redirectUri, state, challenge }).toString();
   return { url: url.toString(), state, verifier };
 }
 

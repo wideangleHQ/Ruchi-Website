@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import { AboutHero } from "@/components/about/about-hero";
 import { AboutGlance } from "@/components/about/about-glance";
-import { AboutHeritage } from "@/components/about/about-heritage";
-import { AboutTimeline } from "@/components/about/about-timeline";
+import { AboutHeritageJourney } from "@/components/about/about-heritage-journey";
 import { AboutVisionMission } from "@/components/about/about-vision-mission";
 import { AboutPillars } from "@/components/about/about-pillars";
 import { AboutLeadership } from "@/components/about/about-leadership";
 import { AboutManufacturing } from "@/components/about/about-manufacturing";
-import { AboutProductWorld } from "@/components/about/about-product-world";
+import { ProductPortfolioGallery } from "@/components/about/product-portfolio-gallery";
 import { AboutGlobalReach } from "@/components/about/about-global-reach";
 import { AboutAwards } from "@/components/about/about-awards";
 import { AboutCSR } from "@/components/about/about-csr";
 import { AboutCertifications } from "@/components/about/about-certifications";
-import { AboutClosingCTA } from "@/components/about/about-closing-cta";
 
 export const metadata: Metadata = {
   title: "About Ruchi Foodline | 50+ Years of Taste, Trust & Innovation",
@@ -32,14 +30,11 @@ export default function AboutPage() {
       {/* 1. Hero — Brand Story */}
       <AboutHero />
 
-      {/* 2. Ruchi at a Glance Proof Section */}
+      {/* 2. Legacy of Quality & Purity Proof Section */}
       <AboutGlance />
 
-      {/* 3. Our Beginning / Heritage */}
-      <AboutHeritage />
-
-      {/* 4. 50-Year Journey Timeline */}
-      <AboutTimeline />
+      {/* 3. Our Heritage & 50-Year Journey — Cinematic Scroll-Driven Experience */}
+      <AboutHeritageJourney />
 
       {/* 5. Vision & Mission */}
       <AboutVisionMission />
@@ -53,8 +48,8 @@ export default function AboutPage() {
       {/* 8. Manufacturing & Technology (Pasta Village) */}
       <AboutManufacturing />
 
-      {/* 9. Product World Mosaic */}
-      <AboutProductWorld />
+      {/* 9. Our Product Portfolio — Accordion Gallery */}
+      <ProductPortfolioGallery />
 
       {/* 10. Our Reach — India & Global */}
       <AboutGlobalReach />
@@ -68,8 +63,6 @@ export default function AboutPage() {
       {/* 13. Quality & Certifications */}
       <AboutCertifications />
 
-      {/* 14. Closing Brand Statement & CTA */}
-      <AboutClosingCTA />
     </div>
   );
 }

@@ -9,11 +9,11 @@ const MISSION =
 export function AboutVisionMission() {
   return (
     <section
-      className="relative min-h-[100svh] flex flex-col justify-center py-12 sm:py-16 md:py-20 bg-white border-b border-gray-200/80"
+      className="relative py-10 sm:py-14 lg:py-16 bg-white"
       aria-labelledby="vision-mission-heading"
     >
       <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-8 sm:mb-12 max-w-2xl text-center">
+        <div className="mx-auto mb-6 sm:mb-8 lg:mb-10 max-w-2xl text-center">
           <h2
             id="vision-mission-heading"
             className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold leading-tight tracking-tight text-gray-900"

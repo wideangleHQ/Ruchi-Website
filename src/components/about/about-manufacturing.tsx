@@ -31,11 +31,11 @@ export function AboutManufacturing() {
   ];
 
   return (
-    <section className="relative min-h-[100svh] flex flex-col justify-center py-8 sm:py-12 bg-[#faf9f6] border-b border-gray-200/80" aria-label="Manufacturing and Technology">
+    <section className="relative py-10 sm:py-14 lg:py-16 bg-[#faf9f6]" aria-label="Manufacturing and Technology">
       <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8 lg:mb-10">
           <div>
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
               Manufacturing &amp; Food Technology

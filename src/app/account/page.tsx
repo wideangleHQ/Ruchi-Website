@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { CA_COOKIES, clientId, getCustomer, type Order } from "@/lib/shopify/customer-account";
+import { clientId, getCustomer, type Order } from "@/lib/shopify/customer-account";
+import { CA_COOKIES } from "@/lib/shopify/customer-account-core";
 
 export const metadata: Metadata = { title: "My Account" };
 
@@ -136,9 +137,11 @@ export default async function AccountPage({
               </li>
             ))}
             <li className="shrink-0">
-              <a href="/account/logout" className="flex min-h-11 items-center whitespace-nowrap rounded-brand px-3.5 text-[15px] font-normal text-brand-red hover:bg-soft-neutral">
-                Sign Out
-              </a>
+              <form action="/account/logout" method="post">
+                <button type="submit" className="flex min-h-11 w-full items-center whitespace-nowrap rounded-brand px-3.5 text-[15px] font-normal text-brand-red hover:bg-soft-neutral cursor-pointer">
+                  Sign Out
+                </button>
+              </form>
             </li>
           </ul>
         </nav>

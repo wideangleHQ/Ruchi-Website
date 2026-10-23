@@ -5,6 +5,8 @@ import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { CartProvider } from "@/context/cart-context";
+import { cookies } from "next/headers";
+import { CA_COOKIES, hasSession } from "@/lib/shopify/customer-account-core";
 import { getCartFromCookies } from "@/lib/shopify/cart-actions";
 import { getCollections, getProducts } from "@/lib/shopify";
 import { poppinsMedium } from "@/lib/fonts";
@@ -28,6 +30,12 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const isSignedIn = hasSession(
+    cookieStore.get(CA_COOKIES.access)?.value,
+    cookieStore.get(CA_COOKIES.refresh)?.value
+  );
+
   const [cart, collections, recommendations] = await Promise.all([
     getCartFromCookies(),
     getCollections(),
@@ -42,7 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" className={`h-full antialiased scroll-smooth ${poppinsMedium.variable}`}>
       <body className="min-h-full flex flex-col bg-white text-text font-sans selection:bg-soft-green selection:text-primary-green">
         <CartProvider>
-          <Header cartQuantity={cart?.totalQuantity ?? 0} />
+          <Header cartQuantity={cart?.totalQuantity ?? 0} isSignedIn={isSignedIn} />
           <main className="flex-1 pb-16 md:pb-0">{children}</main>
           <Footer collections={collections} />
           <MobileBottomNav collections={collections} cartQuantity={cart?.totalQuantity ?? 0} />

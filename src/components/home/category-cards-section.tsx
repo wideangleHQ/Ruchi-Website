@@ -1,8 +1,7 @@
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
-import { Gift } from "lucide-react";
 import type { Collection } from "@/lib/shopify/types";
-import { categoryHref, HAMPERS_HANDLE, orderCategories } from "@/utils/categories";
+import { categoryHref, orderCategories } from "@/utils/categories";
 
 import basicSpicesImg from "@/assets/Images/Categories/Basic Spices.png";
 import blendedSpicesImg from "@/assets/Images/Categories/Blended Spices.png";
@@ -12,6 +11,7 @@ import noodlesImg from "@/assets/Images/Categories/Noodles.png";
 import teaImg from "@/assets/Images/Categories/tea.png";
 import wholeSpicesImg from "@/assets/Images/Categories/Whole Spices (2).png";
 import flourReadyMixImg from "@/assets/Images/Categories/Flour and Ready Mix.png";
+import hampersImg from "@/assets/Images/Categories/hampers.png";
 
 interface CategoryCardsSectionProps {
   collections: Collection[];
@@ -30,6 +30,9 @@ const CATEGORY_IMAGE_MAP: Record<string, StaticImageData> = {
   "flour-and-ready-mix": flourReadyMixImg,
   "flour-ready-mix": flourReadyMixImg,
   "ready-mix": flourReadyMixImg,
+  hampers: hampersImg,
+  hamper: hampersImg,
+  "gift-hampers": hampersImg,
 };
 
 function getCategoryImage(handle: string): StaticImageData | null {
@@ -47,9 +50,9 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
   if (orderedCollections.length === 0) return null;
 
   return (
-    <section className="py-4 sm:py-6 lg:py-7 bg-transparent" aria-label="Shop by category">
+    <section className="pt-3 sm:pt-5 lg:pt-7 pb-1.5 sm:pb-3 lg:pb-4 bg-transparent" aria-label="Shop by category">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-text tracking-tight text-center sm:text-left mb-4 sm:mb-5 lg:mb-6">
+        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-text tracking-tight text-center sm:text-left mb-3 sm:mb-4 lg:mb-5">
           Explore the Flavours Behind Every Ruchi Meal
         </h2>
 
@@ -75,7 +78,7 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-soft-green text-primary-green font-serif font-bold text-base">
-                      {collection.handle === HAMPERS_HANDLE ? <Gift className="h-1/2 w-1/2" aria-hidden="true" /> : collection.title.charAt(0)}
+                      {collection.title.charAt(0)}
                     </div>
                   )}
                 </div>
@@ -108,7 +111,7 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-soft-green text-primary-green font-serif font-bold text-lg">
-                      {collection.handle === HAMPERS_HANDLE ? <Gift className="h-1/2 w-1/2" aria-hidden="true" /> : collection.title.charAt(0)}
+                      {collection.title.charAt(0)}
                     </div>
                   )}
                 </div>

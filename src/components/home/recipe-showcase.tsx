@@ -3,7 +3,6 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import pageBackground from "@/assets/Images/Page Background 2.png";
 import type { BlogArticle } from "@/types/blog";
 
@@ -102,7 +101,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-white/90 hover:text-white transition-colors mr-1"
             >
               <span>View All</span>
-              <ArrowRight className="w-4 h-4" />
+              <span aria-hidden="true">&rarr;</span>
             </Link>
 
             {filteredPosts.length > 1 && (
@@ -111,25 +110,25 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
                   onClick={() => scroll("left")}
                   disabled={!canScrollLeft}
                   aria-label="Previous stories"
-                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all ${
+                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all text-xs font-bold ${
                     canScrollLeft
                       ? "bg-white/10 text-white border-white/30 hover:bg-white hover:text-[#0e6337] cursor-pointer active:scale-95 shadow-xs"
                       : "bg-white/5 text-white/30 border-white/10 cursor-not-allowed opacity-40"
                   }`}
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  &#8592;
                 </button>
                 <button
                   onClick={() => scroll("right")}
                   disabled={!canScrollRight}
                   aria-label="Next stories"
-                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all ${
+                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all text-xs font-bold ${
                     canScrollRight
                       ? "bg-white/10 text-white border-white/30 hover:bg-white hover:text-[#0e6337] cursor-pointer active:scale-95 shadow-xs"
                       : "bg-white/5 text-white/30 border-white/10 cursor-not-allowed opacity-40"
                   }`}
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  &#8594;
                 </button>
               </div>
             )}

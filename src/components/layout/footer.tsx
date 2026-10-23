@@ -21,7 +21,6 @@ interface FooterProps {
 const primaryFooterNav = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
-  { label: "Hampers", href: "/collections/hampers" },
   { label: "About Us", href: "/about" },
   { label: "Blog", href: "/#recipes" },
   { label: "Contact Us", href: "/contact/queries" },
@@ -208,16 +207,6 @@ export function Footer({ collections = [] }: FooterProps) {
                   </Link>
                 </li>
               ))}
-              {collections[0] && (
-                <li>
-                  <Link
-                    href="/products"
-                    className="hover:text-emerald-300 transition-colors duration-200 py-1"
-                  >
-                    All Collections
-                  </Link>
-                </li>
-              )}
             </ul>
           </nav>
         </div>

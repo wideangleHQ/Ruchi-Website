@@ -68,8 +68,43 @@ function calculateUnitPrice(variant: ProductVariant): string | null {
   return `(₹${unitPrice}/${benchmarkLabel})`;
 }
 
+/**
+ * Gallery for the selected pack. Pack-specific shots (front/back, named with the pack size, e.g. "...-100g-pouch-front")
+ * of the other pack sizes are hidden; shared images (ingredients, FSSAI, manufacturer, veg logo, contact) always stay.
+ * If nothing matches the selected size, the full gallery is shown.
+ */
+function imagesForPack<T extends { url: string }>(all: T[], variantTitle: string | undefined): T[] {
+  const want = variantTitle ? parseUnitWeight(variantTitle)?.amount : undefined;
+  if (!want) return all;
+  const packSize = (url: string): number | null => {
+    const file = url.split("?")[0].split("/").pop()?.toLowerCase() ?? "";
+    if (!/-(front|back)(?:[_.-]|$)/.test(file)) return null;
+    const m = file.match(/-(\d+(?:\.\d+)?)(kg|g)-/);
+    return m ? parseFloat(m[1]) * (m[2] === "kg" ? 1000 : 1) : null;
+  };
+  if (!all.some((img) => packSize(img.url) === want)) return all;
+  const own = all.filter((img) => {
+    const size = packSize(img.url);
+    return size === null || size === want;
+  });
+  // Keep the catalogue order after filtering: front, back, ingredients, FSSAI, manufacturer, veg logo, contact, rest.
+  const rank = (url: string) => {
+    const f = url.split("?")[0].split("/").pop()?.toLowerCase() ?? "";
+    if (/fssai/.test(f)) return 3;
+    if (/manufac/.test(f)) return 4;
+    if (/veg-?logo/.test(f)) return 5;
+    if (/contact|coontact/.test(f)) return 6;
+    if (/ingredient/.test(f)) return 2;
+    if (/nutrition|ean|pack-of/.test(f)) return 7;
+    if (/-back(?:[_.-]|$)/.test(f)) return 1;
+    if (/-front(?:[_.-]|$)/.test(f)) return 0;
+    return 7;
+  };
+  return [...own].sort((x, y) => rank(x.url) - rank(y.url));
+}
+
 export function ProductHero({ product }: ProductHeroProps) {
-  const images = product.images.edges.map((e) => e.node);
+  const allImages = product.images.edges.map((e) => e.node);
   const variants = product.variants.edges.map((e) => e.node);
   const availableVariants = variants.filter((v) => v.availableForSale);
 
@@ -77,6 +112,7 @@ export function ProductHero({ product }: ProductHeroProps) {
     availableVariants[0]?.id ?? variants[0]?.id ?? ""
   );
   const selectedVariant = variants.find((v) => v.id === selectedVariantId) ?? variants[0];
+  const images = imagesForPack(allImages, selectedVariant?.title);
 
   const [quantity, setQuantity] = useState(1);
   const [activeImageIdx, setActiveImageIdx] = useState(0);
@@ -89,10 +125,10 @@ export function ProductHero({ product }: ProductHeroProps) {
   const [lastVariantId, setLastVariantId] = useState(selectedVariantId);
   if (selectedVariantId !== lastVariantId) {
     setLastVariantId(selectedVariantId);
-    if (selectedVariant?.image?.url) {
-      const idx = images.findIndex((img) => img.url === selectedVariant.image?.url);
-      if (idx !== -1) setActiveImageIdx(idx);
-    }
+    // Gallery changes with the pack: start at the new pack's own image (or the first one).
+    const nextImages = imagesForPack(allImages, selectedVariant?.title);
+    const idx = selectedVariant?.image?.url ? nextImages.findIndex((img) => img.url === selectedVariant.image?.url) : -1;
+    setActiveImageIdx(idx !== -1 ? idx : 0);
   }
 
   const [addState, addAction, isAdding] = useActionState(addItemAction, undefined);

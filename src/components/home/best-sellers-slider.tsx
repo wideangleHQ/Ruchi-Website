@@ -2,7 +2,6 @@
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { ProductCard } from "@/components/product/product-card";
 
@@ -58,9 +57,10 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
         <Link
           href="/products?category=basic-spices"
           aria-label="View all basic spices"
-          className="w-9 h-9 rounded-full bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-[#168a4a] hover:bg-[#168a4a] hover:text-white transition-colors shrink-0"
+          className="text-xs font-bold text-[#168a4a] hover:text-[#0e6337] transition-colors flex items-center gap-1"
         >
-          <ArrowRight className="w-4 h-4" />
+          <span>View All</span>
+          <span aria-hidden="true">&rarr;</span>
         </Link>
       </div>
 
@@ -82,7 +82,7 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
             className="group inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#168a4a] hover:text-[#0e6337] transition-colors"
           >
             <span>View All</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+            <span className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">&rarr;</span>
           </Link>
 
           <div className="flex items-center gap-2">
@@ -90,25 +90,25 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
               onClick={() => handleScroll("left")}
               disabled={!canScrollLeft}
               aria-label="Previous products"
-              className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border transition-all ${
+              className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border transition-all text-base font-bold ${
                 canScrollLeft
                   ? "bg-white text-gray-800 border-gray-200 hover:bg-emerald-50 hover:border-[#168a4a]/40 hover:text-[#168a4a] shadow-xs cursor-pointer active:scale-95"
                   : "bg-gray-100 text-gray-300 border-gray-200/50 cursor-not-allowed opacity-50"
               }`}
             >
-              <ChevronLeft className="w-5 h-5" />
+              &#8592;
             </button>
             <button
               onClick={() => handleScroll("right")}
               disabled={!canScrollRight}
               aria-label="Next products"
-              className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border transition-all ${
+              className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border transition-all text-base font-bold ${
                 canScrollRight
                   ? "bg-white text-gray-800 border-gray-200 hover:bg-emerald-50 hover:border-[#168a4a]/40 hover:text-[#168a4a] shadow-xs cursor-pointer active:scale-95"
                   : "bg-gray-100 text-gray-300 border-gray-200/50 cursor-not-allowed opacity-50"
               }`}
             >
-              <ChevronRight className="w-5 h-5" />
+              &#8594;
             </button>
           </div>
         </div>

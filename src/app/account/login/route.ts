@@ -1,8 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { buildAuthorizeUrl, CA_COOKIES, clientId } from "@/lib/shopify/customer-account";
+import { buildAuthorizeUrl, clientId } from "@/lib/shopify/customer-account";
+import { CA_COOKIES, resolveOrigin } from "@/lib/shopify/customer-account-core";
 
 export async function GET(req: NextRequest) {
-  const origin = req.nextUrl.origin;
+  const origin = resolveOrigin({ siteUrl: process.env.SITE_URL, headers: req.headers, fallbackProtocol: req.nextUrl.protocol });
   if (!clientId()) return NextResponse.redirect(`${origin}/account?error=config`);
   const { url, state, verifier } = await buildAuthorizeUrl(`${origin}/account/callback`);
   const res = NextResponse.redirect(url);

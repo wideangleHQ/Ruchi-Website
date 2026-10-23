@@ -2,7 +2,6 @@
 
 import React, { useState, useRef } from "react";
 import Image, { type StaticImageData } from "next/image";
-import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 
 import socialImg1 from "@/assets/Images/Social Media/1.png";
 import socialImg2 from "@/assets/Images/Social Media/2.png";
@@ -103,7 +102,6 @@ export function SocialMediaSection() {
             >
               <InstagramIcon className="w-4 h-4" />
               <span>Follow on Instagram</span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-80" />
             </a>
           </div>
         </div>
@@ -183,13 +181,13 @@ export function SocialMediaSection() {
               onClick={() => setActiveIndex((p) => Math.max(0, p - 1))}
               disabled={activeIndex === 0}
               aria-label="Previous social card"
-              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all text-xs font-bold ${
                 activeIndex > 0
                   ? "bg-white text-gray-800 border-gray-200 hover:bg-gray-50 active:scale-95"
                   : "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed opacity-40"
               }`}
             >
-              <ChevronLeft className="w-4 h-4" />
+              &#8592;
             </button>
 
             {/* Dots */}
@@ -210,13 +208,13 @@ export function SocialMediaSection() {
               onClick={() => setActiveIndex((p) => Math.min(SOCIAL_POSTS.length - 1, p + 1))}
               disabled={activeIndex === SOCIAL_POSTS.length - 1}
               aria-label="Next social card"
-              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all text-xs font-bold ${
                 activeIndex < SOCIAL_POSTS.length - 1
                   ? "bg-white text-gray-800 border-gray-200 hover:bg-gray-50 active:scale-95"
                   : "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed opacity-40"
               }`}
             >
-              <ChevronRight className="w-4 h-4" />
+              &#8594;
             </button>
           </div>
 
@@ -230,7 +228,6 @@ export function SocialMediaSection() {
             >
               <InstagramIcon className="w-3.5 h-3.5" />
               <span>View Instagram</span>
-              <ExternalLink className="w-3 h-3 opacity-80" />
             </a>
           </div>
         </div>

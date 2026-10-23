@@ -41,11 +41,11 @@ export function AboutCertifications() {
   ];
 
   return (
-    <section className="relative min-h-[100svh] flex flex-col justify-center py-8 sm:py-12 bg-white border-b border-gray-200/80" aria-label="Quality and Certifications">
+    <section className="relative py-10 sm:py-14 lg:py-16 bg-white" aria-label="Quality and Certifications">
       <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-2xl mb-8 sm:mb-10">
+        <div className="max-w-2xl mb-6 sm:mb-8 lg:mb-10">
           <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
             Quality Assurance &amp; Certifications
           </h2>

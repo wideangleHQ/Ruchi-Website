@@ -412,12 +412,9 @@ export function FarmToKitchenSection() {
                   pointerEvents: idx === activeStageIndex ? "auto" : "none",
                 }}
               >
-                {/* Eyebrow & Stage Badge (Centered) */}
-                <div className="flex items-center justify-center gap-2 mb-2 sm:mb-2.5">
-                  <span className="font-mono text-[10px] sm:text-xs font-bold text-amber-300 tracking-[0.2em] uppercase px-2.5 py-0.5 rounded-full bg-black/50 border border-amber-400/40 backdrop-blur-xs">
-                    FARM TO KITCHEN
-                  </span>
-                  <span className="font-mono text-xs sm:text-sm font-semibold text-white/80 tracking-wider">
+                {/* Stage Badge (Centered) */}
+                <div className="flex items-center justify-center mb-2 sm:mb-2.5">
+                  <span className="font-mono text-[10px] sm:text-xs font-bold text-amber-300 tracking-[0.2em] uppercase px-3 py-0.5 rounded-full bg-black/50 border border-amber-400/40 backdrop-blur-xs">
                     {stage.stageLabel}
                   </span>
                 </div>

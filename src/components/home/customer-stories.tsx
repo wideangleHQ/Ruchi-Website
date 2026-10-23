@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Star, Check } from "lucide-react";
 
 interface ReviewItem {
   id: string;
@@ -146,27 +145,28 @@ export function CustomerStories() {
   const duplicatedReviews = [...REVIEWS, ...REVIEWS];
 
   return (
-    <section className="h-[40vh] min-h-[320px] flex flex-col justify-center py-2 sm:py-3 bg-transparent overflow-hidden" aria-label="Customer Reviews">
+    <section
+      className="h-[70vh] min-h-[540px] flex flex-col justify-center py-6 sm:py-8 lg:py-10 bg-transparent overflow-hidden"
+      aria-label="Customer Reviews"
+    >
       <div className="w-full mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         
-        {/* Header Block: Centered Editorial Heading & Rating (Compact for 40vh) */}
-        <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-3 sm:mb-4">
-          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#168a4a] mb-0.5">
+        {/* Header Block: Centered Editorial Heading & Rating (Scaled for 70vh) */}
+        <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-6 sm:mb-8 lg:mb-10">
+          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-[#168a4a] mb-1.5">
             Real Stories, Real Trust
           </span>
-          <h2 className="font-serif text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-gray-900 leading-tight">
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
             A Taste Worth Coming Back To
           </h2>
-          <div className="flex items-center gap-2 mt-1.5 bg-amber-50/80 border border-amber-200/70 px-2.5 py-1 rounded-full">
-            <div className="flex items-center text-amber-500">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-400 text-amber-400" />
-              ))}
+          <div className="flex items-center gap-2.5 mt-3 sm:mt-3.5 bg-amber-50/90 border border-amber-200/80 px-3.5 py-1.5 rounded-full shadow-2xs">
+            <div className="flex items-center text-amber-500 text-sm tracking-wider select-none" aria-hidden="true">
+              ★★★★★
             </div>
-            <span className="text-xs font-bold text-gray-900">
+            <span className="text-xs sm:text-sm font-bold text-gray-900">
               {averageRating.toFixed(1)} / 5.0
             </span>
-            <span className="text-[10px] sm:text-[11px] text-gray-500 font-medium border-l border-amber-200 pl-2">
+            <span className="text-[11px] sm:text-xs text-gray-500 font-medium border-l border-amber-200 pl-2.5">
               From Verified Buyers
             </span>
           </div>
@@ -174,71 +174,68 @@ export function CustomerStories() {
       </div>
 
       {/* Continuous Infinite Slider Track with Edge Fading */}
-      <div className="relative w-full overflow-hidden py-1">
+      <div className="relative w-full overflow-hidden py-2 sm:py-4">
         {/* Left & Right Soft Fade Masks */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-20 md:w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-20 md:w-32 bg-gradient-to-r from-transparent via-white/80 to-white z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-24 md:w-36 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-10 sm:w-24 md:w-36 bg-gradient-to-r from-transparent via-white/80 to-white z-10 pointer-events-none" />
 
         {/* Continuous Marquee Track */}
-        <div className="animate-marquee flex items-stretch gap-3 sm:gap-4 hover:[animation-play-state:paused]">
+        <div className="animate-marquee flex items-stretch gap-4 sm:gap-6 hover:[animation-play-state:paused]">
           {duplicatedReviews.map((review, idx) => (
             <div
               key={`${review.id}-${idx}`}
-              className="review-card w-[260px] xs:w-[280px] sm:w-[320px] shrink-0 bg-white rounded-xl p-3.5 sm:p-4 border border-gray-200/80 shadow-2xs hover:shadow-md hover:border-[#168a4a]/40 transition-all duration-300 flex flex-col justify-between select-none"
+              className="review-card w-[280px] xs:w-[320px] sm:w-[360px] lg:w-[380px] shrink-0 bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-xs hover:shadow-xl hover:-translate-y-1 hover:border-[#168a4a]/40 transition-all duration-300 flex flex-col justify-between select-none"
             >
               <div>
                 {/* 1. Star Rating + Numeric Badge */}
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-0.5">
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-0.5 text-xs text-amber-500 tracking-wider select-none" aria-hidden="true">
                     {[...Array(5)].map((_, i) => (
-                      <Star
+                      <span
                         key={i}
-                        className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${
-                          i < Math.floor(review.rating)
-                            ? "fill-amber-400 text-amber-400"
-                            : "fill-gray-200 text-gray-200"
-                        }`}
-                      />
+                        className={i < Math.floor(review.rating) ? "text-amber-400" : "text-gray-300"}
+                      >
+                        ★
+                      </span>
                     ))}
                   </div>
-                  <span className="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-amber-50 text-amber-800 rounded border border-amber-200/60">
+                  <span className="inline-block px-2 py-0.5 text-[11px] font-bold bg-amber-50 text-amber-800 rounded-md border border-amber-200/60">
                     {review.rating.toFixed(1)}
                   </span>
                 </div>
 
                 {/* 2. Review Title */}
-                <h3 className="font-sans font-bold text-xs sm:text-sm text-gray-900 mb-1 leading-snug line-clamp-1">
+                <h3 className="font-sans font-bold text-sm sm:text-base text-gray-900 mb-1.5 leading-snug line-clamp-1">
                   {review.title}
                 </h3>
 
                 {/* 3. Review Content */}
-                <p className="font-sans text-[11px] sm:text-xs text-gray-600 leading-relaxed italic mb-2 line-clamp-2">
+                <p className="font-sans text-xs sm:text-sm text-gray-600 leading-relaxed italic mb-3 line-clamp-3">
                   &ldquo;{review.content}&rdquo;
                 </p>
               </div>
 
               {/* 4. Reviewer Metadata & Verified Badge */}
-              <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-2 mt-auto">
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full bg-[#168a4a]/10 text-[#168a4a] text-[10px] sm:text-[11px] font-bold flex items-center justify-center shrink-0 border border-[#168a4a]/20">
+              <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2 mt-auto">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#168a4a]/10 text-[#168a4a] text-xs sm:text-sm font-bold flex items-center justify-center shrink-0 border border-[#168a4a]/20">
                     {getInitials(review.reviewer)}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-gray-900 truncate leading-tight">
+                    <p className="text-xs sm:text-sm font-bold text-gray-900 truncate leading-tight">
                       {review.reviewer}
                     </p>
-                    <p className="text-[10px] text-gray-500 truncate">
+                    <p className="text-[11px] text-gray-500 truncate">
                       {review.location}
                     </p>
                   </div>
                 </div>
 
                 <div className="shrink-0 text-right">
-                  <div className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-full border border-emerald-200/60">
-                    <Check className="w-2.5 h-2.5 stroke-[3]" />
+                  <div className="inline-flex items-center text-[10px] sm:text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
                     <span>Verified</span>
                   </div>
-                  <p className="text-[9px] text-gray-400 mt-0.5">{review.date}</p>
+                  <p className="text-[10px] text-gray-400 mt-0.5">{review.date}</p>
                 </div>
               </div>
             </div>
