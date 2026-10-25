@@ -36,7 +36,7 @@ function SignIn({ error }: { error?: string }) {
         ? "We couldn't sign you in. Please try again."
         : null;
   return (
-    <div className="mx-auto w-full max-w-md px-4 py-10 sm:py-16">
+    <div className="mx-auto flex min-h-[90vh] w-full max-w-md flex-col justify-center px-4 py-10 sm:py-16">
       <h1 className={title}>My Account</h1>
       <p className="mt-2 text-[15px] font-normal leading-relaxed text-muted-text">
         Sign in or create an account to view your orders and manage your details. You&apos;ll be taken to our secure Shopify sign-in page.
@@ -113,7 +113,7 @@ export default async function AccountPage({
   const name = [customer.firstName, customer.lastName].filter(Boolean).join(" ") || email;
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-12">
+    <div className="mx-auto min-h-[90vh] w-full max-w-6xl px-4 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-12">
       <header className="mb-6 sm:mb-8">
         <h1 className={title}>My Account</h1>
         <p className="mt-1 break-words text-[15px] font-medium text-text">{name}</p>
@@ -129,7 +129,7 @@ export default async function AccountPage({
                   href={`/account?tab=${k}`}
                   aria-current={tab === k ? "page" : undefined}
                   className={`flex min-h-11 items-center whitespace-nowrap rounded-brand px-3.5 text-[15px] transition-colors ${
-                    tab === k ? "bg-soft-green font-medium text-primary-green" : "font-normal text-text hover:bg-soft-neutral"
+                    tab === k ? "bg-soft-green font-bold text-primary-green" : "font-semibold text-text hover:bg-soft-neutral"
                   }`}
                 >
                   {l}
@@ -138,7 +138,7 @@ export default async function AccountPage({
             ))}
             <li className="shrink-0">
               <form action="/account/logout" method="post">
-                <button type="submit" className="flex min-h-11 w-full items-center whitespace-nowrap rounded-brand px-3.5 text-[15px] font-normal text-brand-red hover:bg-soft-neutral cursor-pointer">
+                <button type="submit" className="flex min-h-11 w-full items-center whitespace-nowrap rounded-brand px-3.5 text-[15px] font-semibold text-brand-red hover:bg-soft-neutral cursor-pointer">
                   Sign Out
                 </button>
               </form>

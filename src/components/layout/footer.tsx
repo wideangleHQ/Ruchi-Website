@@ -22,7 +22,7 @@ const primaryFooterNav = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
   { label: "About Us", href: "/about" },
-  { label: "Blog", href: "/#recipes" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact Us", href: "/contact/queries" },
 ];
 

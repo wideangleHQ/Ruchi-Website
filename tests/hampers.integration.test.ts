@@ -1,9 +1,9 @@
-// Integration tests (hampers + product-card image boxes) against a running site (default http://localhost:3000, override with BASE_URL).
+// Integration tests (hampers + product-card image boxes) against a running site (default http://localhost:4500, override with BASE_URL).
 // Start the app first (`npm run dev` or `npm run start`); the suite skips itself when nothing is listening.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const BASE = process.env.BASE_URL ?? "http://localhost:4500";
 
 async function get(path: string): Promise<{ status: number; html: string } | null> {
   try {

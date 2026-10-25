@@ -30,8 +30,8 @@ export default async function BlogPage({ searchParams }: Props) {
 
   const [blogData, categories] = await Promise.all([
     category
-      ? getBlogArticles({ handle: category, first: 13, query: queryStr, reverse })
-      : getArticles({ first: 13, query: queryStr, reverse }),
+      ? getBlogArticles({ handle: category, first: 12, query: queryStr, reverse })
+      : getArticles({ first: 12, query: queryStr, reverse }),
     getBlogs(),
   ]);
 
@@ -71,8 +71,8 @@ function BlogSkeleton() {
           <div key={i} className="h-9 w-24 bg-soft-neutral rounded-full animate-pulse" />
         ))}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from({ length: 6 }).map((_, i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {Array.from({ length: 12 }).map((_, i) => (
           <div key={i} className="card-ruchi overflow-hidden">
             <div className="aspect-[16/10] bg-soft-neutral animate-pulse" />
             <div className="p-5 space-y-3">

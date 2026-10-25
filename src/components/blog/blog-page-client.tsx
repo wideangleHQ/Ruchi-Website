@@ -55,10 +55,6 @@ export function BlogPageClient({
 
   const allTags = Array.from(new Set(articles.flatMap((a) => a.tags))).sort();
 
-  const featured = articles.find(
-    (a) => a.tags.some((t) => t.toLowerCase() === "featured") || articles.indexOf(a) === 0
-  );
-  const regularArticles = articles.filter((a) => a !== featured);
 
   return (
     <div className="w-full">
@@ -184,16 +180,9 @@ export function BlogPageClient({
         </div>
       ) : (
         <>
-          {/* Featured Article */}
-          {featured && !currentSearch && !currentTag && (
-            <div className="mb-8">
-              <BlogCard article={featured} featured />
-            </div>
-          )}
-
-          {/* Article Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {(currentSearch || currentTag ? articles : regularArticles).map((article) => (
+          {/* Article matrix: equal-size cards in a strict grid (1 / 2 / 3 / 4 columns) */}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr">
+            {articles.map((article) => (
               <BlogCard key={article.id} article={article} />
             ))}
           </div>

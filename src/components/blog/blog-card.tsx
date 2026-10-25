@@ -62,7 +62,7 @@ export function BlogCard({ article, featured = false }: { article: BlogArticle; 
             src={article.image.url}
             alt={article.image.altText ?? article.title}
             fill
-            sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1280px) 320px, (min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
             className="object-cover transition-transform duration-600 group-hover:scale-[1.03]"
           />
         ) : (
@@ -75,13 +75,13 @@ export function BlogCard({ article, featured = false }: { article: BlogArticle; 
         <span className="text-primary-green text-[11px] font-semibold tracking-wider uppercase mb-1.5">
           {article.blog.title}
         </span>
-        <h3 className="font-serif text-lg sm:text-xl font-bold text-text leading-snug mb-2 line-clamp-2 group-hover:text-primary-green transition-colors">
+        <h3 className="font-serif text-lg font-bold text-text leading-snug mb-2 line-clamp-2 min-h-[3.25rem] group-hover:text-primary-green transition-colors">
           {article.title}
         </h3>
-        <p className="text-muted-text text-sm font-medium leading-relaxed mb-4 line-clamp-2 flex-1">
+        <p className="text-muted-text text-sm font-medium leading-relaxed mb-4 line-clamp-3 flex-1">
           {excerpt}
         </p>
-        <div className="flex items-center gap-2 text-[11px] sm:text-xs text-muted-text font-medium mt-auto">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] sm:text-xs text-muted-text font-medium mt-auto">
           <span className="font-semibold text-gray-800">{article.author.name}</span>
           <span className="w-1 h-1 rounded-full bg-border" />
           <span>{date}</span>

@@ -104,11 +104,11 @@ export const HERITAGE_CHAPTERS: HeritageChapter[] = [
 ];
 
 export const STOP_POINTS = [
-  { index: 0, year: "1976", label: "The Beginning", stop: "STOP 01", progress: 0.0 },
-  { index: 1, year: "1986–1996", label: "Recognition", stop: "STOP 02", progress: 0.25 },
-  { index: 2, year: "1997–2005", label: "Innovation", stop: "STOP 03", progress: 0.5 },
-  { index: 3, year: "2008–2019", label: "Expansion", stop: "STOP 04", progress: 0.75 },
-  { index: 4, year: "2021–2026", label: "Golden Jubilee", stop: "STOP 05", progress: 1.0 },
+  { index: 0, year: "1976", label: "The Beginning", stop: "01", progress: 0.0 },
+  { index: 1, year: "1986–1996", label: "Recognition", stop: "02", progress: 0.25 },
+  { index: 2, year: "1997–2005", label: "Innovation", stop: "03", progress: 0.5 },
+  { index: 3, year: "2008–2019", label: "Expansion", stop: "04", progress: 0.75 },
+  { index: 4, year: "2021–2026", label: "Golden Jubilee", stop: "05", progress: 1.0 },
 ];
 
 export function AboutHeritageJourney() {
@@ -387,7 +387,6 @@ export function AboutHeritageJourney() {
                   <span className="text-[11px] xl:text-xs font-bold uppercase tracking-[0.2em] text-[#0e6337]">
                     {chapter.chapterLabel}
                   </span>
-                  <span className="text-[11px] font-bold text-stone-400">· STOP 0{idx + 1}</span>
                 </div>
 
                 {/* Editorial Headline */}
@@ -444,9 +443,6 @@ export function AboutHeritageJourney() {
                   <span className="font-serif tracking-tight font-medium drop-shadow-sm">
                     {chapter.year} · Ruchi Foodline
                   </span>
-                  <span className="font-sans text-[11px] text-white/90 bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/20">
-                    Stop 0{idx + 1} of 05
-                  </span>
                 </div>
               </div>
             ))}
@@ -454,26 +450,22 @@ export function AboutHeritageJourney() {
         </div>
 
         {/* ===================================================================
-            BOTTOM: ON-SCROLL PROGRESS BAR WITH STOP POINTS (CARDLESS DESIGN)
+            BOTTOM: ON-SCROLL PROGRESS BAR (CARDLESS DESIGN)
             =================================================================== */}
         <div className="w-full pt-2 pb-1 border-t border-stone-200/80 shrink-0">
           {/* Status & Navigation Header */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500">
-                Interactive Journey Progression
-              </span>
-              <span className="text-stone-300">·</span>
               <span className="text-xs font-bold text-[#168a4a]">
-                Stop 0{activeChapterIndex + 1} of 05: {STOP_POINTS[activeChapterIndex].label}
+                {STOP_POINTS[activeChapterIndex].year} — {STOP_POINTS[activeChapterIndex].label}
               </span>
             </div>
             <span className="text-[11px] font-medium text-stone-400">
-              Scroll or click stop points to jump between milestones
+              Scroll or click milestones to explore
             </span>
           </div>
 
-          {/* Continuous On-Scroll Progress Bar with Integrated Stop Points */}
+          {/* Continuous On-Scroll Progress Bar with Integrated Milestone Points */}
           <div className="relative w-full px-6">
             {/* Base Continuous Track Line (Centered at 15px matching node center) */}
             <div className="absolute left-6 right-6 top-[15px] -translate-y-1/2 h-1.5 bg-stone-200/90 rounded-full overflow-hidden">
@@ -494,7 +486,7 @@ export function AboutHeritageJourney() {
               />
             </div>
 
-            {/* Interactive Stop Points Along the Progress Bar */}
+            {/* Interactive Milestone Points Along the Progress Bar */}
             <div className="relative z-20 flex justify-between w-full">
               {STOP_POINTS.map((sp, idx) => {
                 const isPassed = idx < activeChapterIndex;
@@ -502,13 +494,13 @@ export function AboutHeritageJourney() {
 
                 return (
                   <button
-                    key={sp.stop}
+                    key={sp.year}
                     type="button"
                     onClick={() => handleChapterClick(idx)}
                     className="group flex flex-col items-center focus:outline-hidden cursor-pointer"
-                    aria-label={`Jump to ${sp.stop}: ${sp.year} - ${sp.label}`}
+                    aria-label={`Jump to ${sp.year} - ${sp.label}`}
                   >
-                    {/* Stop Point Circular Node */}
+                    {/* Milestone Circular Node */}
                     <div
                       className={`w-[30px] h-[30px] rounded-full flex items-center justify-center transition-all duration-300 ${
                         isCurrent
@@ -535,19 +527,8 @@ export function AboutHeritageJourney() {
                       )}
                     </div>
 
-                    {/* Stop Point Label & Milestone Details (No Card Box) */}
+                    {/* Milestone Year & Label Details (No Card Box, No Stop labels) */}
                     <div className="mt-2 flex flex-col items-center text-center select-none">
-                      <span
-                        className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${
-                          isCurrent
-                            ? "text-[#168a4a]"
-                            : isPassed
-                            ? "text-stone-700"
-                            : "text-stone-400 group-hover:text-stone-600"
-                        }`}
-                      >
-                        {sp.stop}
-                      </span>
                       <span
                         className={`text-xs font-bold transition-colors ${
                           isCurrent
@@ -573,7 +554,7 @@ export function AboutHeritageJourney() {
 
       {/* =====================================================================
           MOBILE & TABLET EDITORIAL EXPERIENCE (below lg: 1024px)
-          NO CARDS · STICKY PROGRESS BAR · STOP POINTS
+          NO CARDS · STICKY PROGRESS BAR · MILESTONES
           ===================================================================== */}
       <div ref={mobileContainerRef} className="lg:hidden w-full bg-white">
         {/* Sticky Mobile On-Scroll Progress Bar */}
@@ -582,14 +563,14 @@ export function AboutHeritageJourney() {
             {/* Header Readout */}
             <div className="flex items-center justify-between text-xs mb-2">
               <span className="font-bold text-[#0e6337] uppercase tracking-wider text-[11px]">
-                {STOP_POINTS[activeChapterIndex].stop} · {STOP_POINTS[activeChapterIndex].year}
+                {STOP_POINTS[activeChapterIndex].year} · {STOP_POINTS[activeChapterIndex].label}
               </span>
               <span ref={mobilePercentRef} className="font-sans text-[11px] font-bold text-[#168a4a]">
                 0%
               </span>
             </div>
 
-            {/* Continuous Progress Bar with Stop Point Markers */}
+            {/* Continuous Progress Bar with Milestone Markers */}
             <div className="relative w-full py-1">
               {/* Background Track */}
               <div className="relative h-1.5 w-full bg-stone-200 rounded-full">
@@ -601,7 +582,7 @@ export function AboutHeritageJourney() {
                 />
               </div>
 
-              {/* Stop Point Taps */}
+              {/* Milestone Point Taps */}
               <div className="absolute top-1 left-0 right-0 -translate-y-1/2 flex justify-between pointer-events-none">
                 {STOP_POINTS.map((sp, idx) => {
                   const isPassed = idx < activeChapterIndex;
@@ -609,11 +590,11 @@ export function AboutHeritageJourney() {
 
                   return (
                     <button
-                      key={sp.stop}
+                      key={sp.year}
                       type="button"
                       onClick={() => handleChapterClick(idx)}
                       className="pointer-events-auto w-4 h-4 rounded-full flex items-center justify-center transition-all duration-200"
-                      aria-label={`Jump to ${sp.stop}: ${sp.year}`}
+                      aria-label={`Jump to ${sp.year} - ${sp.label}`}
                     >
                       <span
                         className={`w-3 h-3 rounded-full transition-all ${
@@ -666,7 +647,7 @@ export function AboutHeritageJourney() {
                   }}
                   className="relative pl-12 sm:pl-16 space-y-4"
                 >
-                  {/* Stop Point Marker Node on Vertical Spine */}
+                  {/* Marker Node on Vertical Spine */}
                   <div
                     className={`absolute top-0 left-8 sm:left-10 -translate-x-1/2 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
                       isCurrent
@@ -679,13 +660,13 @@ export function AboutHeritageJourney() {
                     <span className="text-[10px] font-bold">0{idx + 1}</span>
                   </div>
 
-                  {/* Stop Tag & Year (No Card Box) */}
+                  {/* Year & Milestone Tag (No "STOP 01" Tag) */}
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#0e6337] bg-[#eef6ec] px-2.5 py-0.5 rounded-full border border-[#168a4a]/20">
-                      STOP 0{idx + 1}
-                    </span>
                     <span className="font-sans text-2xl sm:text-3xl font-bold text-[#168a4a] leading-none">
                       {chapter.year}
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-stone-500">
+                      · {chapter.chapterLabel}
                     </span>
                   </div>
 

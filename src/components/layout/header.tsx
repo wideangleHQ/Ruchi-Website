@@ -14,7 +14,7 @@ const primaryNavLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
   { label: "About Us", href: "/about" },
-  { label: "Blog", href: "/#recipes" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const contactNav = {
@@ -198,7 +198,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
             {primaryNavLinks.map((link) => {
               const isActive = link.href.includes("?")
                 ? pathname === link.href.split("?")[0]
-                : (link.href === "/" ? pathname === "/" : pathname === link.href);
+                : (link.href === "/" ? pathname === "/" : pathname === link.href || pathname.startsWith(`${link.href}/`));
 
               return (
                 <Link
