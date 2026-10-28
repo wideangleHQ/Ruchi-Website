@@ -10,6 +10,7 @@ import { PromoAdsSection } from "@/components/home/promo-ads-section";
 import { TrustBanner } from "@/components/home/trust-banner";
 import { IndianMapSection } from "@/components/home/indian-map-section";
 import { TrustPillars } from "@/components/home/trust-pillars";
+import { CertificationsSection } from "@/components/home/certifications-section";
 import { FarmToKitchenSection } from "@/components/home/farm-to-kitchen-section";
 import { CustomerStories } from "@/components/home/customer-stories";
 import { RecipeShowcase } from "@/components/home/recipe-showcase";
@@ -63,6 +64,9 @@ export default async function HomePage() {
 
         {/* Quality That Meets Its Standards */}
         <TrustPillars />
+
+        {/* Certifications & Compliance — original PDFs with in-page viewer and download */}
+        <CertificationsSection />
 
         {/* 5. Farm to Kitchen — Cinematic Scroll Story */}
         <FarmToKitchenSection />
