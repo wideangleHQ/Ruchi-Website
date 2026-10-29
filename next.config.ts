@@ -17,6 +17,23 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: "/documents/Ruchi-Foodline-Product-Catalogue.pdf",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "application/pdf",
+          },
+          {
+            key: "Content-Disposition",
+            value: 'attachment; filename="Ruchi-Foodline-Product-Catalogue.pdf"',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

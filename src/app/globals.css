@@ -261,3 +261,19 @@ p {
   }
 }
 
+
+/* Tea page: scroll-driven fade-and-rise for [data-reveal] items inside [data-tea-reveal] sections.
+   Pure CSS, reversible, and content stays fully visible where scroll timelines are unsupported or motion is reduced. */
+@keyframes tea-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-tea-reveal] [data-reveal] {
+      animation: tea-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}

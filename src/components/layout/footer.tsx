@@ -18,12 +18,24 @@ interface FooterProps {
   collections?: Collection[];
 }
 
-const primaryFooterNav = [
+interface FooterNavItem {
+  label: string;
+  href: string;
+  download?: string;
+}
+
+const primaryFooterNav: FooterNavItem[] = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
+  { label: "Tea", href: "/tea" },
   { label: "About Us", href: "/about" },
   { label: "Blog", href: "/blog" },
   { label: "Contact Us", href: "/contact/queries" },
+  {
+    label: "Product Catalogue",
+    href: "/documents/Ruchi-Foodline-Product-Catalogue.pdf",
+    download: "Ruchi-Foodline-Product-Catalogue.pdf",
+  },
 ];
 
 const legalLinks = [
@@ -199,12 +211,23 @@ export function Footer({ collections = [] }: FooterProps) {
             <ul className="flex flex-wrap items-center justify-center md:justify-end gap-x-5 gap-y-2.5 sm:gap-6 lg:gap-8 text-xs sm:text-sm font-medium text-white/90">
               {primaryFooterNav.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="hover:text-emerald-300 transition-colors duration-200 py-1"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.download ? (
+                    <a
+                      href={link.href}
+                      download={link.download}
+                      className="hover:text-emerald-300 active:text-emerald-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e6337] rounded-xs transition-colors duration-200 py-1"
+                      aria-label="Download Ruchi Foodline Product Catalogue"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="hover:text-emerald-300 active:text-emerald-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e6337] rounded-xs transition-colors duration-200 py-1"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

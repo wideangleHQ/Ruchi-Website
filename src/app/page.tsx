@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getCollections } from "@/lib/shopify";
 import { getArticles, getBlogs } from "@/lib/shopify/blog";
 import { HeroSection } from "@/components/home/hero-section";
+import { DiwaliFireworks } from "@/components/home/diwali-fireworks";
 import { CategoryCardsSection } from "@/components/home/category-cards-section";
 import { BestSellersSection } from "@/components/home/best-sellers-section";
 import { BestSellersSkeleton } from "@/components/home/best-sellers-skeleton";
@@ -39,6 +40,9 @@ export default async function HomePage() {
           className="object-cover object-top opacity-20 w-full h-full"
         />
       </div>
+
+      {/* Diwali Celebration Fireworks Overlay (Full-screen, non-blocking, session-managed) */}
+      <DiwaliFireworks />
 
       {/* Home Page Sections Layer */}
       <div className="relative z-10 w-full">

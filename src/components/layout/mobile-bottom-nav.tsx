@@ -90,6 +90,9 @@ export function MobileBottomNav({ collections = [], cartQuantity = 0 }: MobileBo
   const isShopActive = pathname.startsWith("/products") && !isCategorySheetOpen;
   const whatsappUrl = "https://wa.me/919124754082?text=Hello%20Ruchi%20Foodline%21%20I%20would%20like%20to%20inquire%20about%20your%20products%20and%20offers.";
 
+  // The Tea page is a full-bleed brand experience without the bottom bar (the header menu covers navigation).
+  if (pathname === "/tea") return null;
+
   return (
     <>
       {/* Fixed Bottom Navigation Bar — Mobile Only */}

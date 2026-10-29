@@ -9,10 +9,12 @@ import { useCartDrawer } from "@/context/cart-context";
 import { AnnouncementBar } from "./announcement-bar";
 import { HeaderSearch } from "./header-search";
 import ruchiLogoBlack from "@/assets/Images/Ruchi Logo Balck.png";
+import ruchiTeaLogo from "@/assets/Images/Tea/Tea Logo.png";
 
 const primaryNavLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
+  { label: "Tea", href: "/tea" },
   { label: "About Us", href: "/about" },
   { label: "Blog", href: "/blog" },
 ];
@@ -83,11 +85,94 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
     };
   }, [isMobileMenuOpen]);
 
+  // The Tea page opens on a full-bleed landscape hero, so it gets a transparent three-part bar
+  // (logo | navigation | Shop) laid over the hero instead of the standard sticky header.
+  const isTeaPage = pathname === "/tea";
+
   return (
     <header
       id="site-header"
-      className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200/80 transition-all shadow-2xs"
+      className={
+        isTeaPage
+          ? "absolute inset-x-0 top-0 z-40 bg-transparent"
+          : "sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200/80 transition-all shadow-2xs"
+      }
     >
+      {isTeaPage ? (
+        <div className="mx-auto grid h-16 max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:h-18 sm:px-6 lg:h-20 lg:px-8">
+          {/* LEFT: RUCHI Tea logo — below lg the Ruchi Foodline logo joins it here, side by side */}
+          <div className="flex items-center gap-2.5 justify-self-start sm:gap-3">
+            <Link href="/tea" className="flex items-center py-1" aria-label="RUCHI Tea">
+              <div className="relative h-12 w-12 sm:h-14 sm:w-14 lg:h-[72px] lg:w-[72px]">
+                <Image
+                  src={ruchiTeaLogo}
+                  alt="RUCHI Tea Logo"
+                  fill
+                  sizes="(min-width: 1024px) 72px, (min-width: 640px) 56px, 48px"
+                  className="object-contain object-left"
+                  priority
+                />
+              </div>
+            </Link>
+            <Link href="/" className="flex items-center py-1 transition-opacity hover:opacity-85 lg:hidden" aria-label="Ruchi Foodline Home">
+              <div className="relative h-11 w-11 sm:h-13 sm:w-13">
+                <Image src={ruchiLogoBlack} alt="Ruchi Foodline Logo" fill sizes="(min-width: 640px) 52px, 44px" className="object-contain object-left" priority />
+              </div>
+            </Link>
+          </div>
+
+          <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex xl:gap-9">
+            {[
+              // "Shop" lives in the button on the right, so it is not repeated in the centre.
+              ...primaryNavLinks.filter((link) => link.href !== "/products"),
+              { label: contactNav.label, href: contactNav.children[0].href },
+            ].map((link) => {
+              const isCurrent = link.href === "/tea" ? pathname === "/tea" : pathname === link.href;
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={`relative py-1 text-sm font-semibold transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#0e6337] after:transition-all after:content-[''] hover:text-[#0e6337] hover:after:w-full focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0e6337] ${
+                    isCurrent ? "text-[#0e6337] after:w-full" : "text-[#10331f] after:w-0"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* RIGHT: Ruchi Logo (desktop only — it sits on the left on smaller screens) & Mobile Menu Toggle */}
+          <div className="col-start-3 flex items-center gap-2 sm:gap-3 justify-self-end">
+            <Link
+              href="/"
+              className="hidden items-center py-1 transition-opacity hover:opacity-85 lg:flex"
+              aria-label="Ruchi Foodline Home"
+            >
+              <div className="relative h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16">
+                <Image
+                  src={ruchiLogoBlack}
+                  alt="Ruchi Foodline Logo"
+                  fill
+                  sizes="(min-width: 1024px) 64px, (min-width: 640px) 56px, 48px"
+                  className="object-contain object-right"
+                  priority
+                />
+              </div>
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="flex cursor-pointer rounded-[6px] p-2 text-[#10331f] transition-colors hover:bg-white/40 lg:hidden"
+              aria-label="Open menu"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
+        </div>
+      ) : (
+      <>
       <AnnouncementBar />
 
       {/* TOP ROW: Logo (Far Left) | Desktop Search (Center) | Desktop Utils / Mobile Hamburger (Far Right) */}
@@ -273,6 +358,9 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
         </div>
       </div>
 
+      </>
+      )}
+
       {/* Mobile Full-Screen Navigation Overlay */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] lg:hidden w-screen h-[100dvh] bg-white flex flex-col justify-between overflow-y-auto animate-fade-in pt-[env(safe-area-inset-top,0px)] pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
@@ -280,15 +368,15 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
             {/* Overlay Header: Logo on Far Left, Close ✕ on Far Right matching global header padding */}
             <div className="mx-auto max-w-[1400px] px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between border-b border-gray-200/80 sticky top-0 bg-white z-10">
               <Link
-                href="/"
+                href={isTeaPage ? "/tea" : "/"}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center group py-1 flex-shrink-0"
-                aria-label="Ruchi Foodline Home"
+                aria-label={isTeaPage ? "RUCHI Tea" : "Ruchi Foodline Home"}
               >
                 <div className="relative w-20 xs:w-24 sm:w-26 h-12 xs:h-13 sm:h-14 flex items-center justify-start">
                   <Image
-                    src={ruchiLogoBlack}
-                    alt="Ruchi Foodline Logo"
+                    src={isTeaPage ? ruchiTeaLogo : ruchiLogoBlack}
+                    alt={isTeaPage ? "RUCHI Tea Logo" : "Ruchi Foodline Logo"}
                     fill
                     className="object-contain object-left"
                     priority

@@ -31,6 +31,14 @@ const CERTIFICATES: Certificate[] = [
     previewAlt: "ISO 22000:2018 food safety management system certificate",
   },
   {
+    id: "halal",
+    title: "Halal Certificate",
+    file: "/documents/certifications/halal-certificate.pdf",
+    preview: "/documents/certifications/previews/halal-certificate.jpg",
+    downloadName: "RUCHI-Halal-Certificate.pdf",
+    previewAlt: "Halal product certificate issued by HCS India for Om Oil & Flour Mills Limited",
+  },
+  {
     id: "ayush-gmp",
     title: "AYUSH GMP Certificate",
     file: "/documents/certifications/ayush-gmp-certificate.pdf",
@@ -150,7 +158,7 @@ export function CertificationsSection() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
           {CERTIFICATES.map((cert, i) => (
             <CertificationCard
               key={cert.id}
