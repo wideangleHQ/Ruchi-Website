@@ -16,6 +16,7 @@ const primaryNavLinks = [
   { label: "Shop", href: "/products" },
   { label: "Tea", href: "/tea" },
   { label: "About Us", href: "/about" },
+  { label: "Global Business", href: "/global-business" },
   { label: "Blog", href: "/blog" },
 ];
 

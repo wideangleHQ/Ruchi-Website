@@ -17,7 +17,7 @@ if (typeof window !== "undefined") {
 // Editable copy — the layout does not depend on line lengths.
 const COPY = {
   eyebrow: "RUCHI Tea",
-  headline: "Some moments are meant to be brewed slowly.",
+  headline: "Conversations Begin With a Great Cup of Tea",
   support: "Discover the tea that brings everyday moments closer.",
 };
 

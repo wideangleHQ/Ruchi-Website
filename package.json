@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "node --test \"src/**/*.test.ts\" \"tests/**/*.integration.test.ts\"",
-    "test:auth": "npm run build && node --test tests/auth.e2e.test.ts"
+    "test:auth": "npm run build && node --test tests/auth.e2e.test.ts",
+    "test:tea": "npm run build && node --test tests/tea.e2e.test.ts"
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.20.0",

@@ -75,6 +75,7 @@ export function TeaCards({ cards }: { cards: Card[] }) {
       {cards.map(({ product, tint, image }, i) => {
         const variants = product.variants.edges.map((e) => e.node);
         const specs = getKeySpecs(product, variants[0] ?? null);
+        const packSizes = variants.map((v) => v.title).filter((t) => t && t.toLowerCase() !== "default title");
         const img = product.featuredImage;
         return (
           <li key={product.id} className={i === 2 ? "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-0.75rem)] lg:col-span-1 lg:mx-0 lg:w-auto" : ""}>
@@ -109,6 +110,7 @@ export function TeaCards({ cards }: { cards: Card[] }) {
                 {/* Revealed content: fade + rise only; transform/opacity never change the layout */}
                 <div className="mt-3 translate-y-3 opacity-0 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
                   {specs.length > 0 && <p className="font-sans text-sm leading-relaxed text-white/90 sm:text-[15px]">{specs.slice(0, 2).join(" · ")}</p>}
+                  {packSizes.length > 0 && <p className="mt-1.5 font-sans text-sm leading-relaxed text-white/90 sm:text-[15px]">Pack sizes: {packSizes.join(" · ")}</p>}
                   <div className="mt-4 flex items-center justify-between gap-3">
                     <p className="font-sans text-base font-semibold text-white">{priceLabel(product)}</p>
                     <Link
@@ -153,12 +155,18 @@ export async function TeaRange() {
           <>
             <TeaCards cards={cards} />
 
-            <div className="mt-10 text-center">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-center">
               <Link
                 href={categoryHref(TEA_COLLECTION)}
                 className="inline-flex items-center gap-2 font-sans text-sm font-semibold text-[#0e6337] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#168a4a]"
               >
                 View all tea in the shop <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/contact/bulk-order"
+                className="inline-flex items-center gap-2 font-sans text-sm font-semibold text-[#0e6337] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#168a4a]"
+              >
+                Enquire for Bulk Supply <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
           </>

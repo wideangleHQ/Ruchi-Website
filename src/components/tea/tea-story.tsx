@@ -12,26 +12,28 @@ import { FloatingLeaves, type FloatingLeaf } from "./tea-leaves";
 // Continues the Hero's closing beige so the hand-off reads as one surface.
 export const TEA_BEIGE = "#F3EBDD";
 
-/** Section A — emotional brand statement, directly after the Hero. */
+/**
+ * Section A — brand story, directly after the Hero. Wording is the client-supplied "Crafted for True Tea Lovers"
+ * heading and paragraph (Website Design Brief, Tea page, section 2), verbatim.
+ */
 export function TeaStatement() {
   return (
     <section data-tea-reveal aria-labelledby="tea-statement-heading" className="px-4 py-16 sm:px-6 sm:py-24 lg:py-28" style={{ backgroundColor: TEA_BEIGE }}>
-      <div className="mx-auto max-w-3xl text-center">
+      <div className="mx-auto max-w-[800px] text-center">
         <p data-reveal="0" className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-[#168a4a]">
           Karlo Dosti Sehat Se
         </p>
         <h2
           id="tea-statement-heading"
           data-reveal="1"
-          className="mt-5 font-serif text-[clamp(2rem,5vw,3.75rem)] font-bold leading-[1.1] tracking-tight text-[#1A1A1A]"
+          className="mt-5 font-serif text-[clamp(2rem,5vw,3.75rem)] font-bold leading-[1.1] tracking-tight text-[#10331f]"
         >
-          Every cup has a story.
-          <br />
-          <span className="text-[#0e6337]">Every sip brings us closer.</span>
+          Crafted for True Tea Lovers
         </h2>
-        <p data-reveal="2" className="mx-auto mt-6 max-w-xl font-sans text-base leading-relaxed text-[#1A1A1A]/75 sm:text-lg">
-          Since 1976, RUCHI has been part of everyday kitchens. Our tea is made for the moments in between — the first
-          cup, the shared break, the cup you pour for a guest.
+        <p data-reveal="2" className="mx-auto mt-6 font-sans text-base leading-[1.6] text-[#1A1A1A]/80 sm:text-lg">
+          Tea is more than a beverage in India; it is a daily ritual, a pause between busy moments, and a feeling shared across
+          conversations, homes, and generations. At Ruchi Foodline, we bring that experience to life through carefully selected tea
+          leaves, trusted sourcing, hygienic processing, and blends designed for flavour consistency in every cup.
         </p>
       </div>
     </section>
