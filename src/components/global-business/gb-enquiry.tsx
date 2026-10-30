@@ -165,7 +165,7 @@ export function GlobalBusinessEnquiry({ categories }: { categories: string[] }) 
                 <input id={id("company")} autoComplete="organization" value={values.companyName} onChange={set("companyName")} aria-invalid={!!errors.companyName} aria-describedby={errors.companyName ? `${id("company")}-err` : undefined} className={`${input} ${fieldBorder(errors.companyName)}`} />
               </Field>
               <Field id={id("country")} label="Country" error={errors.country}>
-                <select id={id("country")} autoComplete="country-name" value={values.country} onChange={set("country")} aria-invalid={!!errors.country} aria-describedby={errors.country ? `${id("country")}-err` : undefined} className={`${input} ${fieldBorder(errors.country)} appearance-none font-medium ${values.country ? "" : "text-[#1f1a17]/55"}`}>
+                <select id={id("country")} autoComplete="country-name" value={values.country} onChange={set("country")} aria-invalid={!!errors.country} aria-describedby={errors.country ? `${id("country")}-err` : undefined} className={`${input} ${fieldBorder(errors.country)} appearance-none font-semibold [&_option]:font-semibold [&_option]:text-[#1f1a17] ${values.country ? "" : "text-[#1f1a17]/70"}`}>
                   <option value="">Select your country</option>
                   {COUNTRIES.map((c) => (
                     <option key={c} value={c}>
