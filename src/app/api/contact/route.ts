@@ -40,17 +40,15 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const {
-      formType,
-      fullName,
-      email,
-      phone,
-      message,
-      companyName,
-      quantity,
-      location,
-      businessType,
-    } = body;
+    const formType = body.formType || body.form_type;
+    const fullName = body.fullName || body.full_name;
+    const email = body.email;
+    const phone = body.phone;
+    const message = body.message;
+    const companyName = body.companyName || body.company_name;
+    const quantity = body.quantity !== undefined && body.quantity !== null ? String(body.quantity) : undefined;
+    const location = body.location;
+    const businessType = body.businessType || body.business_type || body.buisness_type;
 
     if (!VALID_FORM_TYPES.includes(formType)) {
       return NextResponse.json({ error: "Invalid form type" }, { status: 400 });

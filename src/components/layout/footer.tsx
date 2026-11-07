@@ -53,9 +53,10 @@ export function Footer({ collections = [] }: FooterProps) {
   const pathname = usePathname();
   const socialLinks = getSocialLinksForPath(pathname);
   const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [newsletterError, setNewsletterError] = useState<string | null>(null);
-
+  const [newsletterMessage, setNewsletterMessage] = useState("");
+  const [statusType, setStatusType] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
@@ -63,32 +64,45 @@ export function Footer({ collections = [] }: FooterProps) {
     if (isSubmitting) return;
     const trimmed = email.trim();
     if (!trimmed) {
-      setNewsletterError("Please enter your email address.");
+      setStatusType("error");
+      setNewsletterMessage("Please enter your email address.");
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(trimmed)) {
-      setNewsletterError("Please enter a valid email address.");
+      setStatusType("error");
+      setNewsletterMessage("Please enter a valid email address.");
+      return;
+    }
+    if (!consent) {
+      setStatusType("error");
+      setNewsletterMessage("Please agree to receive email news and offers.");
       return;
     }
 
-    setNewsletterError(null);
+    setStatusType("loading");
+    setNewsletterMessage("Submitting…");
     setIsSubmitting(true);
     try {
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed }),
+        body: JSON.stringify({
+          email: trimmed,
+          consent: true,
+        }),
       });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        setNewsletterError(data.error || "Could not subscribe. Please try again.");
-        return;
+        throw new Error("Submission failed");
       }
+      setStatusType("success");
+      setNewsletterMessage("Thank you. Your request was received.");
       setIsSubscribed(true);
       setEmail("");
+      setConsent(false);
     } catch {
-      setNewsletterError("Could not reach the server. Please try again.");
+      setStatusType("error");
+      setNewsletterMessage("We couldn't submit your request. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -122,42 +136,86 @@ export function Footer({ collections = [] }: FooterProps) {
           {/* Compact Newsletter Input Form */}
           <div className="w-full max-w-md sm:max-w-lg mt-5 sm:mt-6">
             {isSubscribed ? (
-              <div className="bg-white/10 backdrop-blur-md rounded-full px-5 py-3 border border-emerald-400/40 flex items-center justify-center gap-2 text-white animate-fade-in shadow-xs">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="text-xs sm:text-sm font-medium">
-                  Thank you for subscribing to Ruchi Foodline!
-                </span>
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-4 border border-emerald-400/40 flex flex-col items-center justify-center gap-1 text-white animate-fade-in shadow-xs text-center">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                  <span className="text-xs sm:text-sm font-semibold text-emerald-200">
+                    Thank you. Your request was received.
+                  </span>
+                </div>
+                <p id="newsletter-message" role="status" className="text-[11px] sm:text-xs text-white/80">
+                  You are now subscribed to Ruchi Foodline news and exclusive offers.
+                </p>
               </div>
             ) : (
-              <form onSubmit={handleNewsletterSubmit} noValidate className="relative flex flex-col items-center">
+              <form
+                id="newsletter-form"
+                onSubmit={handleNewsletterSubmit}
+                className="relative flex flex-col items-center w-full"
+              >
+                <label htmlFor="newsletter-email" className="sr-only">
+                  Email address
+                </label>
+
                 <div className="relative w-full flex items-center bg-white rounded-full p-1.5 shadow-md focus-within:ring-2 focus-within:ring-emerald-400">
                   <input
+                    id="newsletter-email"
                     type="email"
                     name="email"
+                    autoComplete="email"
                     required
-                    aria-label="Email address for newsletter"
+                    aria-label="Email address"
                     placeholder="Enter your email address"
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
-                      if (newsletterError) setNewsletterError(null);
+                      if (newsletterMessage) setNewsletterMessage("");
                     }}
-                    className="w-full pl-4 sm:pl-5 pr-12 sm:pr-14 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-900 placeholder:text-gray-400 rounded-full focus:outline-none bg-transparent font-medium"
+                    className="w-full pl-4 sm:pl-5 pr-28 sm:pr-32 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-900 placeholder:text-gray-400 rounded-full focus:outline-none bg-transparent font-medium"
                   />
                   <button
                     type="submit"
-                    aria-label="Subscribe to newsletter"
-                    className="absolute right-1.5 w-8.5 h-8.5 sm:w-9.5 sm:h-9.5 rounded-full bg-[#168a4a] hover:bg-[#0e6337] text-white flex items-center justify-center transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
+                    disabled={isSubmitting}
+                    className="absolute right-1.5 px-3.5 sm:px-4 py-2 sm:py-2 rounded-full bg-[#168a4a] hover:bg-[#0e6337] disabled:opacity-60 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
                   >
-                    <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                    <span>{isSubmitting ? "Submitting…" : "Subscribe"}</span>
+                    <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </button>
                 </div>
 
-                {newsletterError && (
-                  <p className="mt-1.5 text-xs font-medium text-rose-300 bg-black/40 px-3 py-0.5 rounded-full" role="alert">
-                    {newsletterError}
-                  </p>
-                )}
+                {/* Consent Checkbox */}
+                <label className="flex items-center gap-2 text-xs sm:text-[12.5px] text-white/90 cursor-pointer mt-3 select-none hover:text-white transition-colors">
+                  <input
+                    name="consent"
+                    type="checkbox"
+                    required
+                    checked={consent}
+                    onChange={(e) => {
+                      setConsent(e.target.checked);
+                      if (newsletterMessage) setNewsletterMessage("");
+                    }}
+                    className="w-4 h-4 rounded border-white/30 text-[#168a4a] focus:ring-emerald-400 cursor-pointer accent-[#168a4a]"
+                  />
+                  <span>I agree to receive email news and offers.</span>
+                </label>
+
+                {/* Status message */}
+                <p
+                  id="newsletter-message"
+                  role="status"
+                  aria-live="polite"
+                  className={`mt-2 text-xs font-medium px-3.5 py-1 rounded-full transition-all ${
+                    !newsletterMessage
+                      ? "hidden"
+                      : statusType === "loading"
+                      ? "text-emerald-100 bg-black/40"
+                      : statusType === "success"
+                      ? "text-emerald-300 bg-black/50"
+                      : "text-rose-300 bg-black/50"
+                  }`}
+                >
+                  {newsletterMessage}
+                </p>
               </form>
             )}
           </div>

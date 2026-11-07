@@ -21,18 +21,55 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
   if (!checkRateLimit(ip)) {
-    return NextResponse.json({ error: "Too many attempts. Please try again later." }, { status: 429 });
+    return NextResponse.json(
+      { error: "Too many attempts. Please try again later." },
+      { status: 429 }
+    );
   }
 
   try {
-    const { email } = await request.json();
-    if (typeof email !== "string" || !email.trim() || email.length > 200 || !EMAIL_REGEX.test(email.trim())) {
-      return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
+    const body = await request.json().catch(() => ({}));
+    const email = body.email;
+    const consent = body.consent;
+
+    if (
+      typeof email !== "string" ||
+      !email.trim() ||
+      email.length > 200 ||
+      !EMAIL_REGEX.test(email.trim())
+    ) {
+      return NextResponse.json(
+        { error: "Please enter a valid email address." },
+        { status: 400 }
+      );
     }
-    await createNewsletterSubscriber(email, "footer");
-    return NextResponse.json({ message: "Subscribed" });
+
+    // Consent validation: must be accepted
+    if (consent === false) {
+      return NextResponse.json(
+        { error: "Please agree to receive email news and offers." },
+        { status: 400 }
+      );
+    }
+
+    await createNewsletterSubscriber(
+      email.trim(),
+      "footer",
+      consent !== undefined ? Boolean(consent) : true
+    );
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Thank you. Your request was received.",
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("[api/newsletter] POST failed:", error);
-    return NextResponse.json({ error: "Could not subscribe. Please try again." }, { status: 500 });
+    return NextResponse.json(
+      { error: "We couldn't submit your request. Please try again." },
+      { status: 500 }
+    );
   }
 }

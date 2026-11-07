@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { ContactForm } from "@/components/contact/contact-form";
+import { PartnerForm } from "@/components/contact/partner-form";
 
 export const metadata: Metadata = {
   title: "Partner With Us",
@@ -30,7 +30,7 @@ export default function PartnerPage() {
           </p>
         </div>
 
-        <ContactForm formType="partner" />
+        <PartnerForm />
       </div>
     </div>
   );

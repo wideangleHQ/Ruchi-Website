@@ -61,9 +61,50 @@ export async function createContactSubmission(input: ContactSubmissionInput): Pr
 }
 
 /** Stores a newsletter signup; one entry per email (re-subscribing updates the same entry). */
-export async function createNewsletterSubscriber(email: string, source = "footer"): Promise<void> {
+export async function createNewsletterSubscriber(
+  email: string,
+  source = "footer",
+  consent = true
+): Promise<void> {
   const normalized = email.trim().toLowerCase();
   const handle = `sub-${createHash("sha256").update(normalized).digest("hex").slice(0, 16)}`;
+
+  // Best-effort sync to Shopify Customer with Email Marketing Consent
+  try {
+    await shopifyAdminFetch<{
+      customerCreate?: {
+        customer?: { id: string } | null;
+        userErrors?: { field: string[]; message: string }[];
+      };
+    }>({
+      query: /* GraphQL */ `
+        mutation CreateSubscriberCustomer($input: CustomerInput!) {
+          customerCreate(input: $input) {
+            customer {
+              id
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `,
+      variables: {
+        input: {
+          email: normalized,
+          emailMarketingConsent: {
+            marketingState: consent ? "SUBSCRIBED" : "UNSUBSCRIBED",
+            marketingOptInLevel: "SINGLE_OPT_IN",
+            consentUpdatedAt: new Date().toISOString(),
+          },
+          tags: ["newsletter", "headless-subscriber", source],
+        },
+      },
+    }).catch(() => null);
+  } catch {
+    // Non-blocking: Customer may already exist or customerCreate permissions may differ
+  }
 
   const data = await shopifyAdminFetch<{
     metaobjectUpsert: { metaobject: { id: string } | null; userErrors: { message: string }[] };
@@ -82,7 +123,7 @@ export async function createNewsletterSubscriber(email: string, source = "footer
         fields: [
           { key: "email", value: normalized },
           { key: "source", value: source },
-          { key: "status", value: "subscribed" },
+          { key: "status", value: consent ? "subscribed" : "unsubscribed" },
           { key: "subscribed_at", value: new Date().toISOString() },
         ],
       },
