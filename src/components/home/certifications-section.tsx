@@ -60,7 +60,11 @@ function CertificationCard({ cert, index, onView }: { cert: Certificate; index: 
   return (
     <article
       data-reveal={index}
-      className="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-[#168a4a]/25 bg-white transition-[border-color,box-shadow] duration-200 hover:border-[#168a4a] hover:shadow-[0_6px_20px_rgba(14,99,55,0.10)]"
+      className={`group flex min-w-0 flex-col overflow-hidden rounded-xl border border-[#168a4a]/25 bg-white transition-[border-color,box-shadow] duration-200 hover:border-[#168a4a] hover:shadow-[0_6px_20px_rgba(14,99,55,0.10)] ${
+        index === 4
+          ? "col-span-2 sm:col-span-1 max-w-[calc(50%-0.375rem)] xs:max-w-[calc(50%-0.5rem)] sm:max-w-none justify-self-center w-full"
+          : ""
+      }`}
     >
       <div className="relative aspect-[16/10] overflow-hidden border-b border-[#168a4a]/15 bg-[#eef6ec]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -75,25 +79,29 @@ function CertificationCard({ cert, index, onView }: { cert: Certificate; index: 
         />
       </div>
 
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <h3 className="font-sans text-base font-bold leading-snug text-[#0e6337] sm:text-lg">{cert.title}</h3>
+      <div className="flex flex-1 flex-col p-3 xs:p-4 sm:p-5">
+        <h3 className="font-sans text-xs xs:text-sm sm:text-base font-bold leading-snug text-[#0e6337] sm:text-lg min-h-[2.25rem] xs:min-h-[2.5rem] sm:min-h-[2.75rem] flex items-center">
+          {cert.title}
+        </h3>
 
-        <div className="mt-auto flex flex-wrap gap-2 pt-4">
+        <div className="mt-auto flex flex-col xs:flex-row gap-1.5 xs:gap-2 pt-3 sm:pt-4">
           <button
             type="button"
             onClick={(e) => onView(cert, e.currentTarget)}
-            className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-md bg-[#168a4a] px-3 py-2 font-sans text-xs font-semibold text-white transition-colors hover:bg-[#0e6337] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-sm"
+            className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1 sm:gap-1.5 rounded-md bg-[#168a4a] px-2 py-1.5 xs:px-2.5 xs:py-2 font-sans text-[11px] xs:text-xs font-semibold text-white transition-colors hover:bg-[#0e6337] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-sm"
             aria-label={`View certificate: ${cert.title}`}
           >
-            <Eye className="h-4 w-4" aria-hidden="true" /> View
+            <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" aria-hidden="true" />
+            <span>View</span>
           </button>
           <a
             href={cert.file}
             download={cert.downloadName}
-            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-[#168a4a] px-3 py-2 font-sans text-xs font-semibold text-[#0e6337] transition-colors hover:bg-[#eef6ec] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-sm"
+            className="inline-flex flex-1 items-center justify-center gap-1 sm:gap-1.5 rounded-md border border-[#168a4a] px-2 py-1.5 xs:px-2.5 xs:py-2 font-sans text-[11px] xs:text-xs font-semibold text-[#0e6337] transition-colors hover:bg-[#eef6ec] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-sm"
             aria-label={`Download PDF: ${cert.title}`}
           >
-            <Download className="h-4 w-4" aria-hidden="true" /> Download
+            <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" aria-hidden="true" />
+            <span>Download</span>
           </a>
         </div>
       </div>
@@ -158,7 +166,7 @@ export function CertificationsSection() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 xs:gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
           {CERTIFICATES.map((cert, i) => (
             <CertificationCard
               key={cert.id}

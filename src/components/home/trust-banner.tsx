@@ -156,12 +156,12 @@ export function TrustBanner() {
     <section
       ref={sectionRef}
       id="trust-banner"
-      className="py-3 sm:py-6 lg:py-8 bg-transparent"
+      className="py-3 sm:py-5 lg:py-6 xl:py-7 bg-transparent"
       aria-label="Ruchi Foodline Trust & Legacy Statistics"
     >
       <div className="mx-auto max-w-[1400px] px-3 sm:px-6 lg:px-8">
         {/* Contained, unified editorial banner canvas */}
-        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-stone-200/80 bg-[#fbfaf7] shadow-2xs min-h-[105px] xs:min-h-[120px] sm:min-h-[200px] md:min-h-[260px] lg:min-h-[32vh] flex items-center justify-center">
+        <div className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl border border-stone-200/80 bg-[#fbfaf7] shadow-2xs min-h-[105px] xs:min-h-[120px] sm:min-h-[180px] md:min-h-[220px] lg:min-h-[240px] flex items-center justify-center">
           {/* Accessible Static Content for Screen Readers */}
           <div className="sr-only">
             <h2>Ruchi Foodline Trust Statistics</h2>
@@ -174,7 +174,7 @@ export function TrustBanner() {
 
           {/* Three-column statistics grid — strictly single row across all mobile & desktop viewports */}
           <div
-            className="w-full grid grid-cols-3 divide-x divide-stone-200/80 py-3 xs:py-4 sm:py-8 lg:py-11"
+            className="w-full grid grid-cols-3 divide-x divide-stone-200/80 py-3 xs:py-4 sm:py-6 lg:py-7 xl:py-8"
             role="list"
           >
             {STATISTICS.map((stat) => {

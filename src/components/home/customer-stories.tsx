@@ -146,13 +146,13 @@ export function CustomerStories() {
 
   return (
     <section
-      className="h-[70vh] min-h-[540px] flex flex-col justify-center py-6 sm:py-8 lg:py-10 bg-transparent overflow-hidden"
+      className="py-6 sm:py-8 lg:py-10 xl:py-12 flex flex-col justify-center bg-transparent overflow-hidden lg:min-h-[380px] lg:max-h-[520px]"
       aria-label="Customer Reviews"
     >
       <div className="w-full mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         
-        {/* Header Block: Centered Editorial Heading & Rating (Scaled for 70vh) */}
-        <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-6 sm:mb-8 lg:mb-10">
+        {/* Header Block: Centered Editorial Heading & Rating */}
+        <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-4 sm:mb-6 lg:mb-7">
           <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-[#168a4a] mb-1.5">
             Real Stories, Real Trust
           </span>

@@ -18,7 +18,7 @@ export const TEA_BEIGE = "#F3EBDD";
  */
 export function TeaStatement() {
   return (
-    <section data-tea-reveal aria-labelledby="tea-statement-heading" className="px-4 py-16 sm:px-6 sm:py-24 lg:py-28" style={{ backgroundColor: TEA_BEIGE }}>
+    <section data-tea-reveal aria-labelledby="tea-statement-heading" className="px-4 py-10 sm:px-6 sm:py-14 lg:py-14 xl:py-18" style={{ backgroundColor: TEA_BEIGE }}>
       <div className="mx-auto max-w-[800px] text-center">
         <p data-reveal="0" className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-[#168a4a]">
           Karlo Dosti Sehat Se
@@ -80,7 +80,7 @@ export function TeaRitual() {
     <section
       data-tea-reveal
       aria-labelledby="tea-ritual-heading"
-      className="relative flex min-h-[90vh] flex-col justify-center overflow-hidden px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-14"
+      className="relative flex min-h-[min(650px,85vh)] flex-col justify-center overflow-hidden px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-12 xl:py-14"
       style={{ backgroundColor: TEA_BEIGE }}
     >
       <FloatingLeaves leaves={RITUAL_LEAVES} />

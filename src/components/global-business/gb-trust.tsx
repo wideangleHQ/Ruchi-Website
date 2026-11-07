@@ -14,7 +14,7 @@ export function GlobalBusinessTrust() {
     <section
       data-tea-reveal
       aria-labelledby="gb-trust-heading"
-      className="flex items-center overflow-x-clip bg-white px-4 py-14 sm:px-6 sm:py-16 lg:min-h-[85vh] lg:px-8 lg:py-6"
+      className="flex items-center overflow-x-clip bg-white px-4 py-12 sm:px-6 sm:py-14 lg:min-h-[min(650px,80vh)] lg:px-8 lg:py-6"
     >
       <div className="mx-auto grid w-full max-w-[1400px] items-center gap-10 md:gap-12 lg:grid-cols-[48fr_52fr] lg:gap-12 xl:gap-16">
         <div>

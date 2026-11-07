@@ -7,7 +7,7 @@ export async function BestSellersSection() {
   if (products.length === 0) return null;
 
   return (
-    <section className="pt-1.5 sm:pt-3 lg:pt-0 pb-4 sm:pb-6 lg:pb-0 lg:h-[100svh] lg:min-h-[560px] lg:flex lg:flex-col lg:justify-center overflow-hidden bg-transparent" aria-label="Best sellers">
+    <section className="pt-2 sm:pt-4 lg:pt-6 xl:pt-8 pb-4 sm:pb-6 lg:pb-8 xl:pb-10 overflow-hidden bg-transparent" aria-label="Best sellers">
       <div className="w-full mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <BestSellersSlider products={products} />
       </div>

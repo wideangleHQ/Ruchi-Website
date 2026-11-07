@@ -59,7 +59,7 @@ export function GlobalBusinessCapabilities({ categories }: { categories: string[
   ];
 
   return (
-    <section data-tea-reveal aria-labelledby="gb-cap-heading" className="flex items-center bg-white px-4 py-14 sm:px-6 sm:py-16 lg:min-h-[85vh] lg:px-8 lg:py-8">
+    <section data-tea-reveal aria-labelledby="gb-cap-heading" className="flex items-center bg-white px-4 py-12 sm:px-6 sm:py-14 lg:min-h-[min(650px,80vh)] lg:px-8 lg:py-8">
       <div className="mx-auto w-full max-w-[1400px]">
         <div className="mx-auto max-w-4xl text-center">
           <h2

@@ -78,6 +78,8 @@ export type CartLine = {
   quantity: number;
   cost: {
     totalAmount: Money;
+    /** Line amount before any discounts — what Shopify's minimum-order rules are measured against. */
+    subtotalAmount: Money;
   };
   merchandise: {
     id: string;
@@ -87,6 +89,7 @@ export type CartLine = {
       id: string;
       handle: string;
       title: string;
+      productType?: string;
       featuredImage: Image | null;
     };
   };

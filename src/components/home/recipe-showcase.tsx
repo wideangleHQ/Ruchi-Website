@@ -72,7 +72,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
   return (
     <section
       id="recipes"
-      className="relative w-full min-h-[100svh] bg-[#0e6337] text-white flex flex-col justify-center py-14 sm:py-16 lg:py-20 overflow-hidden"
+      className="relative w-full bg-[#0e6337] text-white flex flex-col justify-center py-10 sm:py-12 lg:py-14 xl:py-16 overflow-hidden"
       aria-label="Stories, Flavours & Insights"
     >
       <Image
@@ -84,7 +84,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
       <div className="relative z-10 w-full flex flex-col">
 
         {/* Top Section Heading & Controls */}
-        <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-8 lg:mb-10">
+        <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-4 sm:mb-6 lg:mb-7">
           <div className="max-w-2xl text-left">
             <h2 className="font-serif text-2xl xs:text-3xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-white tracking-tight leading-tight">
               Stories, Flavours &amp; Insights
@@ -136,7 +136,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
         </div>
 
         {/* Category Tabs Switcher (Single row horizontal swipe on mobile) */}
-        <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto mb-8 sm:mb-10 lg:mb-12">
+        <div className="w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto mb-5 sm:mb-6 lg:mb-7">
           <div
             className="flex items-center gap-4 sm:gap-7 border-b border-white/20 overflow-x-auto scrollbar-none pb-px select-none whitespace-nowrap"
             role="tablist"
@@ -180,7 +180,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
               <Link
                 key={post.id}
                 href={`/blog/${post.blog.handle}/${post.handle}`}
-                className="blog-card group relative block shrink-0 snap-start w-[82vw] xs:w-[78vw] sm:w-[320px] md:w-[340px] lg:w-[370px] xl:w-[400px] h-[420px] xs:h-[440px] sm:h-[460px] md:h-[500px] lg:h-[540px] rounded-[15px] overflow-hidden shadow-md transition-all duration-500 hover:-translate-y-1.5"
+                className="blog-card group relative block shrink-0 snap-start w-[82vw] xs:w-[78vw] sm:w-[300px] md:w-[320px] lg:w-[340px] xl:w-[380px] h-[380px] xs:h-[400px] sm:h-[420px] md:h-[440px] lg:h-[450px] xl:h-[490px] rounded-[15px] overflow-hidden shadow-md transition-all duration-500 hover:-translate-y-1.5"
               >
                 {post.image ? (
                   <Image

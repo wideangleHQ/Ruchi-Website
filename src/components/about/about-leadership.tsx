@@ -4,12 +4,12 @@ import founderImg from "@/assets/Images/Dr. Sarat Kumar Sahoo.png";
 
 export function AboutLeadership() {
   return (
-    <section className="relative py-10 sm:py-14 lg:py-16 bg-white" aria-labelledby="founder-heading">
+    <section className="relative py-8 sm:py-10 lg:py-11 xl:py-13 bg-white" aria-labelledby="founder-heading">
       {/* Founder — portrait left, philosophy right */}
-      <div className="mx-auto flex w-full max-w-[1400px] items-center px-4 sm:px-6 lg:px-8 mb-10 sm:mb-14 lg:mb-16">
+      <div className="mx-auto flex w-full max-w-[1400px] items-center px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10 lg:mb-12">
         <div className="grid w-full items-center gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-[clamp(2rem,4vw,5rem)]">
           {/* Portrait */}
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-lg lg:h-[min(80svh,52rem)] lg:max-w-none lg:aspect-auto">
+          <div className="relative mx-auto aspect-[4/5] w-full max-w-lg lg:h-[min(65svh,42rem)] lg:max-w-none lg:aspect-auto">
             <Image
               src={founderImg}
               alt="Late Dr. Sarat Kumar Sahoo — Founder, Ruchi Foodline (Om Oil & Flour Mills Ltd.)"

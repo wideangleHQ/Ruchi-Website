@@ -8,6 +8,8 @@ import { ShoppingBag, Menu, X, User, ArrowRight, Search, ChevronDown } from "luc
 import { useCartDrawer } from "@/context/cart-context";
 import { AnnouncementBar } from "./announcement-bar";
 import { HeaderSearch } from "./header-search";
+import { getSocialLinksForPath } from "@/config/social-links";
+import { SocialIcon } from "@/components/ui/social-icons";
 import ruchiLogoBlack from "@/assets/Images/Ruchi Logo Balck.png";
 import ruchiTeaLogo from "@/assets/Images/Tea/Tea Logo.png";
 
@@ -32,6 +34,7 @@ const contactNav = {
 
 export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?: number; isSignedIn?: boolean }) {
   const pathname = usePathname();
+  const socialLinks = getSocialLinksForPath(pathname);
   const { openCart } = useCartDrawer();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -476,11 +479,32 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
           </div>
 
           {/* Footer inside mobile menu with comfortable bottom padding */}
-          <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 pt-5 pb-8 border-t border-gray-200/80 bg-gray-50/70 text-xs text-gray-600 space-y-2 mt-4">
-            <p className="font-bold text-gray-900 text-xs">Ruchi Foodline Customer Service</p>
-            <div className="flex flex-col gap-1 text-[11px]">
-              <p>Email: <a href="mailto:info@ruchifoodline.com" className="text-[#168a4a] font-semibold">info@ruchifoodline.com</a></p>
-              <p>Toll-Free: <a href="tel:18003454439" className="text-[#168a4a] font-semibold">1800 345 4439</a></p>
+          <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 pt-5 pb-8 border-t border-gray-200/80 bg-gray-50/70 text-xs text-gray-600 space-y-3.5 mt-4">
+            <div>
+              <p className="font-bold text-gray-900 text-xs">Ruchi Foodline Customer Service</p>
+              <div className="flex flex-col gap-1 text-[11px] mt-1.5">
+                <p>Email: <a href="mailto:info@ruchifoodline.com" className="text-[#168a4a] font-semibold">info@ruchifoodline.com</a></p>
+                <p>Toll-Free: <a href="tel:18003454439" className="text-[#168a4a] font-semibold">1800 345 4439</a></p>
+              </div>
+            </div>
+
+            {/* Social media profiles */}
+            <div className="pt-2 border-t border-gray-200/70">
+              <p className="font-bold text-gray-900 text-xs mb-2">Connect With Us</p>
+              <div className="flex items-center gap-2.5" aria-label="Social media profiles">
+                {socialLinks.map((item) => (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.label}
+                    className="w-9 h-9 rounded-full bg-white hover:bg-[#168a4a] hover:text-white border border-gray-200 text-gray-700 transition-all duration-200 flex items-center justify-center shadow-2xs hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a]"
+                  >
+                    <SocialIcon platform={item.id} className="w-4 h-4" />
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </div>

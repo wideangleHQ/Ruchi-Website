@@ -29,11 +29,11 @@ export function AboutCSR() {
   ];
 
   return (
-    <section className="relative py-10 sm:py-14 lg:py-16 bg-[#faf9f6]" aria-label="Social Responsibility">
+    <section className="relative py-8 sm:py-10 lg:py-11 xl:py-13 bg-[#faf9f6]" aria-label="Social Responsibility">
       <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-2xl mb-6 sm:mb-8 lg:mb-10">
+        <div className="max-w-2xl mb-5 sm:mb-6 lg:mb-8">
           <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
             RUCHI Prativa Foundation (Est. 1997)
           </h2>

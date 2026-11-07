@@ -66,7 +66,7 @@ function Header() {
 
 // `relative isolate z-10` + an opaque background give the section its own stacking context, so anything decorative
 // from the Ritual section above (e.g. drifting leaves) can never sit over these interactive cards.
-const SECTION = "relative isolate z-10 px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28";
+const SECTION = "relative isolate z-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-14 xl:py-18";
 
 /** Presentational: takes already-picked products, so the layout can be exercised without live data. */
 export function TeaCards({ cards }: { cards: Card[] }) {

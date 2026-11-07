@@ -197,6 +197,9 @@ export const cartFragment = /* GraphQL */ `
             totalAmount {
               ...money
             }
+            subtotalAmount {
+              ...money
+            }
           }
           merchandise {
             ... on ProductVariant {
@@ -210,6 +213,7 @@ export const cartFragment = /* GraphQL */ `
                 id
                 handle
                 title
+                productType
                 featuredImage {
                   ...image
                 }

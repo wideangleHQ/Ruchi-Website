@@ -34,7 +34,7 @@ export function IndianMapSection() {
     <section
       ref={sectionRef}
       id="brand-heritage-map"
-      className="relative w-full overflow-hidden bg-transparent py-12 sm:py-16 lg:py-0 lg:h-[100svh] lg:min-h-[100svh] lg:max-h-[100svh] flex items-center justify-center"
+      className="relative w-full overflow-hidden bg-transparent py-10 sm:py-14 lg:py-14 xl:py-16 flex items-center justify-center"
       aria-label="About Ruchi Foodline - Indian Roots and Heritage"
     >
       <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">

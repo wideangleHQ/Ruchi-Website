@@ -26,7 +26,7 @@ export function GlobalBusinessHero() {
     <section
       ref={rootRef}
       aria-labelledby="gb-hero-heading"
-      className="relative isolate flex min-h-[90vh] min-h-[90svh] w-full items-center justify-center overflow-hidden px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
+      className="relative isolate flex min-h-[min(650px,85vh)] w-full items-center justify-center overflow-hidden px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20"
     >
       {/* Background Image: Global Buisness Hero */}
       <Image

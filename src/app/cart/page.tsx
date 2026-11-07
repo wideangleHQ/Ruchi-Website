@@ -6,6 +6,8 @@ import { getProducts } from "@/lib/shopify";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CartRecommendations } from "@/components/cart/cart-recommendations";
 import { CheckoutButton } from "@/components/cart/checkout-button";
+import { OffersTimeline } from "@/components/cart/offers-timeline";
+import { evaluateOffers, inr } from "@/utils/offers";
 import { formatMoney } from "@/utils/format";
 
 export const metadata: Metadata = {
@@ -18,6 +20,7 @@ export default async function CartPage() {
     getProducts({ first: 12 }),
   ]);
   const lines = cart?.lines.edges.map((edge) => edge.node) ?? [];
+  const offer = evaluateOffers(cart);
 
   return (
     <div className="bg-white py-12">
@@ -43,6 +46,9 @@ export default async function CartPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Items List */}
             <div className="lg:col-span-7">
+              <div className="mb-4">
+                <OffersTimeline cart={cart} />
+              </div>
               <div className="space-y-3">
                 {lines.map((line) => (
                   <CartLineItem key={line.id} line={line} />
@@ -65,6 +71,12 @@ export default async function CartPage() {
                   <span>Subtotal ({cart.totalQuantity} items)</span>
                   <span className="font-bold text-text">{formatMoney(cart.cost.subtotalAmount)}</span>
                 </div>
+                {offer.active && offer.saving > 0 && (
+                  <div className="flex justify-between font-semibold text-primary-green">
+                    <span>{offer.active.percent}% offer (applied at checkout)</span>
+                    <span>≈ −{inr(offer.saving)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Shipping & Taxes</span>
                   <span>Calculated at checkout</span>

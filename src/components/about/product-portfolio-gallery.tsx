@@ -205,13 +205,13 @@ export function ProductPortfolioGallery() {
   return (
     <section
       id="product-portfolio"
-      className="relative py-10 sm:py-14 lg:py-16 bg-white"
+      className="relative py-8 sm:py-10 lg:py-11 xl:py-13 bg-white"
       aria-labelledby="portfolio-heading"
     >
       <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
         
         {/* Section Heading & Introduction */}
-        <div className="max-w-3xl mb-6 sm:mb-8 lg:mb-10">
+        <div className="max-w-3xl mb-5 sm:mb-6 lg:mb-8">
           <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#0e6337] block mb-2">
             THE RUCHI COLLECTION
           </span>
@@ -231,7 +231,7 @@ export function ProductPortfolioGallery() {
             DESKTOP HORIZONTAL ACCORDION GALLERY (>= 1024px)
             =================================================================== */}
         <div
-          className="hidden lg:flex w-full h-[540px] xl:h-[580px] gap-2.5 rounded-2xl p-1 select-none"
+          className="hidden lg:flex w-full h-[460px] xl:h-[520px] 2xl:h-[560px] gap-2.5 rounded-2xl p-1 select-none"
           onMouseLeave={handleMouseLeaveGallery}
           role="tablist"
           aria-label="Ruchi Foodline Product Portfolio Categories"

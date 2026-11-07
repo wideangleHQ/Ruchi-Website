@@ -52,8 +52,8 @@ export function PromoAdsSection() {
   }, [isPaused, stripAds.length]);
 
   return (
-    <section className="py-5 sm:py-8 lg:py-10 bg-transparent" aria-label="Promotions and Strip Ads">
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 space-y-3.5 sm:space-y-6 lg:space-y-8">
+    <section className="py-4 sm:py-6 lg:py-7 xl:py-8 bg-transparent" aria-label="Promotions and Strip Ads">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 space-y-3.5 sm:space-y-4 lg:space-y-5 xl:space-y-6">
 
         {/* 1. Mobile: Horizontal Swipeable Slider with Original 2:1 Image Ratio & No White Borders */}
         <div className="flex md:hidden items-stretch gap-3 overflow-x-auto scrollbar-none scroll-smooth snap-x snap-mandatory py-0.5">

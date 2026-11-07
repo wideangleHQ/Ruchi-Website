@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarClock, FileCheck2, MapPin, PackageCheck, ShieldCheck, type LucideIcon } from "lucide-react";
+import { RUCHI_TEA_SOCIAL_URLS } from "@/config/social-links";
+import { InstagramSvg } from "@/components/ui/social-icons";
 import teaLeavesImg from "@/assets/Images/Categories/tea.png";
 import leaf1 from "@/assets/Images/Tea/leaf-1.png";
 import leaf2 from "@/assets/Images/Tea/leaf-2.png";
@@ -48,7 +50,7 @@ export function TeaCraft() {
     <section
       data-tea-reveal
       aria-labelledby="tea-craft-heading"
-      className="relative isolate overflow-hidden px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+      className="relative isolate overflow-hidden px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-14 xl:py-18"
       style={{ backgroundColor: TEA_BEIGE }}
     >
       <FloatingLeaves leaves={CRAFT_LEAVES} />
@@ -117,7 +119,7 @@ export function TeaCraft() {
 /** Section H — closing brand moment with a single CTA into the tea range. */
 export function TeaClosing() {
   return (
-    <section data-tea-reveal aria-labelledby="tea-closing-heading" className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24" style={{ backgroundColor: TEA_BEIGE }}>
+    <section data-tea-reveal aria-labelledby="tea-closing-heading" className="px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-14 xl:py-18" style={{ backgroundColor: TEA_BEIGE }}>
       <div className="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2 md:gap-14">
         <div className="text-center md:text-left">
           <h2
@@ -130,13 +132,24 @@ export function TeaClosing() {
           <p data-reveal="1" className="mx-auto mt-4 max-w-md font-sans text-base leading-relaxed text-[#1A1A1A]/75 md:mx-0">
             Your next cup of RUCHI tea is a few clicks away.
           </p>
-          <Link
-            data-reveal="2"
-            href="/products?category=tea"
-            className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#168a4a] px-7 font-sans text-sm font-semibold text-white transition-colors hover:bg-[#0e6337] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-base"
-          >
-            Shop RUCHI Tea <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
+          <div data-reveal="2" className="mt-8 flex flex-wrap items-center justify-center gap-3.5 md:justify-start">
+            <Link
+              href="/products?category=tea"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#168a4a] px-7 font-sans text-sm font-semibold text-white transition-colors hover:bg-[#0e6337] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-base"
+            >
+              Shop RUCHI Tea <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <a
+              href={RUCHI_TEA_SOCIAL_URLS.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow RUCHI Tea on Instagram"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-[#10331f]/20 bg-white/70 px-5 font-sans text-sm font-semibold text-[#10331f] transition-all hover:bg-white hover:text-[#0e6337] hover:border-[#0e6337]/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-base"
+            >
+              <InstagramSvg className="h-4 w-4" />
+              <span>Follow @ruchiteaofficial</span>
+            </a>
+          </div>
         </div>
         <div data-reveal="1" className="mx-auto w-full max-w-md">
           <Image

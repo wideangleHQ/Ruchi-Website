@@ -11,11 +11,11 @@ const CARD =
 export function AboutGlance() {
   return (
     <section
-      className="w-full bg-[#F8F5F0] py-10 sm:py-14 lg:py-16"
+      className="w-full bg-[#F8F5F0] py-8 sm:py-10 lg:py-11 xl:py-13"
       aria-labelledby="glance-heading"
     >
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-6 sm:mb-8 lg:mb-10 max-w-3xl text-center">
+        <div className="mx-auto mb-5 sm:mb-6 lg:mb-8 max-w-3xl text-center">
           <h2
             id="glance-heading"
             className="font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-bold leading-tight tracking-tight text-[#1A1A1A]"

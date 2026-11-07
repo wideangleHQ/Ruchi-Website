@@ -2,55 +2,38 @@
 
 import React, { useState, useRef } from "react";
 import Image, { type StaticImageData } from "next/image";
+import { RUCHI_SOCIAL_URLS } from "@/config/social-links";
+import { InstagramSvg } from "@/components/ui/social-icons";
 
 import socialImg1 from "@/assets/Images/Social Media/1.png";
 import socialImg2 from "@/assets/Images/Social Media/2.png";
 import socialImg3 from "@/assets/Images/Social Media/3.png";
 import socialImg4 from "@/assets/Images/Social Media/4.png";
 
-function InstagramIcon({ className = "w-4 h-4" }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-    </svg>
-  );
-}
-
 const SOCIAL_POSTS: { id: string; image: StaticImageData; alt: string; href: string }[] = [
   {
     id: "post-1",
     image: socialImg1,
     alt: "Ruchi Foodline social post 1",
-    href: "https://www.instagram.com/ruchifoodline",
+    href: RUCHI_SOCIAL_URLS.instagram,
   },
   {
     id: "post-2",
     image: socialImg2,
     alt: "Ruchi Foodline social post 2",
-    href: "https://www.instagram.com/ruchifoodline",
+    href: RUCHI_SOCIAL_URLS.instagram,
   },
   {
     id: "post-3",
     image: socialImg3,
     alt: "Ruchi Foodline social post 3",
-    href: "https://www.instagram.com/ruchifoodline",
+    href: RUCHI_SOCIAL_URLS.instagram,
   },
   {
     id: "post-4",
     image: socialImg4,
     alt: "Ruchi Foodline social post 4",
-    href: "https://www.instagram.com/ruchifoodline",
+    href: RUCHI_SOCIAL_URLS.instagram,
   },
 ];
 
@@ -75,11 +58,11 @@ export function SocialMediaSection() {
 
   return (
     <section
-      className="relative w-full min-h-[100svh] flex flex-col justify-center py-4 sm:py-6 lg:py-8 bg-transparent overflow-hidden"
+      className="relative w-full py-8 sm:py-10 lg:py-12 xl:py-14 bg-transparent overflow-hidden"
       aria-label="Follow the Ruchi journey on social media"
     >
       {/* Global Centered Container */}
-      <div className="relative z-10 w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto my-auto flex flex-col justify-center">
+      <div className="relative z-10 w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 mx-auto flex flex-col justify-center">
         
         {/* Header Block with Title, Subtitle, and Follow Button */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-4 mb-3 sm:mb-5 lg:mb-6">
@@ -95,12 +78,12 @@ export function SocialMediaSection() {
           {/* Follow Button (Desktop) */}
           <div className="hidden sm:block shrink-0 self-end">
             <a
-              href="https://www.instagram.com/ruchifoodline"
+              href={RUCHI_SOCIAL_URLS.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-95 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
             >
-              <InstagramIcon className="w-4 h-4" />
+              <InstagramSvg className="w-4 h-4" />
               <span>Follow on Instagram</span>
             </a>
           </div>
@@ -221,12 +204,12 @@ export function SocialMediaSection() {
           {/* Compact Mobile CTA Button */}
           <div className="mt-3 text-center">
             <a
-              href="https://www.instagram.com/ruchifoodline"
+              href={RUCHI_SOCIAL_URLS.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-linear-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white text-xs font-bold shadow-xs active:scale-95 transition-transform"
             >
-              <InstagramIcon className="w-3.5 h-3.5" />
+              <InstagramSvg className="w-3.5 h-3.5" />
               <span>View Instagram</span>
             </a>
           </div>

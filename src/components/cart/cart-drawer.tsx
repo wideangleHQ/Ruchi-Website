@@ -7,6 +7,8 @@ import { useCartDrawer } from "@/context/cart-context";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CheckoutButton } from "@/components/cart/checkout-button";
 import { CartRecommendations } from "@/components/cart/cart-recommendations";
+import { OffersTimeline } from "@/components/cart/offers-timeline";
+import { evaluateOffers, inr } from "@/utils/offers";
 import { formatMoney } from "@/utils/format";
 import type { Cart, Product } from "@/lib/shopify/types";
 
@@ -25,6 +27,7 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
   
   const isFreeDeliveryUnlocked = subtotal >= FREE_DELIVERY_THRESHOLD && subtotal > 0;
   const remainingForFreeDelivery = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
+  const offer = evaluateOffers(cart);
   const deliveryProgress = subtotal > 0 ? Math.min(100, (subtotal / FREE_DELIVERY_THRESHOLD) * 100) : 0;
 
   // ESC key handler is also wired here for fast accessibility
@@ -148,6 +151,9 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
             </div>
           ) : (
             <div className="space-y-2.5">
+              {/* Offers timeline */}
+              <OffersTimeline cart={cart} compact />
+
               {/* Cart Line Items */}
               <div className="space-y-2.5">
                 {lines.map((line) => (
@@ -177,6 +183,13 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
                 </span>
               </div>
               
+              {offer.active && offer.saving > 0 && (
+                <div className="flex justify-between items-center text-[11px] font-semibold text-[#168a4a]">
+                  <span>{offer.active.percent}% offer (applied at checkout)</span>
+                  <span>≈ −{inr(offer.saving)}</span>
+                </div>
+              )}
+
               <div className="flex justify-between items-center text-[11px] text-gray-500 font-medium">
                 <span>Delivery</span>
                 <span>

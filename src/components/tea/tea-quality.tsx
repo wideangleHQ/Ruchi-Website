@@ -33,7 +33,7 @@ export function TeaQuality() {
     <section
       data-tea-reveal
       aria-labelledby="tea-quality-heading"
-      className="relative isolate z-10 px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+      className="relative isolate z-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-14 xl:py-18"
       style={{ backgroundColor: TEA_BEIGE }}
     >
       <div className="mx-auto max-w-[1100px]">

@@ -109,7 +109,7 @@ export function GlobalBusinessEnquiry({ categories }: { categories: string[] }) 
     <section
       id="enquiry"
       aria-labelledby="gb-enquiry-heading"
-      className="scroll-mt-28 px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28"
+      className="scroll-mt-28 px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-16 xl:py-20"
       style={{ background: `linear-gradient(160deg, ${GB_COLORS.maroon} 0%, ${GB_COLORS.maroonDeep} 100%)` }}
     >
       <div className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">

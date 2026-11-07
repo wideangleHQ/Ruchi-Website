@@ -62,7 +62,7 @@ export function TrustPillars() {
   return (
     <section
       id="quality-standards"
-      className="min-h-[100svh] flex flex-col justify-center py-5 sm:py-7 lg:py-9 bg-transparent"
+      className="py-8 sm:py-10 lg:py-12 xl:py-14 bg-transparent"
       aria-label="Quality That Meets Its Standards"
     >
       <div className="w-full mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
@@ -96,7 +96,7 @@ export function TrustPillars() {
                 role="button"
                 aria-expanded={isActive}
                 aria-label={`${step.title} — ${step.description}`}
-                className="group relative w-full h-[270px] xs:h-[300px] sm:h-[380px] md:h-[440px] lg:h-[500px] rounded-xl sm:rounded-2xl overflow-hidden border border-gray-200/80 bg-stone-900 shadow-xs hover:shadow-xl transition-all duration-300 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#168a4a] select-none"
+                className="group relative w-full h-[270px] xs:h-[300px] sm:h-[360px] md:h-[400px] lg:h-[420px] xl:h-[460px] 2xl:h-[500px] rounded-xl sm:rounded-2xl overflow-hidden border border-gray-200/80 bg-stone-900 shadow-xs hover:shadow-xl transition-all duration-300 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#168a4a] select-none"
               >
                 {/* Background Image Canvas */}
                 <Image
