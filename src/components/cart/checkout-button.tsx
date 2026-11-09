@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useFormStatus } from "react-dom";
-import { ArrowRight, Loader2, Lock } from "lucide-react";
 import { redirectToCheckoutAction } from "@/lib/shopify/cart-actions";
 
 function SubmitButton({ disabled }: { disabled?: boolean }) {
@@ -12,20 +11,13 @@ function SubmitButton({ disabled }: { disabled?: boolean }) {
     <button
       type="submit"
       disabled={pending || disabled}
-      className="w-full h-12 sm:h-12.5 rounded-xl bg-[#168a4a] hover:bg-[#0e6337] active:scale-[0.99] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+      className="w-full h-12 sm:h-12.5 rounded-xl bg-[#168a4a] hover:bg-[#0e6337] active:scale-[0.99] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center transition-all shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
       aria-label="Proceed to Checkout"
     >
       {pending ? (
-        <>
-          <Loader2 className="w-4 h-4 animate-spin" />
-          <span>Redirecting to Checkout…</span>
-        </>
+        <span>Redirecting to Checkout…</span>
       ) : (
-        <>
-          <Lock className="w-3.5 h-3.5 opacity-80" />
-          <span>Proceed to Checkout</span>
-          <ArrowRight className="w-4 h-4" />
-        </>
+        <span>Proceed to Checkout</span>
       )}
     </button>
   );

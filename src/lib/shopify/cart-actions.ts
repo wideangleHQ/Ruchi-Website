@@ -111,6 +111,40 @@ export async function updateItemQuantityAction(
   }
 }
 
+export async function updateVariantQuantityAction(
+  _prevState: CartActionState,
+  payload: { merchandiseId: string; quantity: number }
+): Promise<CartActionState> {
+  if (!payload.merchandiseId) {
+    return { error: "Missing product variant." };
+  }
+
+  try {
+    const cart = await getOrCreateCart();
+    const line = cart.lines.edges.find(
+      (e) => e.node.merchandise.id === payload.merchandiseId
+    )?.node;
+
+    if (payload.quantity <= 0) {
+      if (line) {
+        await removeFromCart(cart.id, [line.id]);
+      }
+    } else if (line) {
+      await updateCart(cart.id, [{ id: line.id, quantity: payload.quantity }]);
+    } else {
+      await addToCart(cart.id, [
+        { merchandiseId: payload.merchandiseId, quantity: payload.quantity },
+      ]);
+    }
+    updateTag(TAGS.cart);
+    return undefined;
+  } catch (error) {
+    return {
+      error: isShopifyApiError(error) ? error.message : "Could not update cart.",
+    };
+  }
+}
+
 export async function removeItemAction(
   _prevState: CartActionState,
   payload: { lineId: string }

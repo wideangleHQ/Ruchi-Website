@@ -1,4 +1,3 @@
-import { Gift, Sparkles } from "lucide-react";
 import type { Cart } from "@/lib/shopify/types";
 import { evaluateOffers, inr, OFFER_TIERS } from "@/utils/offers";
 
@@ -17,8 +16,7 @@ export function OffersTimeline({ cart, compact = false }: { cart: Cart | null; c
       aria-label="Order offers"
       className={`rounded-[14px] border border-[#168a4a]/20 bg-gradient-to-b from-[#f4faf3] to-white ${compact ? "px-3.5 py-3" : "px-4 py-4 sm:px-5"}`}
     >
-      <p className="flex items-start gap-2 text-[13px] leading-snug text-gray-700" aria-live="polite">
-        {active ? <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#168a4a]" aria-hidden="true" /> : <Gift className="mt-0.5 h-4 w-4 shrink-0 text-[#168a4a]" aria-hidden="true" />}
+      <p className="text-[13px] leading-snug text-gray-700" aria-live="polite">
         <span>
           {active ? (
             <>

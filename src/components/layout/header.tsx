@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ShoppingBag, Menu, X, User, ArrowRight, Search, ChevronDown } from "lucide-react";
+import { ShoppingBag, Menu, X, User, ArrowRight, Search, ChevronDown, Download, FileDown } from "lucide-react";
 import { useCartDrawer } from "@/context/cart-context";
 import { AnnouncementBar } from "./announcement-bar";
 import { HeaderSearch } from "./header-search";
@@ -21,6 +21,9 @@ const primaryNavLinks = [
   { label: "Global Business", href: "/global-business" },
   { label: "Blog", href: "/blog" },
 ];
+
+const CATALOGUE_URL = "/documents/Ruchi-Foodline-Product-Catalogue.pdf";
+const CATALOGUE_FILENAME = "Ruchi-Foodline-Product-Catalogue.pdf";
 
 const contactNav = {
   label: "Contact Us",
@@ -144,6 +147,16 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                 </Link>
               );
             })}
+            <a
+              href={CATALOGUE_URL}
+              download={CATALOGUE_FILENAME}
+              className="inline-flex items-center gap-1.5 py-1 text-sm font-semibold text-[#10331f] hover:text-[#0e6337] transition-colors group cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#0e6337] after:transition-all after:content-[''] hover:after:w-full relative"
+              title="Download Product Catalogue (PDF)"
+              aria-label="Download Product Catalogue"
+            >
+              <span>Product Catalogue</span>
+              <Download className="w-3.5 h-3.5 text-[#0e6337] group-hover:translate-y-0.5 transition-transform shrink-0" />
+            </a>
           </nav>
 
           {/* RIGHT: Ruchi Logo (desktop only — it sits on the left on smaller screens) & Mobile Menu Toggle */}
@@ -208,7 +221,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
             {/* Desktop Account Icon */}
             <a
               href={isSignedIn ? "/account" : "/account/login"}
-              className="hidden lg:flex p-1.5 text-gray-800 hover:text-[#168a4a] hover:bg-gray-100 rounded-full transition-colors"
+              className="hidden lg:flex p-1.5 text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 rounded-full transition-colors"
               aria-label={isSignedIn ? "My account" : "Sign in"}
             >
               <User className="w-4.5 h-4.5" />
@@ -218,7 +231,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
             <button
               type="button"
               onClick={openCart}
-              className="hidden lg:flex relative items-center gap-1 p-1.5 text-gray-800 hover:text-[#168a4a] hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+              className="hidden lg:flex relative items-center gap-1 p-1.5 text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 rounded-full transition-colors cursor-pointer"
               aria-label="Open Cart"
             >
               <ShoppingBag className="w-4.5 h-4.5" />
@@ -236,7 +249,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   My Account
                 </Link>
                 <form action="/account/logout" method="post">
-                  <button type="submit" className="text-[13px] font-semibold text-gray-500 hover:text-[#c62828] transition-colors cursor-pointer">
+                  <button type="submit" className="text-[13px] font-semibold text-gray-500 hover:text-[#168a4a] transition-colors cursor-pointer">
                     Sign Out
                   </button>
                 </form>
@@ -253,7 +266,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
             {/* Mobile/Tablet Search Toggle */}
             <button
               onClick={() => setIsMobileSearchOpen((v) => !v)}
-              className="lg:hidden p-2 text-gray-800 hover:text-[#168a4a] hover:bg-gray-100 rounded-full transition-colors"
+              className="lg:hidden p-2 text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 rounded-full transition-colors"
               aria-label="Toggle search"
               aria-expanded={isMobileSearchOpen}
             >
@@ -263,7 +276,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
             {/* Mobile Hamburger Menu Button — Far Right */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="flex lg:hidden p-2 text-gray-800 hover:text-[#168a4a] hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+              className="flex lg:hidden p-2 text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 rounded-full transition-colors cursor-pointer"
               aria-label="Open menu"
             >
               <Menu className="w-6 h-6" />
@@ -295,14 +308,24 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   href={link.href}
                   className={`text-[13px] transition-colors relative py-0.5 ${
                     isActive
-                      ? "text-[#c62828] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#c62828]"
-                      : "text-gray-800 font-semibold hover:text-[#c62828] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#c62828] hover:after:w-full after:transition-all"
+                      ? "text-[#168a4a] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#168a4a]"
+                      : "text-gray-800 font-semibold hover:text-[#168a4a] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#168a4a] hover:after:w-full after:transition-all"
                   }`}
                 >
                   {link.label}
                 </Link>
               );
             })}
+            <a
+              href={CATALOGUE_URL}
+              download={CATALOGUE_FILENAME}
+              className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-gray-800 hover:text-[#168a4a] transition-colors relative py-0.5 group cursor-pointer after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#168a4a] hover:after:w-full after:transition-all"
+              title="Download Product Catalogue (PDF)"
+              aria-label="Download Product Catalogue"
+            >
+              <span>Product Catalogue</span>
+              <Download className="w-3.5 h-3.5 text-[#168a4a] group-hover:translate-y-0.5 transition-transform shrink-0" />
+            </a>
           </nav>
 
           {/* RIGHT: Contact Us Dropdown */}
@@ -320,14 +343,14 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
               aria-label="Contact Us menu"
               className={`inline-flex items-center gap-1 text-[13px] font-semibold transition-colors py-0.5 relative cursor-pointer focus:outline-hidden ${
                 isContactDropdownOpen
-                  ? "text-[#c62828] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#c62828]"
-                  : "text-gray-800 hover:text-[#c62828] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#c62828] hover:after:w-full after:transition-all"
+                  ? "text-[#168a4a] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#168a4a]"
+                  : "text-gray-800 hover:text-[#168a4a] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#168a4a] hover:after:w-full after:transition-all"
               }`}
             >
               <span>Contact Us</span>
               <ChevronDown
                 className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                  isContactDropdownOpen ? "rotate-180 text-[#c62828]" : "text-gray-500"
+                  isContactDropdownOpen ? "rotate-180 text-[#168a4a]" : "text-gray-500"
                 }`}
               />
             </button>
@@ -346,9 +369,9 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                     key={child.label}
                     href={child.href}
                     onClick={() => setIsContactDropdownOpen(false)}
-                    className="group block px-3 py-2 rounded-[8px] hover:bg-[#f7f6f2] transition-colors"
+                    className="group block px-3 py-2 rounded-[8px] hover:bg-[#f4faf3] transition-colors"
                   >
-                    <span className="block text-[13px] font-bold text-gray-900 group-hover:text-[#c62828] transition-colors">
+                    <span className="block text-[13px] font-bold text-gray-900 group-hover:text-[#168a4a] transition-colors">
                       {child.label}
                     </span>
                     <span className="block text-[11px] text-gray-600 font-medium leading-tight mt-0.5">
@@ -367,7 +390,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
 
       {/* Mobile Full-Screen Navigation Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] lg:hidden w-screen h-[100dvh] bg-white flex flex-col justify-between overflow-y-auto animate-fade-in pt-[env(safe-area-inset-top,0px)] pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
+        <div className="fixed inset-0 z-[100] lg:hidden w-full h-[100dvh] bg-white flex flex-col justify-between overflow-y-auto animate-fade-in pt-[env(safe-area-inset-top,0px)] pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
           <div className="w-full">
             {/* Overlay Header: Logo on Far Left, Close ✕ on Far Right matching global header padding */}
             <div className="mx-auto max-w-[1400px] px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between border-b border-gray-200/80 sticky top-0 bg-white z-10">
@@ -389,7 +412,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
               </Link>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-10 h-10 rounded-full flex items-center justify-center text-gray-800 hover:text-[#c62828] hover:bg-gray-100 transition-colors cursor-pointer"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 transition-colors cursor-pointer"
                 aria-label="Close menu"
               >
                 <X className="w-6 h-6" />
@@ -403,12 +426,29 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-base font-bold text-gray-900 hover:text-[#c62828] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
+                  className="text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
                 >
                   <span>{link.label}</span>
                   <ArrowRight className="w-4.5 h-4.5 text-gray-400" />
                 </Link>
               ))}
+
+              {/* Product Catalogue Download Option */}
+              <a
+                href={CATALOGUE_URL}
+                download={CATALOGUE_FILENAME}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors group cursor-pointer"
+                aria-label="Download Product Catalogue"
+              >
+                <span className="flex items-center gap-2.5">
+                  <FileDown className="w-5 h-5 text-[#168a4a]" />
+                  <span>Product Catalogue</span>
+                </span>
+                <span className="text-xs font-semibold text-[#168a4a] bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full flex items-center gap-1">
+                  PDF <Download className="w-3 h-3" />
+                </span>
+              </a>
 
               {/* Mobile Contact Us Accordion */}
               <div className="border-b border-gray-100/90 py-1">
@@ -416,12 +456,12 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   type="button"
                   onClick={() => setIsMobileContactOpen((v) => !v)}
                   aria-expanded={isMobileContactOpen}
-                  className="w-full text-base font-bold text-gray-900 hover:text-[#c62828] py-3.5 flex justify-between items-center cursor-pointer transition-colors"
+                  className="w-full text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 flex justify-between items-center cursor-pointer transition-colors"
                 >
                   <span>Contact Us</span>
                   <ChevronDown
                     className={`w-4.5 h-4.5 text-gray-500 transition-transform duration-200 ${
-                      isMobileContactOpen ? "rotate-180 text-[#c62828]" : ""
+                      isMobileContactOpen ? "rotate-180 text-[#168a4a]" : ""
                     }`}
                   />
                 </button>
@@ -436,7 +476,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                           setIsMobileContactOpen(false);
                           setIsMobileMenuOpen(false);
                         }}
-                        className="block py-2.5 px-3 rounded-xl text-xs font-bold text-gray-900 hover:text-[#c62828] hover:bg-[#f7f6f2] transition-colors"
+                        className="block py-2.5 px-3 rounded-xl text-xs font-bold text-gray-900 hover:text-[#168a4a] hover:bg-[#f4faf3] transition-colors"
                       >
                         <span className="block font-bold">{child.label}</span>
                         <span className="block text-[11px] text-gray-600 font-medium mt-0.5">{child.description}</span>
@@ -452,7 +492,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   <Link
                     href="/account"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-base font-bold text-gray-900 hover:text-[#c62828] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
+                    className="text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
                   >
                     <span>My Account</span>
                     <ArrowRight className="w-4.5 h-4.5 text-gray-400" />
@@ -460,7 +500,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   <form action="/account/logout" method="post">
                     <button
                       type="submit"
-                      className="w-full text-left text-base font-bold text-gray-900 hover:text-[#c62828] py-3.5 border-b border-gray-100/90 cursor-pointer transition-colors"
+                      className="w-full text-left text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 cursor-pointer transition-colors"
                     >
                       Sign Out
                     </button>
@@ -469,7 +509,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
               ) : (
                 <a
                   href="/account/login"
-                  className="text-base font-bold text-gray-900 hover:text-[#c62828] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
+                  className="text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
                 >
                   <span>Sign In / Sign Up</span>
                   <ArrowRight className="w-4.5 h-4.5 text-gray-400" />

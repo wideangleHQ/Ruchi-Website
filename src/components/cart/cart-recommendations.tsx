@@ -2,7 +2,6 @@
 
 import React, { useState, useTransition, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Check, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import type { Product, CartLine } from "@/lib/shopify/types";
 import { addItemAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
@@ -123,18 +122,18 @@ export function CartRecommendations({ products, cartLines }: CartRecommendations
             onClick={() => scroll("left")}
             disabled={!canScrollLeft}
             aria-label="Previous recommended items"
-            className="w-6.5 h-6.5 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:text-gray-950 hover:bg-gray-50 transition-all shadow-2xs disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer active:scale-95"
+            className="w-6.5 h-6.5 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:text-gray-950 hover:bg-gray-50 transition-all shadow-2xs disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer active:scale-95 text-xs font-bold leading-none select-none"
           >
-            <ChevronLeft className="w-3.5 h-3.5" />
+            ‹
           </button>
           <button
             type="button"
             onClick={() => scroll("right")}
             disabled={!canScrollRight}
             aria-label="Next recommended items"
-            className="w-6.5 h-6.5 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:text-gray-950 hover:bg-gray-50 transition-all shadow-2xs disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer active:scale-95"
+            className="w-6.5 h-6.5 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:text-gray-950 hover:bg-gray-50 transition-all shadow-2xs disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer active:scale-95 text-xs font-bold leading-none select-none"
           >
-            <ChevronRight className="w-3.5 h-3.5" />
+            ›
           </button>
         </div>
       </div>
@@ -175,13 +174,11 @@ export function CartRecommendations({ products, cartLines }: CartRecommendations
                   )}
                 </div>
 
-                {/* Weight / Pack Size Badge */}
+                {/* Weight / Pack Size */}
                 {packSize && (
-                  <div className="mb-1">
-                    <span className="text-[10px] font-bold text-gray-900 bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200/80 inline-block truncate max-w-full">
-                      {packSize}
-                    </span>
-                  </div>
+                  <p className="text-[11px] font-medium text-gray-500 truncate mb-1">
+                    {packSize}
+                  </p>
                 )}
 
                 {/* Product Title */}
@@ -205,26 +202,14 @@ export function CartRecommendations({ products, cartLines }: CartRecommendations
                 type="button"
                 disabled={isPending}
                 onClick={() => handleAddProduct(product)}
-                className={`w-full h-7.5 sm:h-8 mt-2 rounded-lg font-bold text-[11px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-1 transition-all cursor-pointer shadow-2xs active:scale-95 ${
+                className={`w-full h-7.5 sm:h-8 mt-2 rounded-lg font-bold text-[11px] sm:text-xs uppercase tracking-wider flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95 ${
                   isItemAdded
                     ? "bg-emerald-50 text-[#0e6337] border border-emerald-400"
                     : "bg-[#168a4a] hover:bg-[#0e6337] text-white border border-[#168a4a]"
                 } ${isPending && addingId === product.id ? "opacity-75" : ""}`}
                 aria-label={`Add ${product.title} to cart`}
               >
-                {isItemAdding ? (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                ) : isItemAdded ? (
-                  <>
-                    <Check className="w-3.5 h-3.5" />
-                    <span>Added</span>
-                  </>
-                ) : (
-                  <>
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Add</span>
-                  </>
-                )}
+                {isItemAdding ? "Adding…" : isItemAdded ? "Added" : "Add"}
               </button>
             </div>
           );

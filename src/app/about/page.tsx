@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="bg-white min-h-screen text-gray-900 font-sans">
+    <div className="bg-white min-h-screen text-gray-900 font-sans w-full max-w-full overflow-x-hidden">
       {/* 1. Hero — Brand Story */}
       <AboutHero />
 

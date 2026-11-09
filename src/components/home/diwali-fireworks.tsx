@@ -132,7 +132,7 @@ export function DiwaliFireworks() {
   return (
     <div
       aria-hidden="true"
-      className={`fixed inset-0 z-50 pointer-events-none w-screen h-screen overflow-hidden transition-opacity duration-1000 ease-out ${
+      className={`fixed inset-0 z-50 pointer-events-none w-full h-full overflow-hidden transition-opacity duration-1000 ease-out ${
         isFading ? "opacity-0" : "opacity-100"
       }`}
     >

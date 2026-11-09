@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 interface StatisticItem {
-  id: string;
+  id: "customers" | "legacy" | "states";
   target: number;
   suffix: string;
   finalDisplay: string;
@@ -27,10 +27,10 @@ const STATISTICS: StatisticItem[] = [
     finalDisplay: "1M+",
     formatValue: (progress: number) => {
       if (progress >= 1) return "1M";
-      if (progress === 0) return "0";
+      if (progress <= 0) return "0";
       // Calm, readable progression across tenths of a million (0.1M, 0.2M ... 0.9M, 1M)
       const tenths = Math.round(progress * 10) / 10;
-      if (tenths === 0) return "0";
+      if (tenths <= 0) return "0";
       if (tenths >= 1) return "1M";
       return `${tenths.toFixed(1)}M`;
     },
@@ -74,11 +74,15 @@ export function TrustBanner() {
     states: "0",
   });
 
+  const latestCountsRef = useRef<{ [key: string]: string }>({
+    customers: "0",
+    legacy: "0",
+    states: "0",
+  });
+
   useEffect(() => {
     const node = sectionRef.current;
-    if (!node) return;
-
-    if (hasTriggeredRef.current) return;
+    if (!node || hasTriggeredRef.current) return;
 
     function runAnimation() {
       let startTime: number | null = null;
@@ -92,16 +96,38 @@ export function TrustBanner() {
         const rawProgress = Math.min(1, elapsed / DURATION_MS);
         const easedProgress = easeOutCubic(rawProgress);
 
-        setCounts({
-          customers: STATISTICS[0].formatValue(easedProgress),
-          legacy: STATISTICS[1].formatValue(easedProgress),
-          states: STATISTICS[2].formatValue(easedProgress),
-        });
+        const nextCustomers = STATISTICS[0].formatValue(easedProgress);
+        const nextLegacy = STATISTICS[1].formatValue(easedProgress);
+        const nextStates = STATISTICS[2].formatValue(easedProgress);
+
+        // Optimize mobile renders: only trigger state update when formatted value changes
+        const prev = latestCountsRef.current;
+        if (
+          prev.customers !== nextCustomers ||
+          prev.legacy !== nextLegacy ||
+          prev.states !== nextStates
+        ) {
+          latestCountsRef.current = {
+            customers: nextCustomers,
+            legacy: nextLegacy,
+            states: nextStates,
+          };
+          setCounts({
+            customers: nextCustomers,
+            legacy: nextLegacy,
+            states: nextStates,
+          });
+        }
 
         if (rawProgress < 1) {
           rafRef.current = requestAnimationFrame(step);
         } else {
           // Lock into exact target values
+          latestCountsRef.current = {
+            customers: "1M",
+            legacy: "50",
+            states: "14",
+          };
           setCounts({
             customers: "1M",
             legacy: "50",
@@ -114,38 +140,84 @@ export function TrustBanner() {
       rafRef.current = requestAnimationFrame(step);
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (entry && entry.isIntersecting && !hasTriggeredRef.current) {
-          hasTriggeredRef.current = true;
-          observer.disconnect();
+    const triggerIfVisible = () => {
+      if (hasTriggeredRef.current || !node) return;
 
-          const prefersReducedMotion =
-            typeof window !== "undefined" &&
-            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const rect = node.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
 
-          if (prefersReducedMotion) {
-            setCounts({
-              customers: "1M",
-              legacy: "50",
-              states: "14",
-            });
-            return;
-          }
+      // Section is genuinely visible in viewport:
+      // - Its top has entered the viewport (with a small 20px threshold)
+      // - Its bottom is still visible (hasn't been scrolled past completely)
+      const isVisibleInViewport =
+        rect.top < viewportHeight - 20 && rect.bottom > 20;
 
-          runAnimation();
+      if (isVisibleInViewport) {
+        hasTriggeredRef.current = true;
+        cleanup();
+
+        const prefersReducedMotion =
+          typeof window !== "undefined" &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (prefersReducedMotion) {
+          setCounts({
+            customers: "1M",
+            legacy: "50",
+            states: "14",
+          });
+          return;
         }
-      },
-      {
-        threshold: 0.2, // Trigger when 20% visible in viewport
-      }
-    );
 
-    observer.observe(node);
+        runAnimation();
+      }
+    };
+
+    // Mobile-optimized IntersectionObserver:
+    // Multiple thresholds [0, 0.05, 0.1, 0.2] ensure detection even on small viewports
+    // rootMargin accounts for mobile bottom nav and browser address bars
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (entry && (entry.isIntersecting || entry.intersectionRatio > 0)) {
+            triggerIfVisible();
+          }
+        },
+        {
+          threshold: [0, 0.05, 0.1, 0.2],
+          rootMargin: "0px 0px -20px 0px",
+        }
+      );
+      observer.observe(node);
+    }
+
+    // Scroll & resize fallback listener for mobile momentum scroll & virtual keyboards
+    const handleScrollOrResize = () => {
+      triggerIfVisible();
+    };
+
+    window.addEventListener("scroll", handleScrollOrResize, { passive: true });
+    window.addEventListener("resize", handleScrollOrResize, { passive: true });
+
+    function cleanup() {
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+      window.removeEventListener("scroll", handleScrollOrResize);
+      window.removeEventListener("resize", handleScrollOrResize);
+    }
+
+    // Initial check in case section is already in view (e.g. page refreshed midway)
+    const initialCheckTimer = setTimeout(() => {
+      triggerIfVisible();
+    }, 200);
 
     return () => {
-      observer.disconnect();
+      cleanup();
+      clearTimeout(initialCheckTimer);
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }

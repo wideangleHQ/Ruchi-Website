@@ -1,12 +1,19 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
+import { SlidersHorizontal, X, ChevronDown, Sparkles } from "lucide-react";
 import type { Collection, Product } from "@/lib/shopify/types";
 import { ProductCard } from "@/components/product/product-card";
-import shopBanner from "@/assets/Images/Ads/Strip 2.png";
+
+import strip1 from "@/assets/Images/Ads/Strip_1.png";
+import strip2 from "@/assets/Images/Ads/Strip_2.png";
+import strip3 from "@/assets/Images/Ads/Strip_3.png";
+
+import { ShopPromotionalStrip } from "./shop-promotional-strip";
+import { ShopCategoryDiscovery } from "./shop-category-discovery";
+import { ShopProductRow } from "./shop-product-row";
+import { ShopMothersChoice } from "./shop-mothers-choice";
 
 export type SortKey = "featured" | "newest" | "price-asc" | "price-desc" | "name-asc" | "name-desc";
 
@@ -31,15 +38,30 @@ interface ActiveFilters {
   packs: string[];
 }
 
+export interface CuratedSectionsData {
+  bestSellers: Product[];
+  mothersChoice: Product[];
+  blendedSpices: Product[];
+  quickBites: Product[];
+}
+
 interface ShopPageClientProps {
   products: Product[];
   categories: Collection[];
   packSizes: string[];
   priceBounds: { min: number; max: number };
   activeFilters: ActiveFilters;
+  curated?: CuratedSectionsData;
 }
 
-export function ShopPageClient({ products, categories, packSizes, priceBounds, activeFilters }: ShopPageClientProps) {
+export function ShopPageClient({
+  products,
+  categories,
+  packSizes,
+  priceBounds,
+  activeFilters,
+  curated,
+}: ShopPageClientProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -81,8 +103,24 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
     activeFilters.avail !== undefined ||
     activeFilters.packs.length > 0;
 
+  const isFilteredSearch = Boolean(
+    activeFilters.query ||
+    activeFilters.category !== "all" ||
+    activeFilters.min !== undefined ||
+    activeFilters.max !== undefined ||
+    activeFilters.avail !== undefined ||
+    activeFilters.packs.length > 0
+  );
+
   const clearAll = () => {
-    updateQuery({ category: undefined, min: undefined, max: undefined, avail: undefined, pack: undefined });
+    updateQuery({
+      query: undefined,
+      category: undefined,
+      min: undefined,
+      max: undefined,
+      avail: undefined,
+      pack: undefined,
+    });
     setMinInput("");
     setMaxInput("");
   };
@@ -99,7 +137,7 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
         {hasActiveFilters && (
           <button
             onClick={clearAll}
-            className="text-[11px] font-bold uppercase tracking-wider text-[#c62828] hover:underline cursor-pointer"
+            className="text-[11px] font-bold uppercase tracking-wider text-[#168a4a] hover:underline cursor-pointer"
           >
             Clear All
           </button>
@@ -260,155 +298,269 @@ export function ShopPageClient({ products, categories, packSizes, priceBounds, a
   );
 
   return (
-    <div className="bg-transparent py-6 sm:py-8 lg:py-10">
+    <div className="bg-transparent py-4 sm:py-6 lg:py-8">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         
-        {/* Shop Page Header */}
-        <div className="mb-6 sm:mb-8">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#168a4a] block mb-1">
-            Ruchi Foodline Catalog
-          </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
-            {activeFilters.query ? `Search Results for "${activeFilters.query}"` : "Shop All Products"}
-          </h1>
-        </div>
+        {/* Active Search Query Header (Only shown when searching) */}
+        {activeFilters.query && (
+          <div className="mb-4 sm:mb-5">
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              Search Results for &ldquo;{activeFilters.query}&rdquo;
+            </h1>
+          </div>
+        )}
 
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
-          
-          {/* Desktop Sidebar (Left Column) */}
-          <aside className="hidden lg:block w-[260px] shrink-0 sticky top-[160px] self-start max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-none">
-            {filterSidebarContent}
-          </aside>
-
-          {/* Main Content Column (Right Column) */}
-          <div className="flex-1 min-w-0 w-full">
+        {/* ============================================================
+            CURATED MERCHANDISING FLOW (When viewing default catalogue)
+            ============================================================ */}
+        {!isFilteredSearch && curated && (
+          <div className="space-y-2 sm:space-y-4">
             
-            {/* Promotional Strip Banner */}
-            <div className="mb-6 rounded-2xl overflow-hidden border border-gray-200/80 shadow-xs">
-              <Image
-                src={shopBanner}
-                alt="Ruchi Foodline special offer promotional banner"
-                className="w-full h-auto object-cover"
-                priority
+            {/* SECTION 02 — PROMOTIONAL CAMPAIGN STRIP 1 (New Featured Hero Strip) */}
+            <ShopPromotionalStrip
+              image={strip1}
+              alt="Ruchi Foodline Luxury Spice Combos & Signature Delights"
+              href="/products?category=blended-spices"
+              title="Signature Delights & Special Combos"
+              priority
+            />
+
+            {/* SECTION 03 — CATEGORY DISCOVERY */}
+            <ShopCategoryDiscovery
+              categories={categories}
+              activeCategory={activeFilters.category}
+              onSelectCategory={(handle) => updateQuery({ category: handle })}
+            />
+
+            {/* SECTION 04 — BEST SELLERS PRODUCT ROW */}
+            {curated.bestSellers.length > 0 && (
+              <ShopProductRow
+                title="Best Sellers"
+                subtitle="Discover the favourites everyone loves."
+                badge="Customer Favourites"
+                products={curated.bestSellers}
+                viewAllHref="/products?sort=featured"
+                viewAllText="View All Best Sellers"
               />
-            </div>
-
-            {/* Toolbar: Filter Trigger + Left-Aligned Sort Dropdown + Product Count */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 mb-5 sm:mb-6 pb-4 border-b border-gray-200/70">
-              {/* Left Side: Sort Dropdown & Mobile Filter Button */}
-              <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
-                {/* Sort By Dropdown (Left Aligned on all viewports) */}
-                <div className="relative shrink-0">
-                  <label htmlFor="shop-sort" className="sr-only">
-                    Sort products
-                  </label>
-                  <select
-                    id="shop-sort"
-                    value={activeFilters.sort}
-                    onChange={(e) => updateQuery({ sort: e.target.value === "featured" ? undefined : e.target.value })}
-                    className="appearance-none pl-3 pr-8 sm:pl-3.5 sm:pr-9 py-2 rounded-[8px] border border-gray-300 text-xs sm:text-sm font-medium text-gray-800 bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#168a4a] focus:border-transparent cursor-pointer shadow-2xs transition-all"
-                  >
-                    {SORT_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value} className="font-medium text-gray-800">
-                        Sort By: {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
-                </div>
-
-                {/* Mobile Filter Drawer Button */}
-                <button
-                  onClick={() => setIsDrawerOpen(true)}
-                  className="lg:hidden inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-[8px] border border-gray-300 bg-white text-xs font-semibold text-gray-900 shadow-2xs hover:bg-gray-50 active:scale-95 transition-all cursor-pointer"
-                  aria-haspopup="dialog"
-                  aria-expanded={isDrawerOpen}
-                >
-                  <SlidersHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#168a4a]" />
-                  <span>Filters</span>
-                  {hasActiveFilters && (
-                    <span className="w-2 h-2 rounded-full bg-[#c62828]" />
-                  )}
-                </button>
-              </div>
-
-              {/* Product Count Display */}
-              <div className="flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-gray-600">
-                  Showing <span className="font-bold text-gray-900">{products.length}</span> {products.length === 1 ? "Product" : "Products"}
-                  {activeCategoryTitle ? (
-                    <span> in <strong className="font-semibold text-gray-900">{activeCategoryTitle}</strong></span>
-                  ) : ""}
-                </p>
-              </div>
-            </div>
-
-            {/* Active Filter Chips */}
-            {hasActiveFilters && (
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                {activeCategoryTitle && (
-                  <FilterChip label={activeCategoryTitle} onRemove={() => updateQuery({ category: undefined })} />
-                )}
-                {(activeFilters.min !== undefined || activeFilters.max !== undefined) && (
-                  <FilterChip
-                    label={`₹${activeFilters.min ?? priceBounds.min} – ₹${activeFilters.max ?? priceBounds.max}`}
-                    onRemove={() => {
-                      setMinInput("");
-                      setMaxInput("");
-                      updateQuery({ min: undefined, max: undefined });
-                    }}
-                  />
-                )}
-                {activeFilters.avail && (
-                  <FilterChip
-                    label={activeFilters.avail === "in" ? "In Stock" : "Out of Stock"}
-                    onRemove={() => updateQuery({ avail: undefined })}
-                  />
-                )}
-                {activeFilters.packs.map((size) => (
-                  <FilterChip key={size} label={size} onRemove={() => togglePack(size)} />
-                ))}
-              </div>
             )}
 
-            {/* Product Grid */}
-            {products.length === 0 ? (
-              <div className="text-center py-20 border border-gray-200/80 rounded-2xl bg-gray-50/50">
-                <p className="text-base font-bold text-gray-900 mb-1.5">No products found</p>
-                <p className="text-sm font-medium text-gray-600 mb-5 max-w-sm mx-auto">
-                  We couldn&apos;t find any products matching your current filters. Try changing or clearing filters.
-                </p>
-                {hasActiveFilters && (
-                  <button
-                    onClick={clearAll}
-                    className="px-5 py-2.5 rounded-[8px] bg-[#168a4a] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0e6337] transition-all shadow-xs cursor-pointer active:scale-95"
-                  >
-                    Clear All Filters
-                  </button>
-                )}
+            {/* SECTION 05 — PROMOTIONAL STRIP AD 2 (Between Product Rows) */}
+            <ShopPromotionalStrip
+              image={strip2}
+              alt="RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Offer"
+              href="/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic"
+              title="Ruchi Sattvik Festive Kit"
+            />
+
+            {/* SECTION 06A — FEATURED COLLECTION: SPICE BLENDS & MASALAS */}
+            {curated.blendedSpices.length > 0 && (
+              <ShopProductRow
+                title="Spice Blends & Masalas"
+                subtitle="Authentic regional blends crafted for rich, aromatic Indian dishes."
+                badge="Chef's Secret"
+                products={curated.blendedSpices}
+                viewAllHref="/products?category=blended-spices"
+                viewAllText="Explore All Masalas"
+              />
+            )}
+
+            {/* SECTION 07 — MOTHER'S CHOICE PRODUCT ROW (MANDATORY) */}
+            {curated.mothersChoice.length > 0 && (
+              <ShopMothersChoice
+                products={curated.mothersChoice}
+                viewAllHref="/products?category=basic-spices"
+              />
+            )}
+
+            {/* SECTION 05B — PROMOTIONAL STRIP AD 3 (Authentic Spices & Delights) */}
+            <ShopPromotionalStrip
+              image={strip3}
+              alt="Ruchi Foodline Authentic Spices & Festive Delights"
+              href="/products"
+              title="Authentic Spices & Festive Delights"
+            />
+
+            {/* SECTION 06B — FEATURED COLLECTION: QUICK BITES & PASTAS */}
+            {curated.quickBites.length > 0 && (
+              <ShopProductRow
+                title="Quick Bites & Pastas"
+                subtitle="Wholesome pasta, vermicelli, and noodles for delightful quick family meals."
+                badge="Fast & Wholesome"
+                products={curated.quickBites}
+                viewAllHref="/products?category=pasta"
+                viewAllText="Explore All Pastas"
+              />
+            )}
+
+          </div>
+        )}
+
+        {/* Notice for Filtered Searches allowing instant return to curated view */}
+        {isFilteredSearch && (
+          <div className="my-4 p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#0e6337]">
+              <Sparkles className="w-4 h-4 text-[#168a4a] shrink-0" />
+              <span>
+                Showing filtered results ({products.length} {products.length === 1 ? "product" : "products"}).
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={clearAll}
+              className="text-xs font-bold text-[#168a4a] hover:text-[#0e6337] underline cursor-pointer"
+            >
+              Clear filters &amp; view all curated collections &rarr;
+            </button>
+          </div>
+        )}
+
+        {/* ============================================================
+            SECTION 08 — COMPLETE SHOP CATALOGUE (All Products Grid)
+            ============================================================ */}
+        <div id="all-products" className="pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-gray-200/80">
+          
+          <div className="mb-4 sm:mb-6">
+            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#168a4a] block mb-1">
+              Complete Catalogue
+            </span>
+            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900">
+              {activeCategoryTitle ? `${activeCategoryTitle} Collection` : "All Products"}
+            </h2>
+            <p className="mt-1 text-xs sm:text-sm text-gray-600">
+              Filter by category, price, and pack size to find your kitchen favourites.
+            </p>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+            
+            {/* Desktop Sidebar (Left Column) - Sticky with Independent Scrolling */}
+            <aside className="hidden lg:block w-[280px] shrink-0 sticky top-[72px] self-start">
+              <div className="max-h-[calc(100vh-88px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400 pr-2">
+                {filterSidebarContent}
               </div>
-            ) : (
-              <>
-                <div className="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(172px,1fr))] gap-2.5 sm:gap-3.5 lg:gap-4">
-                  {visibleProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} compact />
+            </aside>
+
+            {/* Main Content Column (Right Column) */}
+            <div className="flex-1 min-w-0 w-full">
+              
+              {/* Toolbar: Sort Dropdown + Mobile Filter Button + Product Count */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 mb-5 sm:mb-6 pb-4 border-b border-gray-200/70">
+                {/* Left Side: Sort Dropdown & Mobile Filter Button */}
+                <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+                  {/* Sort By Dropdown (Left Aligned on all viewports) */}
+                  <div className="relative shrink-0">
+                    <label htmlFor="shop-sort" className="sr-only">
+                      Sort products
+                    </label>
+                    <select
+                      id="shop-sort"
+                      value={activeFilters.sort}
+                      onChange={(e) => updateQuery({ sort: e.target.value === "featured" ? undefined : e.target.value })}
+                      className="appearance-none pl-3 pr-8 sm:pl-3.5 sm:pr-9 py-2 rounded-[8px] border border-gray-300 text-xs sm:text-sm font-medium text-gray-800 bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#168a4a] focus:border-transparent cursor-pointer shadow-2xs transition-all"
+                    >
+                      {SORT_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value} className="font-medium text-gray-800">
+                          Sort By: {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                  </div>
+
+                  {/* Mobile Filter Drawer Button */}
+                  <button
+                    onClick={() => setIsDrawerOpen(true)}
+                    className="lg:hidden inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-[8px] border border-gray-300 bg-white text-xs font-semibold text-gray-900 shadow-2xs hover:bg-gray-50 active:scale-95 transition-all cursor-pointer"
+                    aria-haspopup="dialog"
+                    aria-expanded={isDrawerOpen}
+                  >
+                    <SlidersHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#168a4a]" />
+                    <span>Filters</span>
+                    {hasActiveFilters && (
+                      <span className="w-2 h-2 rounded-full bg-[#168a4a]" />
+                    )}
+                  </button>
+                </div>
+
+                {/* Product Count Display */}
+                <div className="flex items-center">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600">
+                    Showing <span className="font-bold text-gray-900">{products.length}</span> {products.length === 1 ? "Product" : "Products"}
+                    {activeCategoryTitle ? (
+                      <span> in <strong className="font-semibold text-gray-900">{activeCategoryTitle}</strong></span>
+                    ) : ""}
+                  </p>
+                </div>
+              </div>
+
+              {/* Active Filter Chips */}
+              {hasActiveFilters && (
+                <div className="flex flex-wrap items-center gap-2 mb-6">
+                  {activeCategoryTitle && (
+                    <FilterChip label={activeCategoryTitle} onRemove={() => updateQuery({ category: undefined })} />
+                  )}
+                  {(activeFilters.min !== undefined || activeFilters.max !== undefined) && (
+                    <FilterChip
+                      label={`₹${activeFilters.min ?? priceBounds.min} – ₹${activeFilters.max ?? priceBounds.max}`}
+                      onRemove={() => {
+                        setMinInput("");
+                        setMaxInput("");
+                        updateQuery({ min: undefined, max: undefined });
+                      }}
+                    />
+                  )}
+                  {activeFilters.avail && (
+                    <FilterChip
+                      label={activeFilters.avail === "in" ? "In Stock" : "Out of Stock"}
+                      onRemove={() => updateQuery({ avail: undefined })}
+                    />
+                  )}
+                  {activeFilters.packs.map((size) => (
+                    <FilterChip key={size} label={size} onRemove={() => togglePack(size)} />
                   ))}
                 </div>
+              )}
 
-                {visibleCount < products.length && (
-                  <div className="flex justify-center mt-10">
+              {/* Product Grid — Strict ProductCard Reuse */}
+              {products.length === 0 ? (
+                <div className="text-center py-20 border border-gray-200/80 rounded-2xl bg-gray-50/50">
+                  <p className="text-base font-bold text-gray-900 mb-1.5">No products found</p>
+                  <p className="text-sm font-medium text-gray-600 mb-5 max-w-sm mx-auto">
+                    We couldn&apos;t find any products matching your current filters. Try changing or clearing filters.
+                  </p>
+                  {hasActiveFilters && (
                     <button
-                      onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                      className="px-8 py-3 rounded-[8px] border-2 border-[#168a4a] text-[#0e6337] bg-white text-xs sm:text-sm font-semibold uppercase tracking-wider hover:bg-[#168a4a] hover:text-white transition-all shadow-xs cursor-pointer active:scale-95"
+                      onClick={clearAll}
+                      className="px-5 py-2.5 rounded-[8px] bg-[#168a4a] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0e6337] transition-all shadow-xs cursor-pointer active:scale-95"
                     >
-                      Load More Products ({products.length - visibleCount} Remaining)
+                      Clear All Filters
                     </button>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(172px,1fr))] gap-2.5 sm:gap-3.5 lg:gap-4">
+                    {visibleProducts.map((product) => (
+                      <ProductCard key={product.id} product={product} compact />
+                    ))}
                   </div>
-                )}
-              </>
-            )}
+
+                  {visibleCount < products.length && (
+                    <div className="flex justify-center mt-10">
+                      <button
+                        onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                        className="px-8 py-3 rounded-[8px] border-2 border-[#168a4a] text-[#0e6337] bg-white text-xs sm:text-sm font-semibold uppercase tracking-wider hover:bg-[#168a4a] hover:text-white transition-all shadow-xs cursor-pointer active:scale-95"
+                      >
+                        Load More Products ({products.length - visibleCount} Remaining)
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
+
       </div>
 
       {/* Mobile Filter Drawer */}
@@ -451,10 +603,10 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
   return (
     <button
       onClick={onRemove}
-      className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full border border-gray-200 bg-gray-100 text-xs font-medium text-gray-800 hover:border-[#c62828] hover:text-[#c62828] transition-colors focus-visible:ring-2 focus-visible:ring-[#168a4a] cursor-pointer"
+      className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full border border-gray-200 bg-gray-100 text-xs font-medium text-gray-800 hover:border-[#168a4a] hover:text-[#168a4a] transition-colors focus-visible:ring-2 focus-visible:ring-[#168a4a] cursor-pointer"
     >
       <span className="font-medium">{label}</span>
-      <X className="w-3.5 h-3.5 text-gray-500 hover:text-[#c62828]" />
+      <X className="w-3.5 h-3.5 text-gray-500 hover:text-[#168a4a]" />
     </button>
   );
 }

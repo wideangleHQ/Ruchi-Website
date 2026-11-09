@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { X, ShoppingBag, ArrowRight, ShieldCheck, Truck, CheckCircle2 } from "lucide-react";
 import { useCartDrawer } from "@/context/cart-context";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CheckoutButton } from "@/components/cart/checkout-button";
@@ -66,23 +65,23 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
             ============================================================ */}
         <div className="border-b border-gray-200/80 px-4 sm:px-5 py-3.5 bg-white shrink-0">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <h2 className="font-serif text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
                 Your Bag
               </h2>
               {totalQuantity > 0 && (
-                <span className="bg-emerald-50 text-[#168a4a] border border-emerald-300/60 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
-                  {totalQuantity} {totalQuantity === 1 ? "item" : "items"}
+                <span className="text-xs font-semibold text-gray-500">
+                  ({totalQuantity} {totalQuantity === 1 ? "item" : "items"})
                 </span>
               )}
             </div>
 
             <button
               onClick={closeCart}
-              className="w-8.5 h-8.5 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-colors cursor-pointer text-base leading-none font-semibold"
               aria-label="Close cart"
             >
-              <X className="w-4.5 h-4.5" />
+              ✕
             </button>
           </div>
 
@@ -92,12 +91,7 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
           {lines.length > 0 && (
             <div className="mt-3 pt-2.5 border-t border-gray-100">
               <div className="flex items-center justify-between text-xs font-medium mb-1.5">
-                <div className="flex items-center gap-1.5">
-                  {isFreeDeliveryUnlocked ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#168a4a] shrink-0" />
-                  ) : (
-                    <Truck className="w-3.5 h-3.5 text-[#168a4a] shrink-0" />
-                  )}
+                <div>
                   {isFreeDeliveryUnlocked ? (
                     <span className="text-[#168a4a] font-bold">
                       You&apos;ve unlocked FREE delivery!
@@ -131,9 +125,6 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
           {lines.length === 0 || !cart ? (
             /* Empty State */
             <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center py-10 px-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center text-[#168a4a] mb-3.5 shadow-2xs">
-                <ShoppingBag className="w-7 h-7" />
-              </div>
               <h3 className="font-serif text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
                 Your bag is empty
               </h3>
@@ -143,10 +134,9 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
               <Link
                 href="/products"
                 onClick={closeCart}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#168a4a] hover:bg-[#0e6337] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-xs active:scale-98 cursor-pointer"
+                className="inline-flex items-center px-6 py-2.5 rounded-xl bg-[#168a4a] hover:bg-[#0e6337] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-xs active:scale-98 cursor-pointer"
               >
                 <span>Explore Products</span>
-                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           ) : (
@@ -217,8 +207,7 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
                 ← Continue Shopping
               </button>
               
-              <div className="flex items-center gap-1.5 text-emerald-800 font-semibold text-[11px]">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#168a4a] shrink-0" />
+              <div className="text-emerald-800 font-semibold text-[11px]">
                 <span>Secure checkout powered by Shopify</span>
               </div>
             </div>

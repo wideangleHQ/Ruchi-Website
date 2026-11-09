@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
@@ -29,6 +29,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const isSignedIn = hasSession(
@@ -47,9 +54,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   ]);
 
   return (
-    <html lang="en" className={`h-full antialiased scroll-smooth ${poppinsMedium.variable}`}>
-      <body className="min-h-full flex flex-col bg-white text-text font-sans selection:bg-soft-green selection:text-primary-green">
-        <CartProvider>
+    <html lang="en" className={`h-full antialiased scroll-smooth overflow-x-hidden ${poppinsMedium.variable}`}>
+      <body className="min-h-full flex flex-col bg-white text-text font-sans selection:bg-soft-green selection:text-primary-green overflow-x-hidden">
+        <CartProvider initialCart={cart}>
           <Header cartQuantity={cart?.totalQuantity ?? 0} isSignedIn={isSignedIn} />
           <main className="flex-1 pb-16 md:pb-0">{children}</main>
           <Footer collections={collections} />

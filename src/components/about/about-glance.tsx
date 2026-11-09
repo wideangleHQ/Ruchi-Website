@@ -6,15 +6,15 @@ const LABEL = "mt-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.
 const BODY = "mt-2.5 font-sans text-xs leading-relaxed text-[#1A1A1A]/75";
 
 const CARD =
-  "flex h-full w-[260px] shrink-0 snap-start flex-col rounded-2xl border border-[#1A1A1A]/10 bg-white p-6 shadow-[0_1px_2px_rgba(26,26,26,0.04)] motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 hover:border-[#168a4a] hover:shadow-[0_8px_24px_rgba(26,26,26,0.08)] motion-safe:hover:-translate-y-0.5 sm:w-[280px] lg:w-auto lg:p-5 xl:p-6";
+  "relative flex h-full w-[260px] shrink-0 snap-start flex-col rounded-2xl border border-[#1A1A1A]/10 bg-white p-6 shadow-[0_1px_2px_rgba(26,26,26,0.04)] motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 hover:border-[#168a4a] hover:shadow-[0_8px_24px_rgba(26,26,26,0.08)] motion-safe:hover:-translate-y-0.5 sm:w-[280px] lg:w-auto lg:p-5 xl:p-6";
 
 export function AboutGlance() {
   return (
     <section
-      className="w-full bg-[#F8F5F0] py-8 sm:py-10 lg:py-11 xl:py-13"
+      className="w-full bg-[#F8F5F0] py-8 sm:py-10 lg:py-11 xl:py-13 overflow-hidden"
       aria-labelledby="glance-heading"
     >
-      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="mx-auto mb-5 sm:mb-6 lg:mb-8 max-w-3xl text-center">
           <h2
             id="glance-heading"

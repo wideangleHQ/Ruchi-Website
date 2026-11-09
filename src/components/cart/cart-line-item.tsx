@@ -2,7 +2,6 @@
 
 import { startTransition, useActionState } from "react";
 import Link from "next/link";
-import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
 import { removeItemAction, updateItemQuantityAction } from "@/lib/shopify/cart-actions";
 import type { CartLine } from "@/lib/shopify/types";
 import { formatMoney } from "@/utils/format";
@@ -60,23 +59,16 @@ export function CartLineItem({ line }: { line: CartLine }) {
               disabled={pending}
               onClick={() => startTransition(() => removeAction({ lineId: line.id }))}
               aria-label={`Remove ${product.title} from bag`}
-              className="p-1 -mr-1 text-gray-400 hover:text-[#c62828] transition-colors disabled:opacity-50 cursor-pointer rounded-md hover:bg-red-50 shrink-0"
+              className="p-1 -mr-1 text-gray-400 hover:text-[#c62828] transition-colors disabled:opacity-50 cursor-pointer rounded-md hover:bg-red-50 shrink-0 text-xs font-semibold leading-none"
             >
-              {isRemoving ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#c62828]" />
-              ) : (
-                <Trash2 className="w-3.5 h-3.5" />
-              )}
+              {isRemoving ? "…" : "✕"}
             </button>
           </div>
 
           {variantTitle && (
-            <div className="mt-1 flex items-center">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gray-100 text-xs font-bold text-gray-900 border border-gray-200/90">
-                <span className="text-gray-600 font-semibold text-[11px]">Weight:</span>
-                <span>{variantTitle}</span>
-              </span>
-            </div>
+            <p className="text-xs text-gray-500 font-medium mt-0.5">
+              {variantTitle}
+            </p>
           )}
         </div>
 
@@ -92,10 +84,10 @@ export function CartLineItem({ line }: { line: CartLine }) {
                   updateAction({ lineId: line.id, quantity: line.quantity - 1 })
                 )
               }
-              className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-gray-900 disabled:opacity-50 cursor-pointer rounded-sm hover:bg-gray-100 transition-colors"
+              className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-gray-900 disabled:opacity-50 cursor-pointer rounded-sm hover:bg-gray-100 transition-colors text-xs font-bold leading-none"
               aria-label="Decrease quantity"
             >
-              <Minus className="w-3 h-3" />
+              −
             </button>
             <span className="px-2 text-xs font-bold text-gray-900 min-w-[20px] text-center" aria-live="polite">
               {line.quantity}
@@ -108,10 +100,10 @@ export function CartLineItem({ line }: { line: CartLine }) {
                   updateAction({ lineId: line.id, quantity: line.quantity + 1 })
                 )
               }
-              className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-gray-900 disabled:opacity-50 cursor-pointer rounded-sm hover:bg-gray-100 transition-colors"
+              className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-gray-900 disabled:opacity-50 cursor-pointer rounded-sm hover:bg-gray-100 transition-colors text-xs font-bold leading-none"
               aria-label="Increase quantity"
             >
-              <Plus className="w-3 h-3" />
+              +
             </button>
           </div>
 

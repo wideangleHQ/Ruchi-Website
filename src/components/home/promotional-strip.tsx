@@ -3,20 +3,27 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import stripAd1 from "@/assets/Images/Ads/Strip 1.png";
-import stripAd2 from "@/assets/Images/Ads/Strip 2.png";
+import stripAd1 from "@/assets/Images/Ads/Strip_1.png";
+import stripAd2 from "@/assets/Images/Ads/Strip_2.png";
+import stripAd3 from "@/assets/Images/Ads/Strip_3.png";
 
 export function PromotionalStrip() {
   const stripAds = [
     {
       id: "strip-1",
       image: stripAd1,
-      alt: "RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Offer",
-      href: "/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic",
+      alt: "Ruchi Foodline Luxury Spice Combos & Signature Delights",
+      href: "/products?category=blended-spices",
     },
     {
       id: "strip-2",
       image: stripAd2,
+      alt: "RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Offer",
+      href: "/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic",
+    },
+    {
+      id: "strip-3",
+      image: stripAd3,
       alt: "Ruchi Foodline Authentic Spices & Festive Delights",
       href: "/products",
     },

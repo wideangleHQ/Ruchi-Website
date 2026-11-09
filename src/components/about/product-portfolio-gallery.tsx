@@ -425,13 +425,13 @@ export function ProductPortfolioGallery() {
                 {isExpanded && (
                   <div className="p-4 sm:p-5 border-t border-gray-100 bg-white space-y-4">
                     {/* Category Image Banner */}
-                    <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-stone-100">
+                    <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-stone-100">
                       <Image
                         src={cat.image}
                         alt={cat.alt}
                         fill
                         sizes="(max-width: 1023px) 100vw, 600px"
-                        className="object-cover object-center"
+                        className="object-cover object-center w-full h-full"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                       <div className="absolute bottom-2.5 left-3 right-3 text-white text-xs font-semibold">
