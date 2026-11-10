@@ -1,29 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createNewsletterSubscriber } from "@/lib/shopify/contact-submissions";
-
-// Simple rate limiting: per-IP, max 5 signups per 10 minutes
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + 600_000 });
-    return true;
-  }
-  if (entry.count >= 5) return false;
-  entry.count++;
-  return true;
-}
+import { checkRateLimit, getClientIp } from "@/lib/server/rate-limit";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
-  if (!checkRateLimit(ip)) {
+  const ip = getClientIp(request);
+  const rateLimit = checkRateLimit(ip, 30);
+  if (!rateLimit.allowed) {
     return NextResponse.json(
-      { error: "Too many attempts. Please try again later." },
-      { status: 429 }
+      { error: "Too many subscription attempts. Please wait a few minutes before trying again." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": "600",
+          "X-RateLimit-Remaining": "0",
+        },
+      }
     );
   }
 
@@ -31,6 +24,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => ({}));
     const email = body.email;
     const consent = body.consent;
+    const source = (body.source || "footer").toString().trim();
 
     if (
       typeof email !== "string" ||
@@ -52,9 +46,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await createNewsletterSubscriber(
+    const result = await createNewsletterSubscriber(
       email.trim(),
-      "footer",
+      source,
       consent !== undefined ? Boolean(consent) : true
     );
 
@@ -62,13 +56,20 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         message: "Thank you. Your request was received.",
+        id: result.id,
+        handle: result.handle,
       },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "X-RateLimit-Remaining": String(rateLimit.remaining),
+        },
+      }
     );
   } catch (error) {
     console.error("[api/newsletter] POST failed:", error);
     return NextResponse.json(
-      { error: "We couldn't submit your request. Please try again." },
+      { error: "We couldn't submit your subscription to Shopify. Please try again." },
       { status: 500 }
     );
   }

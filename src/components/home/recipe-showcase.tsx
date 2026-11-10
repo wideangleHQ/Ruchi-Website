@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import pageBackground from "@/assets/Images/Page Background 2.png";
 import type { BlogArticle } from "@/types/blog";
+import { getLocalBlogImage } from "@/lib/blog-images";
 
 interface RecipeShowcaseProps {
   articles: BlogArticle[];
@@ -176,16 +177,18 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
             ref={scrollContainerRef}
             className="w-full flex items-stretch gap-3.5 sm:gap-5 lg:gap-6 overflow-x-auto scrollbar-none scroll-smooth pb-4 snap-x snap-mandatory px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-[max(2rem,calc((100vw-1400px)/2+2rem))] animate-fade-in"
           >
-            {filteredPosts.map((post) => (
+            {filteredPosts.map((post) => {
+              const image = post.image || getLocalBlogImage(post.handle, post.title, post.blog.handle);
+              return (
               <Link
                 key={post.id}
                 href={`/blog/${post.blog.handle}/${post.handle}`}
                 className="blog-card group relative block shrink-0 snap-start w-[82vw] xs:w-[78vw] sm:w-[300px] md:w-[320px] lg:w-[340px] xl:w-[380px] h-[380px] xs:h-[400px] sm:h-[420px] md:h-[440px] lg:h-[450px] xl:h-[490px] rounded-[15px] overflow-hidden shadow-md transition-all duration-500 hover:-translate-y-1.5"
               >
-                {post.image ? (
+                {image ? (
                   <Image
-                    src={post.image.url}
-                    alt={post.image.altText ?? post.title}
+                    src={image.url}
+                    alt={image.altText ?? post.title}
                     fill
                     sizes="(min-width: 1280px) 400px, (min-width: 1024px) 370px, (min-width: 640px) 340px, 82vw"
                     className="object-cover object-center w-full h-full transition-transform duration-700 ease-out group-hover:scale-105"
@@ -205,20 +208,21 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
                     {post.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-white/80 line-clamp-3 leading-relaxed mb-3 sm:mb-4 font-normal">
+                  <p className="text-xs sm:text-sm text-white/95 line-clamp-3 leading-relaxed mb-3 sm:mb-4 font-semibold">
                     {post.excerpt || post.content.replace(/<[^>]*>/g, "").slice(0, 120)}
                   </p>
 
-                  <div className="flex items-center gap-2.5 text-[10px] sm:text-xs text-white/60 font-medium">
+                  <div className="flex items-center gap-2.5 text-[10px] sm:text-xs text-white/85 font-semibold">
                     <span>
                       {new Date(post.publishedAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}
                     </span>
-                    <span className="w-1 h-1 rounded-full bg-white/40" />
+                    <span className="w-1 h-1 rounded-full bg-white/60" />
                     <span>{readTime(post.content)} min read</span>
                   </div>
                 </div>
               </Link>
-            ))}
+            );
+            })}
           </div>
         ) : (
           <div

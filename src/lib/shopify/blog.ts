@@ -8,6 +8,7 @@ import {
 } from "./blog-queries";
 import type { BlogArticle, BlogCategory } from "@/types/blog";
 import type { Connection } from "./types";
+import { getLocalBlogImage } from "@/lib/blog-images";
 
 type PageInfo = {
   hasNextPage: boolean;
@@ -27,7 +28,9 @@ type RawArticle = Omit<BlogArticle, "author"> & {
 
 function normalizeArticle(raw: RawArticle): BlogArticle {
   const { authorV2, ...rest } = raw;
-  return { ...rest, author: authorV2 };
+  const localImg = getLocalBlogImage(raw.handle, raw.title, raw.blog?.handle);
+  const image = localImg || rest.image;
+  return { ...rest, image, author: authorV2 };
 }
 
 // ---- Articles ----

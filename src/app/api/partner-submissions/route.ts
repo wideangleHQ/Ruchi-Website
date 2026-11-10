@@ -1,40 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createContactSubmission } from "@/lib/shopify/contact-submissions";
-
-// Rate limiting: per-IP, max 10 submissions per 10 minutes
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + 600_000 });
-    return true;
-  }
-  if (entry.count >= 10) return false;
-  entry.count++;
-  return true;
-}
-
-function sanitize(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    .trim();
-}
+import {
+  createContactSubmission,
+  sanitizeInput,
+} from "@/lib/shopify/contact-submissions";
+import { checkRateLimit, getClientIp } from "@/lib/server/rate-limit";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^[+]?[\d\s()-]{7,25}$/;
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (!checkRateLimit(ip)) {
+  const ip = getClientIp(request);
+  const rateLimit = checkRateLimit(ip, 30);
+  if (!rateLimit.allowed) {
     return NextResponse.json(
-      { error: "Too many submissions. Please try again later." },
-      { status: 429 }
+      { error: "Too many submissions. Please wait a few minutes before trying again." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": "600",
+          "X-RateLimit-Remaining": "0",
+        },
+      }
     );
   }
 
@@ -85,19 +71,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!message) {
-      return NextResponse.json(
-        { error: "Please tell us about your requirements." },
-        { status: 400 }
-      );
-    }
-    if (message.length > 5000) {
-      return NextResponse.json(
-        { error: "Message must not exceed 5,000 characters." },
-        { status: 400 }
-      );
-    }
-
     if (phone && (!PHONE_REGEX.test(phone) || phone.length > 50)) {
       return NextResponse.json(
         { error: "Please enter a valid phone number." },
@@ -133,29 +106,45 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (message.length > 5000) {
+      return NextResponse.json(
+        { error: "Message must not exceed 5,000 characters." },
+        { status: 400 }
+      );
+    }
+
     // Persist via Shopify metaobject contact submission
-    await createContactSubmission({
+    const result = await createContactSubmission({
       formType: "partner",
-      fullName: sanitize(fullName),
-      email: sanitize(email.toLowerCase()),
-      phone: phone ? sanitize(phone) : undefined,
-      message: sanitize(message),
-      companyName: companyName ? sanitize(companyName) : undefined,
-      quantity: quantity ? sanitize(quantity) : undefined,
-      location: location ? sanitize(location) : undefined,
-      businessType: businessType ? sanitize(businessType) : undefined,
+      fullName: sanitizeInput(fullName),
+      email: sanitizeInput(email),
+      phone: phone ? sanitizeInput(phone) : undefined,
+      message: message ? sanitizeInput(message) : "Partnership enquiry",
+      companyName: companyName ? sanitizeInput(companyName) : undefined,
+      quantity: quantity ? sanitizeInput(quantity) : undefined,
+      location: location ? sanitizeInput(location) : undefined,
+      businessType: businessType ? sanitizeInput(businessType) : undefined,
     });
 
-    return NextResponse.json({
-      success: true,
-      message: "Thank you. Your partnership enquiry was received.",
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Thank you. Your partnership enquiry was received.",
+        id: result.id,
+        handle: result.handle,
+      },
+      {
+        status: 200,
+        headers: {
+          "X-RateLimit-Remaining": String(rateLimit.remaining),
+        },
+      }
+    );
   } catch (error) {
     console.error("[api/partner-submissions] POST failed:", error);
     return NextResponse.json(
-      { error: "We couldn't submit your enquiry. Please try again." },
+      { error: "We couldn't submit your enquiry to Shopify. Please try again." },
       { status: 500 }
     );
   }
 }
-

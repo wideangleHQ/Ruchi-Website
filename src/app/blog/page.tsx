@@ -39,10 +39,10 @@ export default async function BlogPage({ searchParams }: Props) {
     <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text tracking-tight mb-3">
+        <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-950 tracking-tight mb-3">
           Stories, Flavours &amp; Insights
         </h1>
-        <p className="text-sm sm:text-base text-muted-text leading-relaxed max-w-2xl">
+        <p className="text-sm sm:text-base text-gray-700 font-semibold leading-relaxed max-w-2xl">
           Recipes, culinary knowledge, manufacturing stories and the heritage behind Ruchi.
         </p>
       </div>

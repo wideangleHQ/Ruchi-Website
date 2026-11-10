@@ -65,7 +65,7 @@ export function RatingWidget({ articleId }: { articleId: string }) {
 
   return (
     <div className="flex flex-col items-start gap-2">
-      <p className="text-sm font-medium text-text">
+      <p className="text-sm font-bold text-gray-950">
         {userRating ? "Thanks for rating!" : "How useful was this article?"}
       </p>
       <div className="flex items-center gap-1">
@@ -78,7 +78,7 @@ export function RatingWidget({ articleId }: { articleId: string }) {
               onMouseLeave={() => setHoveredStar(0)}
               onClick={() => submitRating(star)}
               disabled={submitted}
-              className="p-0.5 transition-transform hover:scale-110 disabled:cursor-default"
+              className="p-0.5 transition-transform hover:scale-110 disabled:cursor-default cursor-pointer"
               aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
             >
               <Star
@@ -91,7 +91,7 @@ export function RatingWidget({ articleId }: { articleId: string }) {
         })}
       </div>
       {count > 0 && (
-        <p className="text-xs text-muted-text">
+        <p className="text-xs font-semibold text-gray-700">
           {average.toFixed(1)} / 5 · Based on {count} {count === 1 ? "rating" : "ratings"}
         </p>
       )}

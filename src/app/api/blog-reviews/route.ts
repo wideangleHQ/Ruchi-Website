@@ -1,30 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getApprovedComments, addComment, addRating, getRatings } from "@/lib/shopify/admin-blog";
-
-// Rate limiting: per-IP, max 10 submissions per 10 minutes
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + 600_000 });
-    return true;
-  }
-  if (entry.count >= 10) return false;
-  entry.count++;
-  return true;
-}
-
-function sanitize(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    .trim();
-}
+import { checkRateLimit, getClientIp } from "@/lib/server/rate-limit";
+import { sanitizeInput } from "@/lib/shopify/contact-submissions";
 
 export async function GET(request: NextRequest) {
   const articleId =
@@ -48,10 +25,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (!checkRateLimit(ip)) {
+  const ip = getClientIp(request);
+  const rateLimit = checkRateLimit(ip, 30);
+  if (!rateLimit.allowed) {
     return NextResponse.json(
-      { error: "Too many submissions. Please try again later." },
+      { error: "Too many submissions. Please wait a few minutes before trying again." },
       { status: 429 }
     );
   }
@@ -91,10 +69,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const sanitizedComments = sanitize(comments);
-    const sanitizedName = sanitize(authorName.slice(0, 100));
+    const sanitizedComments = sanitizeInput(comments);
+    const sanitizedName = sanitizeInput(authorName.slice(0, 100));
 
-    // 1. Add comment to review queue
+    // 1. Add comment to review queue in Shopify Metaobject
     const comment = await addComment(articleId, {
       name: sanitizedName,
       content: sanitizedComments,
@@ -109,12 +87,20 @@ export async function POST(request: NextRequest) {
       console.warn("[api/blog-reviews] Rating aggregation warning:", ratingErr);
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Thank you. Your review was received.",
-      review: comment,
-      ratings: ratingData,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Thank you. Your review was received.",
+        review: comment,
+        ratings: ratingData,
+      },
+      {
+        status: 200,
+        headers: {
+          "X-RateLimit-Remaining": String(rateLimit.remaining),
+        },
+      }
+    );
   } catch (error) {
     console.error("[api/blog-reviews] POST failed:", error);
     return NextResponse.json(
@@ -123,4 +109,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

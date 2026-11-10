@@ -68,6 +68,7 @@ export function PartnerForm() {
       email: formData.email.trim(),
       phone: formData.phone.trim(),
       company_name: formData.company_name.trim(),
+      business_type: formData.buisness_type.trim(),
       buisness_type: formData.buisness_type.trim(),
       quantity: formData.quantity.trim(),
       location: formData.location.trim(),
@@ -81,12 +82,13 @@ export function PartnerForm() {
         body: JSON.stringify(payload),
       });
 
+      const resData = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || "Submission failed");
+        throw new Error(resData.error || "Submission failed");
       }
 
-      setStatusMessage("Thank you. Your partnership enquiry was received.");
+      setStatusMessage(resData.message || "Thank you. Your partnership enquiry was received.");
       setIsSuccess(true);
       setFormData(EMPTY_STATE);
       form.reset();

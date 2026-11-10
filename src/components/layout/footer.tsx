@@ -92,17 +92,19 @@ export function Footer({ collections = [] }: FooterProps) {
           consent: true,
         }),
       });
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error("Submission failed");
+        throw new Error(data.error || "Submission failed");
       }
       setStatusType("success");
-      setNewsletterMessage("Thank you. Your request was received.");
+      setNewsletterMessage(data.message || "Thank you. Your request was received.");
       setIsSubscribed(true);
       setEmail("");
       setConsent(false);
-    } catch {
+    } catch (err: unknown) {
       setStatusType("error");
-      setNewsletterMessage("We couldn't submit your request. Please try again.");
+      const msg = err instanceof Error && err.message ? err.message : "We couldn't submit your request. Please try again.";
+      setNewsletterMessage(msg);
     } finally {
       setIsSubmitting(false);
     }

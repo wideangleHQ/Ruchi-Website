@@ -39,10 +39,10 @@ export function CommentsSection({ articleId }: { articleId: string }) {
   return (
     <section className="mt-12 pt-10 border-t border-border">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-serif text-2xl font-bold text-text">
+        <h2 className="font-serif text-2xl font-bold text-gray-950">
           Reviews & Comments{" "}
           {comments.length > 0 && (
-            <span className="text-lg text-muted-text font-normal">
+            <span className="text-lg text-gray-700 font-bold">
               ({comments.length})
             </span>
           )}
@@ -56,7 +56,7 @@ export function CommentsSection({ articleId }: { articleId: string }) {
 
       {/* Review & Comment List */}
       <div className="space-y-6">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-text">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-gray-800">
           Community Feedback
         </h3>
 
@@ -66,7 +66,7 @@ export function CommentsSection({ articleId }: { articleId: string }) {
               <div key={comment.id} className="pt-6 first:pt-0">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
-                    <p className="font-semibold text-sm text-text">
+                    <p className="font-bold text-sm text-gray-950">
                       {comment.name || "Verified Reader"}
                     </p>
                     {Boolean(comment.rating) && (
@@ -84,11 +84,11 @@ export function CommentsSection({ articleId }: { articleId: string }) {
                       </div>
                     )}
                   </div>
-                  <span className="text-xs text-muted-text whitespace-nowrap">
+                  <span className="text-xs font-semibold text-gray-600 whitespace-nowrap">
                     {formatDate(comment.createdAt)}
                   </span>
                 </div>
-                <p className="text-sm text-text/85 leading-relaxed whitespace-pre-line">
+                <p className="text-sm font-semibold text-gray-800 leading-relaxed whitespace-pre-line">
                   {comment.content}
                 </p>
               </div>
@@ -97,7 +97,7 @@ export function CommentsSection({ articleId }: { articleId: string }) {
         ) : (
           !loading && (
             <div className="p-6 rounded-lg bg-surface border border-border/60 text-center">
-              <p className="text-sm text-muted-text">
+              <p className="text-sm font-semibold text-gray-700">
                 No reviews yet. Be the first to share your thoughts and rating!
               </p>
             </div>

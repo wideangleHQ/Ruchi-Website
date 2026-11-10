@@ -39,18 +39,21 @@ export function HeadlessNewsletterForm({ className = "", onSuccess }: Newsletter
         }),
       });
 
+      const data = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        throw new Error("Submission failed");
+        throw new Error(data.error || "Submission failed");
       }
 
       setStatusType("success");
-      setStatusMessage("Thank you. Your request was received.");
+      setStatusMessage(data.message || "Thank you. Your request was received.");
       setEmail("");
       setConsent(false);
       if (onSuccess) onSuccess();
-    } catch {
+    } catch (err: unknown) {
       setStatusType("error");
-      setStatusMessage("We couldn't submit your request. Please try again.");
+      const msg = err instanceof Error && err.message ? err.message : "We couldn't submit your request. Please try again.";
+      setStatusMessage(msg);
     } finally {
       setIsSubmitting(false);
     }

@@ -1,30 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getApprovedComments, addComment } from "@/lib/shopify/admin-blog";
-
-// Simple rate limiting: per-IP, max 5 comments per 10 minutes
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + 600_000 });
-    return true;
-  }
-  if (entry.count >= 10) return false;
-  entry.count++;
-  return true;
-}
-
-function sanitize(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    .trim();
-}
+import { checkRateLimit, getClientIp } from "@/lib/server/rate-limit";
+import { sanitizeInput } from "@/lib/shopify/contact-submissions";
 
 export async function GET(request: NextRequest) {
   const articleId =
@@ -37,13 +14,17 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
-  if (!checkRateLimit(ip)) {
-    return NextResponse.json({ error: "Too many comments. Please try again later." }, { status: 429 });
+  const ip = getClientIp(request);
+  const rateLimit = checkRateLimit(ip, 30);
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many comments. Please wait a few minutes before trying again." },
+      { status: 429 }
+    );
   }
 
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => ({}));
     const articleId = body.articleId || body.article_id;
     const rawName = body.name || "Verified Reader";
     const rawContent = body.content || body.comments;
@@ -61,16 +42,24 @@ export async function POST(request: NextRequest) {
     }
 
     const comment = await addComment(articleId, {
-      name: sanitize(rawName.trim()),
-      content: sanitize(rawContent.trim()),
+      name: sanitizeInput(rawName),
+      content: sanitizeInput(rawContent),
       rating: rating || null,
     });
 
-    return NextResponse.json({
-      success: true,
-      comment,
-      message: "Thank you. Your review was received.",
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        comment,
+        message: "Thank you. Your review was received.",
+      },
+      {
+        status: 200,
+        headers: {
+          "X-RateLimit-Remaining": String(rateLimit.remaining),
+        },
+      }
+    );
   } catch (error) {
     console.error("[api/blog/comments] POST failed:", error);
     return NextResponse.json({ error: "Failed to submit comment" }, { status: 500 });

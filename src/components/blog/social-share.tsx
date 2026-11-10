@@ -30,7 +30,7 @@ export function SocialShare({ url, title }: { url: string; title: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs font-medium text-muted-text mr-1">Share</span>
+      <span className="text-xs font-bold uppercase tracking-wider text-gray-800 mr-1">Share</span>
       {SHARE_TARGETS.map((target) => (
         <a
           key={target.name}
@@ -38,7 +38,7 @@ export function SocialShare({ url, title }: { url: string; title: string }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Share on ${target.name}`}
-          className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-text hover:text-primary-green hover:border-primary-green/40 transition-colors"
+          className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-700 hover:text-[#168a4a] hover:border-[#168a4a]/40 bg-gray-50 transition-colors"
         >
           {icons[target.icon]}
         </a>
@@ -46,9 +46,9 @@ export function SocialShare({ url, title }: { url: string; title: string }) {
       <button
         onClick={copyLink}
         aria-label="Copy link"
-        className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-text hover:text-primary-green hover:border-primary-green/40 transition-colors"
+        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-700 hover:text-[#168a4a] hover:border-[#168a4a]/40 bg-gray-50 transition-colors cursor-pointer"
       >
-        {copied ? <Check className="w-3.5 h-3.5 text-primary-green" /> : <LinkIcon className="w-3.5 h-3.5" />}
+        {copied ? <Check className="w-3.5 h-3.5 text-[#168a4a]" /> : <LinkIcon className="w-3.5 h-3.5" />}
       </button>
     </div>
   );

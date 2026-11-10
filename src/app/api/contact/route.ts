@@ -1,96 +1,143 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createContactSubmission, type ContactFormType } from "@/lib/shopify/contact-submissions";
-
-// Simple rate limiting: per-IP, max 5 submissions per 10 minutes
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + 600_000 });
-    return true;
-  }
-  if (entry.count >= 5) return false;
-  entry.count++;
-  return true;
-}
-
-function sanitize(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    .trim();
-}
+import {
+  createContactSubmission,
+  sanitizeInput,
+  type ContactFormType,
+} from "@/lib/shopify/contact-submissions";
+import { checkRateLimit, getClientIp } from "@/lib/server/rate-limit";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_REGEX = /^[+]?[\d\s()-]{7,20}$/;
+const PHONE_REGEX = /^[+]?[\d\s()-]{7,25}$/;
 const VALID_FORM_TYPES: ContactFormType[] = ["queries", "bulk_order", "partner"];
 const MAX_FIELD_LENGTH = 200;
-const MAX_MESSAGE_LENGTH = 2000;
+const MAX_MESSAGE_LENGTH = 5000;
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
-  if (!checkRateLimit(ip)) {
-    return NextResponse.json({ error: "Too many submissions. Please try again later." }, { status: 429 });
+  const ip = getClientIp(request);
+  const rateLimit = checkRateLimit(ip, 30);
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many submissions. Please wait a few minutes before trying again." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": "600",
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
   }
 
   try {
-    const body = await request.json();
-    const formType = body.formType || body.form_type;
-    const fullName = body.fullName || body.full_name;
-    const email = body.email;
-    const phone = body.phone;
-    const message = body.message;
-    const companyName = body.companyName || body.company_name;
-    const quantity = body.quantity !== undefined && body.quantity !== null ? String(body.quantity) : undefined;
-    const location = body.location;
-    const businessType = body.businessType || body.business_type || body.buisness_type;
+    const body = await request.json().catch(() => ({}));
 
+    // Harmonize camelCase and snake_case inputs
+    const formType = (body.formType || body.form_type) as ContactFormType;
+    const fullName = (body.fullName || body.full_name || "").toString().trim();
+    const email = (body.email || "").toString().trim();
+    const phone = (body.phone || "").toString().trim();
+    const message = (body.message || "").toString().trim();
+    const companyName = (body.companyName || body.company_name || "").toString().trim();
+    const quantity = body.quantity !== undefined && body.quantity !== null
+      ? String(body.quantity).trim()
+      : "";
+    const location = (body.location || "").toString().trim();
+    const businessType = (
+      body.businessType ||
+      body.business_type ||
+      body.buisness_type ||
+      ""
+    ).toString().trim();
+
+    // Validation
     if (!VALID_FORM_TYPES.includes(formType)) {
-      return NextResponse.json({ error: "Invalid form type" }, { status: 400 });
-    }
-    if (!fullName?.trim() || !email?.trim()) {
-      return NextResponse.json({ error: "Full name and email are required" }, { status: 400 });
-    }
-    if (fullName.length > MAX_FIELD_LENGTH || email.length > MAX_FIELD_LENGTH) {
-      return NextResponse.json({ error: "Input too long" }, { status: 400 });
-    }
-    if (!EMAIL_REGEX.test(email.trim())) {
-      return NextResponse.json({ error: "Please enter a valid email address" }, { status: 400 });
-    }
-    if (phone && !PHONE_REGEX.test(phone.trim())) {
-      return NextResponse.json({ error: "Please enter a valid phone number" }, { status: 400 });
-    }
-    if (message && message.length > MAX_MESSAGE_LENGTH) {
-      return NextResponse.json({ error: "Message is too long" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid form type. Must be queries, bulk_order, or partner." },
+        { status: 400 }
+      );
     }
 
-    if (formType === "bulk_order" && !quantity?.trim()) {
-      return NextResponse.json({ error: "Approximate quantity is required" }, { status: 400 });
+    if (!fullName) {
+      return NextResponse.json({ error: "Full name is required." }, { status: 400 });
     }
-    if (formType === "partner" && !businessType?.trim()) {
-      return NextResponse.json({ error: "Business type is required" }, { status: 400 });
+    if (fullName.length > MAX_FIELD_LENGTH) {
+      return NextResponse.json(
+        { error: `Full name must not exceed ${MAX_FIELD_LENGTH} characters.` },
+        { status: 400 }
+      );
     }
 
-    await createContactSubmission({
+    if (!email) {
+      return NextResponse.json({ error: "Email address is required." }, { status: 400 });
+    }
+    if (email.length > MAX_FIELD_LENGTH || !EMAIL_REGEX.test(email)) {
+      return NextResponse.json(
+        { error: "Please enter a valid email address." },
+        { status: 400 }
+      );
+    }
+
+    if (phone && (!PHONE_REGEX.test(phone) || phone.length > 50)) {
+      return NextResponse.json(
+        { error: "Please enter a valid phone number." },
+        { status: 400 }
+      );
+    }
+
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json(
+        { error: `Message must not exceed ${MAX_MESSAGE_LENGTH} characters.` },
+        { status: 400 }
+      );
+    }
+
+    if (formType === "bulk_order" && !quantity) {
+      return NextResponse.json(
+        { error: "Approximate quantity is required for bulk order enquiries." },
+        { status: 400 }
+      );
+    }
+
+    if (formType === "partner" && !businessType) {
+      return NextResponse.json(
+        { error: "Please select your business type." },
+        { status: 400 }
+      );
+    }
+
+    // Persist to Shopify Metaobjects
+    const result = await createContactSubmission({
       formType,
-      fullName: sanitize(fullName.trim()),
-      email: sanitize(email.trim()),
-      phone: phone ? sanitize(phone.trim()) : undefined,
-      message: message ? sanitize(message.trim()) : undefined,
-      companyName: companyName ? sanitize(companyName.trim()) : undefined,
-      quantity: quantity ? sanitize(quantity.trim()) : undefined,
-      location: location ? sanitize(location.trim()) : undefined,
-      businessType: businessType ? sanitize(businessType.trim()) : undefined,
+      fullName: sanitizeInput(fullName),
+      email: sanitizeInput(email),
+      phone: phone ? sanitizeInput(phone) : undefined,
+      message: message ? sanitizeInput(message) : undefined,
+      companyName: companyName ? sanitizeInput(companyName) : undefined,
+      quantity: quantity ? sanitizeInput(quantity) : undefined,
+      location: location ? sanitizeInput(location) : undefined,
+      businessType: businessType ? sanitizeInput(businessType) : undefined,
     });
 
-    return NextResponse.json({ message: "Submission received" });
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Thank you. Your enquiry was received.",
+        id: result.id,
+        handle: result.handle,
+      },
+      {
+        status: 200,
+        headers: {
+          "X-RateLimit-Remaining": String(rateLimit.remaining),
+        },
+      }
+    );
   } catch (error) {
     console.error("[api/contact] POST failed:", error);
-    return NextResponse.json({ error: "Failed to submit. Please try again." }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to submit enquiry.";
+    return NextResponse.json(
+      { error: "We couldn't submit your enquiry to Shopify. Please try again." },
+      { status: 500 }
+    );
   }
 }

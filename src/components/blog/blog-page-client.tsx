@@ -60,18 +60,18 @@ export function BlogPageClient({
     <div className="w-full">
       {/* Search Bar */}
       <div className="relative max-w-xl mb-6">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-muted-text" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-500" />
         <input
           type="search"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search recipes, spices, stories..."
-          className="w-full pl-11 pr-4 py-3 rounded-[var(--radius-brand)] border border-border bg-white text-sm font-medium text-text placeholder:text-muted-text/60 focus:outline-none focus:border-primary-green/40 focus:ring-1 focus:ring-primary-green/20 transition-colors"
+          className="w-full pl-11 pr-4 py-3 rounded-[var(--radius-brand)] border border-gray-300 bg-white text-sm font-semibold text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#168a4a] focus:ring-1 focus:ring-[#168a4a]/20 transition-colors"
         />
         {searchInput && (
           <button
             onClick={() => { setSearchInput(""); updateParams({ search: "" }); }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-text hover:text-text"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-900 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -82,10 +82,10 @@ export function BlogPageClient({
       <div className="hidden sm:flex items-center gap-1.5 flex-wrap mb-6">
         <button
           onClick={() => updateParams({ category: "", page: "" })}
-          className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-colors cursor-pointer ${
             !currentCategory
-              ? "bg-primary-green text-white"
-              : "text-muted-text hover:bg-soft-green hover:text-primary-green font-medium"
+              ? "bg-[#168a4a] text-white shadow-xs"
+              : "text-gray-700 bg-gray-100 hover:bg-emerald-50 hover:text-[#168a4a] font-semibold"
           }`}
         >
           All
@@ -96,10 +96,10 @@ export function BlogPageClient({
             <button
               key={cat.handle}
               onClick={() => updateParams({ category: cat.handle, page: "" })}
-              className={`px-4 py-2 rounded-full text-sm transition-colors ${
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-colors cursor-pointer ${
                 isSelected
-                  ? "bg-primary-green text-white font-semibold"
-                  : "text-muted-text hover:bg-soft-green hover:text-primary-green font-medium"
+                  ? "bg-[#168a4a] text-white font-bold shadow-xs"
+                  : "text-gray-700 bg-gray-100 hover:bg-emerald-50 hover:text-[#168a4a] font-semibold"
               }`}
             >
               {cat.title}
@@ -112,38 +112,38 @@ export function BlogPageClient({
       <div className="sm:hidden flex gap-2 mb-5">
         <button
           onClick={() => setShowMobileFilters(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-[var(--radius-brand)] border border-border text-sm font-medium text-text"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-[var(--radius-brand)] border border-gray-300 text-sm font-semibold text-gray-900 bg-white"
         >
           <SlidersHorizontal className="w-4 h-4" />
           Filter
           {currentCategory && (
-            <span className="badge-ruchi text-[10px] py-0.5 px-1.5 font-semibold">1</span>
+            <span className="badge-ruchi text-[10px] py-0.5 px-1.5 font-bold">1</span>
           )}
         </button>
         <select
           value={currentSort}
           onChange={(e) => updateParams({ sort: e.target.value })}
-          className="px-4 py-2.5 rounded-[var(--radius-brand)] border border-border text-sm font-medium text-text bg-white"
+          className="px-4 py-2.5 rounded-[var(--radius-brand)] border border-gray-300 text-sm font-semibold text-gray-900 bg-white"
         >
-          <option value="latest" className="font-medium">Latest</option>
-          <option value="oldest" className="font-medium">Oldest</option>
+          <option value="latest" className="font-semibold">Latest</option>
+          <option value="oldest" className="font-semibold">Oldest</option>
         </select>
       </div>
 
       {/* Sorting — Desktop */}
       <div className="hidden sm:flex items-center justify-between mb-6">
-        <p className="text-sm font-medium text-muted-text">
+        <p className="text-sm font-semibold text-gray-700">
           {articles.length} {articles.length === 1 ? "story" : "stories"}
           {currentSearch && <> for &ldquo;{currentSearch}&rdquo;</>}
-          {isPending && <span className="ml-2 text-primary-green font-semibold">Loading…</span>}
+          {isPending && <span className="ml-2 text-[#168a4a] font-bold">Loading…</span>}
         </p>
         <select
           value={currentSort}
           onChange={(e) => updateParams({ sort: e.target.value })}
-          className="px-3 py-1.5 rounded-lg border border-border text-sm font-medium text-text bg-white"
+          className="px-3 py-1.5 rounded-lg border border-gray-300 text-sm font-semibold text-gray-900 bg-white cursor-pointer"
         >
-          <option value="latest" className="font-medium">Latest</option>
-          <option value="oldest" className="font-medium">Oldest</option>
+          <option value="latest" className="font-semibold">Latest</option>
+          <option value="oldest" className="font-semibold">Oldest</option>
         </select>
       </div>
 
@@ -154,13 +154,13 @@ export function BlogPageClient({
             <button
               key={tag}
               onClick={() => updateParams({ tag: currentTag === tag ? "" : tag, page: "" })}
-              className={`px-3 py-1 rounded-full text-xs border transition-colors whitespace-nowrap ${
+              className={`px-3 py-1 rounded-full text-xs transition-colors whitespace-nowrap cursor-pointer ${
                 currentTag === tag
-                  ? "bg-primary-green text-white border-primary-green font-semibold"
-                  : "border-border text-muted-text hover:border-primary-green/40 hover:text-primary-green font-medium"
+                  ? "bg-[#168a4a] text-white border border-[#168a4a] font-bold shadow-xs"
+                  : "border border-gray-300 text-gray-700 bg-gray-50 hover:border-[#168a4a]/40 hover:text-[#168a4a] font-semibold"
               }`}
             >
-              {tag}
+              #{tag}
             </button>
           ))}
         </div>
@@ -169,10 +169,10 @@ export function BlogPageClient({
       {/* Content */}
       {articles.length === 0 ? (
         <div className="py-20 text-center">
-          <p className="font-serif text-2xl font-bold text-text mb-2">
+          <p className="font-serif text-2xl font-bold text-gray-950 mb-2">
             {currentSearch ? "No stories found." : "More stories coming soon."}
           </p>
-          <p className="text-sm font-medium text-muted-text">
+          <p className="text-sm font-semibold text-gray-700">
             {currentSearch
               ? "Try another search or explore a different category."
               : "We are curating new stories, culinary tips, and heritage features."}
@@ -220,14 +220,14 @@ export function BlogPageClient({
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-text mb-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-gray-800 mb-3">
                 Categories
               </p>
               <div className="space-y-1">
                 <button
                   onClick={() => { updateParams({ category: "", page: "" }); setShowMobileFilters(false); }}
                   className={`w-full text-left px-3 py-2.5 rounded-lg text-sm ${
-                    !currentCategory ? "bg-soft-green text-primary-green font-semibold" : "text-text font-medium"
+                    !currentCategory ? "bg-soft-green text-[#168a4a] font-bold" : "text-gray-900 font-semibold"
                   }`}
                 >
                   All
@@ -238,8 +238,8 @@ export function BlogPageClient({
                     onClick={() => { updateParams({ category: cat.handle, page: "" }); setShowMobileFilters(false); }}
                     className={`w-full text-left px-3 py-2.5 rounded-lg text-sm ${
                       currentCategory === cat.handle
-                        ? "bg-soft-green text-primary-green font-semibold"
-                        : "text-text font-medium"
+                        ? "bg-soft-green text-[#168a4a] font-bold"
+                        : "text-gray-900 font-semibold"
                     }`}
                   >
                     {cat.title}
@@ -249,7 +249,7 @@ export function BlogPageClient({
 
               {allTags.length > 0 && (
                 <>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-text mb-3 mt-6">
+                  <p className="text-xs font-bold uppercase tracking-wider text-gray-800 mb-3 mt-6">
                     Tags
                   </p>
                   <div className="flex gap-2 flex-wrap">
@@ -257,13 +257,13 @@ export function BlogPageClient({
                       <button
                         key={tag}
                         onClick={() => { updateParams({ tag: currentTag === tag ? "" : tag, page: "" }); setShowMobileFilters(false); }}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium border ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${
                           currentTag === tag
-                            ? "bg-primary-green text-white border-primary-green font-semibold"
-                            : "border-border text-muted-text"
+                            ? "bg-[#168a4a] text-white border-[#168a4a] font-bold"
+                            : "border-gray-300 text-gray-700 bg-gray-50"
                         }`}
                       >
-                        {tag}
+                        #{tag}
                       </button>
                     ))}
                   </div>

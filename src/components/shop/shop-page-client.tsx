@@ -434,8 +434,8 @@ export function ShopPageClient({
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
             
             {/* Desktop Sidebar (Left Column) - Sticky with Independent Scrolling */}
-            <aside className="hidden lg:block w-[280px] shrink-0 sticky top-[72px] self-start">
-              <div className="max-h-[calc(100vh-88px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400 pr-2">
+            <aside className="hidden lg:block w-[280px] shrink-0 sticky top-[160px] self-start z-20">
+              <div className="max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 pr-1 pb-2">
                 {filterSidebarContent}
               </div>
             </aside>
