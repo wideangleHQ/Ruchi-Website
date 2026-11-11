@@ -7,8 +7,16 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const blogs = await getAdminBlogs();
-  return NextResponse.json({ blogs });
+  try {
+    const blogs = await getAdminBlogs();
+    return NextResponse.json({ blogs });
+  } catch (err: unknown) {
+    console.error("[api/admin/blogs] GET failed:", err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Failed to fetch blogs" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
