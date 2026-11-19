@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ShoppingBag, Menu, X, User, ArrowRight, Search, ChevronDown, Download, FileDown } from "lucide-react";
 import { useCartDrawer } from "@/context/cart-context";
+import { useDialog } from "@/lib/use-dialog";
 import { AnnouncementBar } from "./announcement-bar";
 import { HeaderSearch } from "./header-search";
 import { getSocialLinksForPath } from "@/config/social-links";
@@ -80,17 +81,8 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
     setIsMobileContactOpen(false);
   }
 
-  // Lock body scroll when mobile hamburger overlay is active
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isMobileMenuOpen]);
+  // The mobile menu is a real modal: focus trap, Escape, scroll lock, phone Back button closes it, and focus returns to the hamburger.
+  const { ref: mobileMenuRef, onClickCapture: onMobileMenuClickCapture } = useDialog(isMobileMenuOpen, () => setIsMobileMenuOpen(false), { closeOnBack: true });
 
   // The Tea page opens on a full-bleed landscape hero, so it gets a transparent three-part bar
   // (logo | navigation | Shop) laid over the hero instead of the standard sticky header.
@@ -181,8 +173,10 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(true)}
-              className="flex cursor-pointer rounded-[6px] p-2 text-[#10331f] transition-colors hover:bg-white/40 lg:hidden"
+              className="flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-[6px] p-2 text-[#10331f] transition-colors hover:bg-white/40 lg:hidden"
               aria-label="Open menu"
+              aria-haspopup="dialog"
+              aria-expanded={isMobileMenuOpen}
             >
               <Menu className="h-6 w-6" />
             </button>
@@ -265,9 +259,10 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
 
             {/* Mobile/Tablet Search Toggle */}
             <button
+              type="button"
               onClick={() => setIsMobileSearchOpen((v) => !v)}
-              className="lg:hidden p-2 text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 rounded-full transition-colors"
-              aria-label="Toggle search"
+              className="lg:hidden flex min-h-11 min-w-11 items-center justify-center p-2 text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 rounded-full transition-colors"
+              aria-label={isMobileSearchOpen ? "Close search" : "Open search"}
               aria-expanded={isMobileSearchOpen}
             >
               <Search className="w-5 h-5" />
@@ -275,9 +270,12 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
 
             {/* Mobile Hamburger Menu Button — Far Right */}
             <button
+              type="button"
               onClick={() => setIsMobileMenuOpen(true)}
-              className="flex lg:hidden p-2 text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 rounded-full transition-colors cursor-pointer"
+              className="flex lg:hidden min-h-11 min-w-11 items-center justify-center p-2 text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 rounded-full transition-colors cursor-pointer"
               aria-label="Open menu"
+              aria-haspopup="dialog"
+              aria-expanded={isMobileMenuOpen}
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -390,7 +388,15 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
 
       {/* Mobile Full-Screen Navigation Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] lg:hidden w-full h-[100dvh] bg-white flex flex-col justify-between overflow-y-auto animate-fade-in pt-[env(safe-area-inset-top,0px)] pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
+        <div
+          ref={mobileMenuRef}
+          onClickCapture={onMobileMenuClickCapture}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site menu"
+          tabIndex={-1}
+          className="fixed inset-0 z-[100] lg:hidden w-full h-[100dvh] bg-white flex flex-col justify-between overflow-y-auto overscroll-contain animate-fade-in pt-[env(safe-area-inset-top,0px)] pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] focus:outline-none"
+        >
           <div className="w-full">
             {/* Overlay Header: Logo on Far Left, Close ✕ on Far Right matching global header padding */}
             <div className="mx-auto max-w-[1400px] px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between border-b border-gray-200/80 sticky top-0 bg-white z-10">
@@ -411,8 +417,10 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                 </div>
               </Link>
               <button
+                type="button"
+                data-autofocus
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-10 h-10 rounded-full flex items-center justify-center text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 transition-colors cursor-pointer"
+                className="w-11 h-11 rounded-full flex items-center justify-center text-gray-800 hover:text-[#168a4a] hover:bg-emerald-50 transition-colors cursor-pointer"
                 aria-label="Close menu"
               >
                 <X className="w-6 h-6" />

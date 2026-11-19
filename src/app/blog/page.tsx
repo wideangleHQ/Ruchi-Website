@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Stories, Flavours & Insights",
   description:
     "Explore recipes, culinary knowledge, manufacturing stories and the heritage behind Ruchi Foodline.",
+  alternates: { canonical: "/blog" },
 };
 
 export const revalidate = 60;

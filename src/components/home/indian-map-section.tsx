@@ -57,7 +57,7 @@ export function IndianMapSection() {
             </h2>
 
             {/* Editorial Paragraph */}
-            <p className="mt-5 sm:mt-6 lg:mt-8 font-sans text-stone-700 text-sm sm:text-base lg:text-[1.0625rem] font-normal leading-relaxed lg:leading-[1.75] max-w-xl">
+            <p className="mt-5 sm:mt-6 lg:mt-8 font-sans text-stone-700 text-sm sm:text-base lg:text-[1.0625rem] font-medium leading-relaxed lg:leading-[1.75] max-w-xl">
               Born in Cuttack, Odisha, in 1976, Ruchi Foodline has grown from
               its humble beginnings into a trusted name in Indian kitchens.
               Built on a foundation of quality, dedication, and honest

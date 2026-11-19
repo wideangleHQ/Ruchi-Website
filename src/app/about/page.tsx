@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGE } from "@/lib/seo/site";
 import { AboutHero } from "@/components/about/about-hero";
 import { AboutGlance } from "@/components/about/about-glance";
 import { AboutHeritageJourney } from "@/components/about/about-heritage-journey";
@@ -13,10 +14,13 @@ import { AboutCSR } from "@/components/about/about-csr";
 import { AboutCertifications } from "@/components/about/about-certifications";
 
 export const metadata: Metadata = {
-  title: "About Ruchi Foodline | 50+ Years of Taste, Trust & Innovation",
+  alternates: { canonical: "/about" },
+  // `absolute`: the site-wide "| Ruchi Foodline" suffix would push this title past search-result length.
+  title: { absolute: "About Ruchi Foodline | 50+ Years of Taste, Trust & Innovation" },
   description:
-    "Discover Ruchi Foodline's 50-year legacy (1976–2026). From Cuttack to global kitchens, learn about our heritage, founder Dr. Sarat Kumar Sahoo, 100% pure spices, suji pasta technology, and ISO-certified standards.",
+    "The Ruchi Foodline story since 1976 in Cuttack, Odisha: our heritage, founder Dr. Sarat Kumar Sahoo, manufacturing, quality certifications and awards.",
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     title: "About Ruchi Foodline — 50 Years of Taste, Trust & Innovation",
     description:
       "Celebrating 50 years of authentic taste, farm-sourced pure spices, zero-maida suji pasta, and food processing excellence since 1976.",

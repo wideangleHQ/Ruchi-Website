@@ -25,6 +25,8 @@ function endpoint() {
   return `${host}/api/${apiVersion}/graphql.json`;
 }
 
+const DEFAULT_REVALIDATE_SECONDS = 300;
+
 type ShopifyFetchOptions<TVariables> = {
   query: string;
   variables?: TVariables;
@@ -64,7 +66,8 @@ export async function shopifyFetch<TResult, TVariables = Record<string, unknown>
       cache,
       next:
         cache === "force-cache" || cache === undefined
-          ? { tags, revalidate }
+          ? // Default 5 min so stock/price can never stay stale indefinitely, even if webhooks are not configured.
+            { tags, revalidate: revalidate === undefined ? DEFAULT_REVALIDATE_SECONDS : revalidate }
           : undefined,
     });
   } catch (error) {

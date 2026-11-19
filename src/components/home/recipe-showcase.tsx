@@ -99,7 +99,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
           <div className="flex items-center gap-3 self-start sm:self-end shrink-0">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-white/90 hover:text-white transition-colors mr-1"
+              className="inline-flex min-h-11 items-center gap-1.5 text-xs sm:text-sm font-semibold text-white/90 hover:text-white transition-colors mr-1"
             >
               <span>View All</span>
               <span aria-hidden="true">&rarr;</span>
@@ -111,7 +111,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
                   onClick={() => scroll("left")}
                   disabled={!canScrollLeft}
                   aria-label="Previous stories"
-                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all text-xs font-bold ${
+                  className={`w-11 h-11 rounded-full flex items-center justify-center border transition-all text-xs font-bold ${
                     canScrollLeft
                       ? "bg-white/10 text-white border-white/30 hover:bg-white hover:text-[#0e6337] cursor-pointer active:scale-95 shadow-xs"
                       : "bg-white/5 text-white/30 border-white/10 cursor-not-allowed opacity-40"
@@ -123,7 +123,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
                   onClick={() => scroll("right")}
                   disabled={!canScrollRight}
                   aria-label="Next stories"
-                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all text-xs font-bold ${
+                  className={`w-11 h-11 rounded-full flex items-center justify-center border transition-all text-xs font-bold ${
                     canScrollRight
                       ? "bg-white/10 text-white border-white/30 hover:bg-white hover:text-[#0e6337] cursor-pointer active:scale-95 shadow-xs"
                       : "bg-white/5 text-white/30 border-white/10 cursor-not-allowed opacity-40"
@@ -151,7 +151,7 @@ export function RecipeShowcase({ articles, categories }: RecipeShowcaseProps) {
                   role="tab"
                   aria-selected={isActive}
                   onClick={(e) => handleCategoryChange(cat.handle, e)}
-                  className={`relative pb-2.5 text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer shrink-0 focus:outline-hidden ${
+                  className={`relative inline-flex min-h-11 items-end pb-2.5 text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer shrink-0 focus:outline-hidden ${
                     isActive
                       ? "text-white font-bold"
                       : "text-white/75 hover:text-white font-medium sm:font-semibold"

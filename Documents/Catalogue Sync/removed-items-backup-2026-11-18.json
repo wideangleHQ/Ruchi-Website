@@ -1,0 +1,868 @@
+{
+ "taken": "2026-11-18",
+ "note": "Backup of products archived / pack sizes deleted when aligning the store to Product Catalogue - Website.xlsx. Archived products can be restored in Shopify admin (status Active). Deleted variants (below) can be re-created from this data.",
+ "archivedProducts": [
+  {
+   "id": "gid://shopify/Product/10284658786520",
+   "handle": "black-salt",
+   "title": "Black Salt",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": []
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550820692184",
+      "title": "100 GM",
+      "sku": "RUCHI-BLACKSALT-008",
+      "availableForSale": true,
+      "price": {
+       "amount": "10.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284658884824",
+   "handle": "ruchi-rock-salt",
+   "title": "Ruchi Rock Salt",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": []
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550820724952",
+      "title": "500 GM",
+      "sku": "RUCHI-ROCKSALT-009",
+      "availableForSale": true,
+      "price": {
+       "amount": "65.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284658983128",
+   "handle": "edible-soda",
+   "title": "Edible Soda",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": []
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550820823256",
+      "title": "100 GM",
+      "sku": "RUCHI-EDIBLESODA-010",
+      "availableForSale": true,
+      "price": {
+       "amount": "15.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284659081432",
+   "handle": "hingu-jar",
+   "title": "Hingu Jar",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": []
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550820921560",
+      "title": "10 GM",
+      "sku": null,
+      "availableForSale": true,
+      "price": {
+       "amount": "22.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     },
+     {
+      "id": "gid://shopify/ProductVariant/52550820954328",
+      "title": "50 GM",
+      "sku": null,
+      "availableForSale": true,
+      "price": {
+       "amount": "105.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284659179736",
+   "handle": "tamarind-paste",
+   "title": "Tamarind Paste",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": []
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550821183704",
+      "title": "200 GM",
+      "sku": "RUCHI-TAMARPASTE-012",
+      "availableForSale": true,
+      "price": {
+       "amount": "99.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284663079128",
+   "handle": "jaggery-powder-jar",
+   "title": "Jaggery Powder Jar",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": []
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550829342936",
+      "title": "500 GM",
+      "sku": "RUCHI-JAGGERY-015",
+      "availableForSale": true,
+      "price": {
+       "amount": "100.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284663275736",
+   "handle": "sahi-biryani-masala",
+   "title": "Sahi Biryani Masala",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": [
+     {
+      "handle": "blended-spices"
+     }
+    ]
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550830981336",
+      "title": "50 GM",
+      "sku": "RUCHI-BL-SAHIBIRYANI-002",
+      "availableForSale": true,
+      "price": {
+       "amount": "120.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284663374040",
+   "handle": "ruchi-hyderabadi-biryani-masala",
+   "title": "Ruchi Hyderabadi Biryani Masala",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": [
+     {
+      "handle": "blended-spices"
+     }
+    ]
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550831636696",
+      "title": "50 GM",
+      "sku": "RUCHI-BL-HYDBIR-003",
+      "availableForSale": true,
+      "price": {
+       "amount": "95.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284664160472",
+   "handle": "ruchi-curry-powder-pouch",
+   "title": "Ruchi Curry Powder Pouch",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": [
+     {
+      "handle": "blended-spices"
+     }
+    ]
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550835208408",
+      "title": "50 GM",
+      "sku": null,
+      "availableForSale": true,
+      "price": {
+       "amount": "37.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     },
+     {
+      "id": "gid://shopify/ProductVariant/52550835241176",
+      "title": "500 GM",
+      "sku": null,
+      "availableForSale": true,
+      "price": {
+       "amount": "37.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284668944600",
+   "handle": "ruchi-pav-bhaji-masala",
+   "title": "Ruchi Pav Bhaji Masala",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": [
+     {
+      "handle": "blended-spices"
+     }
+    ]
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550855721176",
+      "title": "50 GM",
+      "sku": "RUCHI-BL-PAVBHAJI-014",
+      "availableForSale": true,
+      "price": {
+       "amount": "40.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284669010136",
+   "handle": "ruchi-mushroom-rye-masala",
+   "title": "Ruchi Mushroom Rye Masala",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": [
+     {
+      "handle": "blended-spices"
+     }
+    ]
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550855852248",
+      "title": "50 GM",
+      "sku": "RUCHI-BL-MUSHROOM-016",
+      "availableForSale": true,
+      "price": {
+       "amount": "40.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284669042904",
+   "handle": "ruchi-dal-ka-masala",
+   "title": "Ruchi Dal Ka Masala",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": [
+     {
+      "handle": "blended-spices"
+     }
+    ]
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550855885016",
+      "title": "50 GM",
+      "sku": "RUCHI-BL-DAL-017",
+      "availableForSale": true,
+      "price": {
+       "amount": "40.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284669108440",
+   "handle": "ruchi-chowmein-masala",
+   "title": "Ruchi Chowmein Masala",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": [
+     {
+      "handle": "blended-spices"
+     }
+    ]
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550855917784",
+      "title": "50 GM",
+      "sku": "RUCHI-BL-CHOWMEIN-018",
+      "availableForSale": true,
+      "price": {
+       "amount": "40.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284673990872",
+   "handle": "ruchi-non-veg-masala",
+   "title": "Ruchi Non Veg Masala",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": [
+     {
+      "handle": "blended-spices"
+     }
+    ]
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550859849944",
+      "title": "50 GM",
+      "sku": "RUCHI-BL-NONVEG-024",
+      "availableForSale": true,
+      "price": {
+       "amount": "78.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "gid://shopify/Product/10284690440408",
+   "handle": "ruchi-methi-powder",
+   "title": "Ruchi Methi Powder",
+   "productType": "",
+   "status": true,
+   "collections": {
+    "nodes": [
+     {
+      "handle": "whole-spices"
+     }
+    ]
+   },
+   "variants": {
+    "nodes": [
+     {
+      "id": "gid://shopify/ProductVariant/52550887342296",
+      "title": "75 GM",
+      "sku": "RUCHI-WS-METHIPWD-023",
+      "availableForSale": true,
+      "price": {
+       "amount": "27.0"
+      },
+      "metafields": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "deletedVariants": [
+  {
+   "productHandle": "ruchi-curry-powder",
+   "productTitle": "RUCHI Curry Powder",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550803423448",
+    "title": "250GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "200.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-haldi-powder-special",
+   "productTitle": "RUCHI Turmeric Powder",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550805389528",
+    "title": "1 KG",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "424.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "dalchini-powder",
+   "productTitle": "RUCHI Cinnamon Powder",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550820495576",
+    "title": "50 GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "50.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-sambar-powder",
+   "productTitle": "RUCHI Sambar Masala",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550855196888",
+    "title": "100 GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "77.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-short-cut-vermicelli",
+   "productTitle": "RUCHI Short Vermicelli",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550890881240",
+    "title": "850 GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "90.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-short-cut-vermicelli",
+   "productTitle": "RUCHI Short Vermicelli",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550890946776",
+    "title": "5 KG",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "445.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-short-cut-vermicelli",
+   "productTitle": "RUCHI Short Vermicelli",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550890979544",
+    "title": "20 KG",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "45.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-fussili-pasta",
+   "productTitle": "RUCHI Gourmet Fusilli Pasta",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550891897048",
+    "title": "150 GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "23.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-fussili-pasta",
+   "productTitle": "RUCHI Gourmet Fusilli Pasta",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550891962584",
+    "title": "5 KG",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "575.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-macaroni-medium",
+   "productTitle": "Ruchi Macaroni Medium",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550892191960",
+    "title": "175 GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "26.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-macaroni-medium",
+   "productTitle": "Ruchi Macaroni Medium",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550892257496",
+    "title": "900 GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "125.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-penne-pasta",
+   "productTitle": "RUCHI Gourmet Penne Pasta",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550897139928",
+    "title": "250 GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "40.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-noodles",
+   "productTitle": "RUCHI 100% Veg Noodles with Taste Maker",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550897402072",
+    "title": "75 GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "12.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "productHandle": "ruchi-utkarsh-tea",
+   "productTitle": "RUCHI Utkarsh Premium Kadak Chai",
+   "variant": {
+    "id": "gid://shopify/ProductVariant/52550897926360",
+    "title": "100 GM",
+    "sku": null,
+    "availableForSale": true,
+    "price": {
+     "amount": "40.0"
+    },
+    "metafields": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  }
+ ]
+}

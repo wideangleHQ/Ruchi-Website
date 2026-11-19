@@ -1,13 +1,35 @@
+import { expandSearchTerms, toShopifyQuery } from "@/utils/search-synonyms";
+import { rankByTitle } from "@/utils/search-rank";
+import { formatPackSize, parsePackSize } from "@/utils/pricing";
 import type { Metadata } from "next";
-import { getProducts, getCollections } from "@/lib/shopify";
+import { getProducts, getCollections, getCollectionProducts } from "@/lib/shopify";
 import type { Product } from "@/lib/shopify/types";
 import { HAMPERS_HANDLE, isHamper, orderCategories, productsForCategory } from "@/utils/categories";
 import { ShopPageClient, type SortKey } from "@/components/shop/shop-page-client";
 
-export const metadata: Metadata = {
-  title: "Shop All Products",
-  description: "Browse the full collection of Ruchi Foodline pure spices, masalas, pasta, and food products.",
-};
+const BASE_TITLE = "Shop All Products";
+const BASE_DESCRIPTION = "Browse Ruchi Foodline spices, blended masalas, tea, pasta and food products. Filter by category, price and pack size.";
+
+/**
+ * /products is the one canonical shop listing. Any query string (search, filters, sort, pack) makes a view that
+ * duplicates it, so those views stay crawlable for link discovery but are kept out of the index (noindex, follow).
+ * They must NOT be blocked in robots.txt: a blocked URL can't be fetched, so its noindex would never be seen.
+ * A plain ?category=<handle> view canonicalises to the real collection page.
+ */
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const hasParams = Object.values(params).some((v) => v !== undefined && v !== "");
+  if (!hasParams) return { title: BASE_TITLE, description: BASE_DESCRIPTION, alternates: { canonical: "/products" } };
+
+  const onlyCategory = Object.entries(params).every(([k, v]) => k === "category" || !v);
+  const handle = typeof params.category === "string" && /^[a-z0-9-]+$/i.test(params.category) ? params.category : null;
+  return {
+    title: params.query ? `Search results for "${params.query.slice(0, 60)}"` : BASE_TITLE,
+    description: BASE_DESCRIPTION,
+    robots: { index: false, follow: true },
+    alternates: { canonical: onlyCategory && handle ? `/collections/${handle}` : "/products" },
+  };
+}
 
 type Props = {
   searchParams: Promise<{
@@ -34,7 +56,9 @@ function buildShopifyQuery(freeText: string | undefined, availability: string | 
   // Hampers are fetched with everything else and split out in JS from the real Shopify
   // productType field (see productsForCategory): hidden from "All Products", shown under Hampers.
   const clauses: string[] = [];
-  if (freeText?.trim()) clauses.push(freeText.trim());
+  // Regional names and small typos (haldi → turmeric, dalama → dalma) via the shared synonym list.
+  const terms = expandSearchTerms((freeText ?? "").slice(0, 80));
+  if (terms.length) clauses.push(`(${toShopifyQuery(terms)})`);
   if (availability === "in") clauses.push("available_for_sale:true");
   if (availability === "out") clauses.push("available_for_sale:false");
   return clauses.join(" AND ");
@@ -56,7 +80,9 @@ export default async function ProductsCatalogPage({ searchParams }: Props) {
   ]);
 
   const activeCategory = category ?? "all";
-  const baseProducts = productsForCategory(fetchedProducts, activeCategory);
+  // For a text search on the default sort, products that actually name the term come first.
+  const ordered = query && (!sort || sort === "featured") ? rankByTitle(fetchedProducts, expandSearchTerms(query)) : fetchedProducts;
+  const baseProducts = productsForCategory(ordered, activeCategory);
 
   // Facet option lists reflect the query/availability-filtered set so counts stay
   // meaningful, but options don't disappear as the customer narrows further.
@@ -69,15 +95,17 @@ export default async function ProductsCatalogPage({ searchParams }: Props) {
     )
   );
 
+  // One entry per real pack size ("250GM" and "250 GM" are the same pack), ordered by weight.
   const packSizes = Array.from(
     new Set(
       baseProducts.flatMap((p) =>
         p.variants.edges
           .map((e) => e.node.selectedOptions.find((o) => o.value.toLowerCase() !== "default title")?.value)
           .filter((v): v is string => Boolean(v))
+          .map(formatPackSize)
       )
     )
-  ).sort();
+  ).sort((a, b) => (parsePackSize(a)?.amount ?? Infinity) - (parsePackSize(b)?.amount ?? Infinity) || a.localeCompare(b));
 
   const allPrices = baseProducts.flatMap(variantPrices);
   const priceBounds = {
@@ -85,8 +113,13 @@ export default async function ProductsCatalogPage({ searchParams }: Props) {
     max: allPrices.length ? Math.ceil(Math.max(...allPrices)) : 1000,
   };
 
-  const minPrice = min ? Number(min) : undefined;
-  const maxPrice = max ? Number(max) : undefined;
+  // Shared/hand-edited URLs can carry junk: anything that isn't a finite, non-negative number is ignored.
+  const toPrice = (v?: string) => {
+    const n = v === undefined || v === "" ? NaN : Number(v);
+    return Number.isFinite(n) && n >= 0 ? n : undefined;
+  };
+  const minPrice = toPrice(min);
+  const maxPrice = toPrice(max);
   const selectedPacks = pack ? pack.split(",").filter(Boolean) : [];
 
   const filteredProducts = baseProducts.filter((p) => {
@@ -94,7 +127,10 @@ export default async function ProductsCatalogPage({ searchParams }: Props) {
       return false;
     }
     if (selectedPacks.length > 0) {
-      const productSizes = p.variants.edges.map((e) => e.node.selectedOptions[0]?.value);
+      const productSizes = p.variants.edges.map((e) => {
+        const raw = e.node.selectedOptions[0]?.value;
+        return raw ? formatPackSize(raw) : undefined;
+      });
       if (!productSizes.some((size) => size && selectedPacks.includes(size))) return false;
     }
     if (minPrice !== undefined || maxPrice !== undefined) {
@@ -107,8 +143,16 @@ export default async function ProductsCatalogPage({ searchParams }: Props) {
     return true;
   });
 
+  // Nothing matched: offer real best sellers (Shopify's own BEST_SELLING sort, products with a pack photo only).
+  const suggestions =
+    filteredProducts.length === 0
+      ? (await getCollectionProducts({ handle: "basic-spices", sortKey: "BEST_SELLING", first: 8 })).filter((p) => p.featuredImage).slice(0, 4)
+      : [];
+
   return (
     <ShopPageClient
+      suggestions={suggestions}
+      allCategories={orderCategories(collections)}
       products={filteredProducts}
       categories={availableCategories}
       packSizes={packSizes}

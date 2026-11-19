@@ -2,7 +2,10 @@ import { getCollectionProducts } from "@/lib/shopify";
 import { BestSellersSlider } from "./best-sellers-slider";
 
 export async function BestSellersSection() {
-  const products = await getCollectionProducts({ handle: "basic-spices", sortKey: "BEST_SELLING", first: 10 });
+  // Products are the hero here: a best seller without a pack photo would lead the row with a text placeholder.
+  const products = (await getCollectionProducts({ handle: "basic-spices", sortKey: "BEST_SELLING", first: 12 }))
+    .filter((p) => p.featuredImage)
+    .slice(0, 10);
 
   if (products.length === 0) return null;
 

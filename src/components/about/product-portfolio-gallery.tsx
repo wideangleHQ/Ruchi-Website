@@ -221,7 +221,7 @@ export function ProductPortfolioGallery() {
           >
             A World of Flavours. One Trusted Name.
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed font-normal">
+          <p className="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed font-medium">
             From everyday essential spices to regional specialties, gourmet pasta, vermicelli,
             noodles, tea, and ready mixes — discover the diverse range that brings RUCHI to kitchens everywhere.
           </p>

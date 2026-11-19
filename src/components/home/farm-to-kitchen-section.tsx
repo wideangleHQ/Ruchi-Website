@@ -425,7 +425,7 @@ export function FarmToKitchenSection() {
                 </h3>
 
                 {/* Supporting Story Paragraph (Centered) */}
-                <p className="font-sans text-xs xs:text-sm sm:text-base lg:text-lg text-white/90 font-normal leading-relaxed max-w-xl mx-auto drop-shadow-sm text-center">
+                <p className="font-sans text-xs xs:text-sm sm:text-base lg:text-lg text-white/90 font-medium leading-relaxed max-w-xl mx-auto drop-shadow-sm text-center">
                   {stage.paragraph}
                 </p>
               </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { formatPackSize, isValidPrice } from "@/utils/pricing";
 import { ShoppingBag, Heart, Share2, Minus, Plus, Loader2 } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { useCart } from "@/context/cart-context";
@@ -40,7 +41,7 @@ export function ProductCard({
   const compareAtMoney = selectedVariant?.compareAtPrice ?? null;
   const price = parseFloat(priceMoney.amount);
   const compareAtPrice = compareAtMoney ? parseFloat(compareAtMoney.amount) : null;
-  const isSoldOut = !selectedVariant || !selectedVariant.availableForSale;
+  const isSoldOut = !selectedVariant || !selectedVariant.availableForSale || !isValidPrice(selectedVariant.price);
 
   const tagsLower = product.tags.map((t) => t.toLowerCase());
   const badgeText =
@@ -144,6 +145,18 @@ export function ProductCard({
         compact ? "p-2 sm:p-2.5" : "p-2.5 xs:p-3 sm:p-4 md:p-4.5"
       } transition-all duration-300 hover:border-[#168a4a]/60 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer`}
     >
+      {/* Keyboard route to Quick View (the card itself opens it on click). Invisible until focused, so the card looks unchanged. */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsQuickViewOpen(true);
+        }}
+        className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-30 focus:rounded-md focus:bg-white focus:px-2.5 focus:py-1.5 focus:text-xs focus:font-semibold focus:text-[#0e6337] focus:shadow-md focus:outline-2 focus:outline-[#168a4a]"
+        aria-label={`Quick view: ${product.title}`}
+      >
+        Quick view
+      </button>
       <div className="flex flex-col flex-1">
         {/* Product Image Container */}
         <div
@@ -189,7 +202,7 @@ export function ProductCard({
               <>
                 <SafeImage
                   src={product.featuredImage.url}
-                  alt={product.featuredImage.altText ?? product.title}
+                  alt={product.featuredImage.altText ?? `${product.title} pack`}
                   fallbackTitle={product.title}
                   fill
                   sizes="(min-width: 1280px) 320px, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 60vw"
@@ -315,7 +328,7 @@ export function ProductCard({
                             : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:text-gray-900"
                       }`}
                     >
-                      <span>{v.title}</span>
+                      <span>{formatPackSize(v.title)}</span>
                     </button>
                   );
                 })}
@@ -328,7 +341,7 @@ export function ProductCard({
               </span>
               <span className="inline-block px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-[4px] sm:rounded-[6px] border border-gray-200/70 bg-gray-50/60 text-gray-600 text-[10px] sm:text-[11.5px] font-medium">
                 {variants[0]?.title && variants[0].title.toLowerCase() !== "default title"
-                  ? variants[0].title
+                  ? formatPackSize(variants[0].title)
                   : "Standard Pack"}
               </span>
             </div>
@@ -357,7 +370,7 @@ export function ProductCard({
             </div>
             {selectedVariant?.title && selectedVariant.title.toLowerCase() !== "default title" && (
               <span className="text-[9.5px] sm:text-[10.5px] text-gray-500 font-semibold uppercase truncate max-w-[85px] sm:max-w-[120px]">
-                {selectedVariant.title}
+                {formatPackSize(selectedVariant.title)}
               </span>
             )}
           </div>

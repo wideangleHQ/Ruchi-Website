@@ -1,0 +1,11 @@
+{
+  "taken": "2026-11-19",
+  "note": "Archived (not deleted) at the owner's request. Restore in Shopify Admin by setting each product's status back to Active, then add it to the Hampers collection if wanted.",
+  "archivedProducts": [
+    { "id": "gid://shopify/Product/10284645941464", "title": "Queens Collection", "handle": "queens-collection", "variantId": "gid://shopify/ProductVariant/52550805029080", "price": "300.00" },
+    { "id": "gid://shopify/Product/10284645875928", "title": "Gruha Laxmi", "handle": "gruha-laxmi", "variantId": "gid://shopify/ProductVariant/52550804996312", "price": "300.00" },
+    { "id": "gid://shopify/Product/10284645744856", "title": "Kitchen Kit", "handle": "kitchen-kit", "variantId": "gid://shopify/ProductVariant/52550804898008", "price": "300.00" },
+    { "id": "gid://shopify/Product/10284645646552", "title": "Ruchi Tea Hamper", "handle": "ruchi-tea-hamper", "variantId": "gid://shopify/ProductVariant/52550803685592", "price": "300.00" },
+    { "id": "gid://shopify/Product/10284645581016", "title": "Spicy Moments", "handle": "spicy-moments", "variantId": "gid://shopify/ProductVariant/52550803620056", "price": "300.00" }
+  ]
+}

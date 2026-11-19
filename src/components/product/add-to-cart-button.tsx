@@ -1,6 +1,7 @@
 "use client";
 
 import React, { startTransition, useActionState, useEffect, useState } from "react";
+import { formatPackSize } from "@/utils/pricing";
 import { ShoppingBag, Check, ShieldCheck, Truck } from "lucide-react";
 import type { ProductVariant } from "@/lib/shopify/types";
 import { addItemAction } from "@/lib/shopify/cart-actions";
@@ -86,7 +87,7 @@ export function AddToCartButton({ variants }: AddToCartButtonProps) {
                     : "border-border bg-white text-muted-text hover:text-text"
                 } ${!variant.availableForSale ? "opacity-40 cursor-not-allowed line-through" : ""}`}
               >
-                {variant.title} - {formatMoney(variant.price)}
+                {formatPackSize(variant.title)} - {formatMoney(variant.price)}
               </button>
             ))}
           </div>
@@ -152,7 +153,7 @@ export function AddToCartButton({ variants }: AddToCartButtonProps) {
         </div>
         <div className="flex items-center gap-2">
           <Truck className="w-4 h-4 text-primary-green" />
-          <span>Dispatched within 24 Hours. Free shipping over ₹499</span>
+          <span>Dispatched within 24 Hours. Free delivery on orders ₹699+ (after offers)</span>
         </div>
       </div>
     </div>

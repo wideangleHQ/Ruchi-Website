@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useSubmissionKey } from "@/lib/use-submission-key";
+import { attributionPayload } from "@/lib/attribution-client";
 import { Loader2, CheckCircle2, Send, AlertCircle } from "lucide-react";
 
 interface PartnerFormState {
@@ -45,6 +47,7 @@ export function PartnerForm() {
   const [statusMessage, setStatusMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const submissionKey = useSubmissionKey();
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleChange = (
@@ -64,6 +67,8 @@ export function PartnerForm() {
     setIsSuccess(false);
 
     const payload = {
+      idempotencyKey: submissionKey.get(),
+      ...attributionPayload(),
       full_name: formData.full_name.trim(),
       email: formData.email.trim(),
       phone: formData.phone.trim(),
@@ -90,6 +95,7 @@ export function PartnerForm() {
 
       setStatusMessage(resData.message || "Thank you. Your partnership enquiry was received.");
       setIsSuccess(true);
+      submissionKey.renew();
       setFormData(EMPTY_STATE);
       form.reset();
     } catch (err: unknown) {

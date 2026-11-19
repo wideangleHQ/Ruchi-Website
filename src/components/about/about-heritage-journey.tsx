@@ -397,7 +397,7 @@ export function AboutHeritageJourney() {
                 </div>
 
                 {/* Narrative Prose */}
-                <p className="font-sans text-xs xl:text-sm 2xl:text-[15px] text-[#1A1A1A]/80 leading-relaxed font-normal max-w-xl">
+                <p className="font-sans text-xs xl:text-sm 2xl:text-[15px] text-[#1A1A1A]/80 leading-relaxed font-medium max-w-xl">
                   {chapter.story}
                 </p>
 
@@ -621,7 +621,7 @@ export function AboutHeritageJourney() {
           <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#1A1A1A] leading-tight mb-3">
             50 Years. One Legacy.
           </h2>
-          <p className="font-sans text-xs sm:text-sm text-[#1A1A1A]/75 leading-relaxed font-normal">
+          <p className="font-sans text-xs sm:text-sm text-[#1A1A1A]/75 leading-relaxed font-medium">
             From a humble beginning in Cuttack to five decades of food manufacturing, innovation, and trust.
           </p>
         </div>
@@ -690,7 +690,7 @@ export function AboutHeritageJourney() {
                   </div>
 
                   {/* Narrative Story Prose */}
-                  <p className="font-sans text-xs sm:text-sm text-[#1A1A1A]/85 leading-relaxed font-normal">
+                  <p className="font-sans text-xs sm:text-sm text-[#1A1A1A]/85 leading-relaxed font-medium">
                     {chapter.story}
                   </p>
                 </div>

@@ -57,7 +57,7 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
         <Link
           href="/products?category=basic-spices"
           aria-label="View all basic spices"
-          className="text-xs font-bold text-[#168a4a] hover:text-[#0e6337] transition-colors flex items-center gap-1"
+          className="min-h-11 text-xs font-bold text-[#168a4a] hover:text-[#0e6337] transition-colors flex items-center gap-1"
         >
           <span>View All</span>
           <span aria-hidden="true">&rarr;</span>
@@ -79,7 +79,7 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
         <div className="flex items-center gap-3 sm:gap-4 self-end sm:self-auto shrink-0">
           <Link
             href="/products?category=basic-spices"
-            className="group inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#168a4a] hover:text-[#0e6337] transition-colors"
+            className="group inline-flex min-h-11 items-center gap-1.5 text-xs sm:text-sm font-bold text-[#168a4a] hover:text-[#0e6337] transition-colors"
           >
             <span>View All</span>
             <span className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">&rarr;</span>
@@ -90,7 +90,7 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
               onClick={() => handleScroll("left")}
               disabled={!canScrollLeft}
               aria-label="Previous products"
-              className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border transition-all text-base font-bold ${
+              className={`w-11 h-11 flex items-center justify-center rounded-full border transition-all text-base font-bold ${
                 canScrollLeft
                   ? "bg-white text-gray-800 border-gray-200 hover:bg-emerald-50 hover:border-[#168a4a]/40 hover:text-[#168a4a] shadow-xs cursor-pointer active:scale-95"
                   : "bg-gray-100 text-gray-300 border-gray-200/50 cursor-not-allowed opacity-50"
@@ -102,7 +102,7 @@ export function BestSellersSlider({ products }: BestSellersSliderProps) {
               onClick={() => handleScroll("right")}
               disabled={!canScrollRight}
               aria-label="Next products"
-              className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border transition-all text-base font-bold ${
+              className={`w-11 h-11 flex items-center justify-center rounded-full border transition-all text-base font-bold ${
                 canScrollRight
                   ? "bg-white text-gray-800 border-gray-200 hover:bg-emerald-50 hover:border-[#168a4a]/40 hover:text-[#168a4a] shadow-xs cursor-pointer active:scale-95"
                   : "bg-gray-100 text-gray-300 border-gray-200/50 cursor-not-allowed opacity-50"

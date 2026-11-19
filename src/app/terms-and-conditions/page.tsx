@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { LegalPageLayout, type LegalSection } from "@/components/legal/legal-page-layout";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/terms-and-conditions" },
   title: "Terms & Conditions",
   description:
-    "Statutory Terms & Conditions for Ruchi Foodline (Om Oil & Flour Mills Ltd.). Formulated under the Indian Contract Act 1872, IT Act 2000, Consumer Protection Act 2019, FSSAI Act 2006, and Legal Metrology Act 2009.",
+    "Terms & Conditions for buying from Ruchi Foodline (Om Oil & Flour Mills Ltd.): orders, payment, shipping, cancellations and returns under Indian law.",
 };
 
 const SECTIONS: LegalSection[] = [

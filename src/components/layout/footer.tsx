@@ -35,6 +35,7 @@ const primaryFooterNav: FooterNavItem[] = [
   { label: "Global Business", href: "/global-business" },
   { label: "Blog", href: "/blog" },
   { label: "Contact Us", href: "/contact/queries" },
+  { label: "Track Your Order", href: "/track-order" },
   {
     label: "Product Catalogue",
     href: "/documents/Ruchi-Foodline-Product-Catalogue.pdf",
@@ -173,12 +174,12 @@ export function Footer({ collections = [] }: FooterProps) {
                       setEmail(e.target.value);
                       if (newsletterMessage) setNewsletterMessage("");
                     }}
-                    className="w-full pl-4 sm:pl-5 pr-28 sm:pr-32 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-900 placeholder:text-gray-400 rounded-full focus:outline-none bg-transparent font-medium"
+                    className="w-full min-h-12 pl-4 sm:pl-5 pr-28 sm:pr-32 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-900 placeholder:text-gray-400 rounded-full focus:outline-none bg-transparent font-medium"
                   />
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="absolute right-1.5 px-3.5 sm:px-4 py-2 sm:py-2 rounded-full bg-[#168a4a] hover:bg-[#0e6337] disabled:opacity-60 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
+                    className="absolute right-0.5 min-h-11 px-3.5 sm:px-4 py-2 sm:py-2 rounded-full bg-[#168a4a] hover:bg-[#0e6337] disabled:opacity-60 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
                   >
                     <span>{isSubmitting ? "Submitting…" : "Subscribe"}</span>
                     <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -263,7 +264,7 @@ export function Footer({ collections = [] }: FooterProps) {
                   ) : (
                     <Link
                       href={link.href}
-                      className="hover:text-emerald-300 active:text-emerald-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e6337] rounded-xs transition-colors duration-200 py-1"
+                      className="hover:text-emerald-300 active:text-emerald-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e6337] rounded-xs transition-colors duration-200 py-1 inline-flex min-h-11 items-center"
                     >
                       {link.label}
                     </Link>
@@ -329,7 +330,7 @@ export function Footer({ collections = [] }: FooterProps) {
               <Link
                 key={link.label}
                 href={link.href}
-                className="hover:text-white transition-colors duration-200"
+                className="inline-flex min-h-11 items-center hover:text-white transition-colors duration-200"
               >
                 {link.label}
               </Link>

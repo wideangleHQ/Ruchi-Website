@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useTransition, useRef, useEffect } from "react";
+import { formatPackSize } from "@/utils/pricing";
 import Link from "next/link";
 import type { Product, CartLine } from "@/lib/shopify/types";
 import { addItemAction } from "@/lib/shopify/cart-actions";
@@ -149,7 +150,7 @@ export function CartRecommendations({ products, cartLines }: CartRecommendations
           const cheapestVariant = cheapestAvailableVariant(product);
           const packSize =
             cheapestVariant?.title && cheapestVariant.title.toLowerCase() !== "default title"
-              ? cheapestVariant.title
+              ? formatPackSize(cheapestVariant.title)
               : null;
 
           return (

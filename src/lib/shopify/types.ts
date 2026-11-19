@@ -84,6 +84,11 @@ export type CartLine = {
   merchandise: {
     id: string;
     title: string;
+    /** Live availability as Shopify reports it when the cart is fetched (the cart is never served from cache). */
+    availableForSale?: boolean;
+    currentlyNotInStock?: boolean;
+    /** Stock count; Shopify reports 0 for variants whose inventory is not tracked, so 0 is not "out of stock". */
+    quantityAvailable?: number;
     selectedOptions: Array<{ name: string; value: string }>;
     product: {
       id: string;
@@ -104,6 +109,8 @@ export type Cart = {
     totalAmount: Money;
     totalTaxAmount: Money | null;
   };
+  /** Discounts Shopify has actually applied (automatic offers). Authoritative over any estimate. */
+  discountAllocations?: { discountedAmount: { amount: string } }[];
   lines: Connection<CartLine>;
 };
 

@@ -1,6 +1,9 @@
 "use client";
 
+import { productImageAlt } from "@/utils/image-alt";
+import { useDialog } from "@/lib/use-dialog";
 import React, { useEffect, useState, useSyncExternalStore, startTransition, useActionState } from "react";
+import { formatPackSize, isValidPrice } from "@/utils/pricing";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X, ShoppingBag, Zap, Check, ShieldCheck, Truck, Minus, Plus, ArrowRight } from "lucide-react";
@@ -24,24 +27,8 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
     () => false
   );
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onClose();
-      }
-    };
-    document.addEventListener("keydown", onKeyDown);
-    
-    // Save previous overflow and lock body scroll
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [onClose]);
+  // Focus trap, Escape, scroll lock, and focus back to the card's Quick View button on close.
+  const { ref: dialogRef } = useDialog(true, onClose);
 
   const images = product.images?.edges?.map((e) => e.node) ?? [];
   const variants = product.variants?.edges?.map((e) => e.node) ?? [];
@@ -80,7 +67,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
     return () => clearTimeout(timer);
   }, [added]);
 
-  const isSoldOut = !selectedVariant || !selectedVariant.availableForSale;
+  const isSoldOut = !selectedVariant || !selectedVariant.availableForSale || !isValidPrice(selectedVariant.price);
   const price = selectedVariant?.price;
   const compareAtPrice = selectedVariant?.compareAtPrice;
   const priceNum = price ? parseFloat(price.amount) : null;
@@ -105,7 +92,9 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5 md:p-6 lg:p-8 bg-black/65 backdrop-blur-xs animate-fade-in motion-reduce:animate-none select-auto"
+      ref={dialogRef}
+      tabIndex={-1}
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5 md:p-6 lg:p-8 bg-black/65 backdrop-blur-xs animate-fade-in motion-reduce:animate-none select-auto focus:outline-none"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           e.preventDefault();
@@ -147,7 +136,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                   <SafeImage
                     key={activeImage.url}
                     src={activeImage.url}
-                    alt={activeImage.altText ?? product.title}
+                    alt={productImageAlt(product, activeImage, 0)}
                     fallbackTitle={product.title}
                     fill
                     sizes="(min-width: 1280px) 480px, (min-width: 1024px) 420px, (min-width: 768px) 380px, 90vw"
@@ -192,7 +181,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                     >
                       <SafeImage
                         src={img.url}
-                        alt={img.altText ?? `${product.title} thumbnail ${idx + 1}`}
+                        alt={productImageAlt(product, img, idx)}
                         fallbackTitle={product.title}
                         fill
                         className="object-contain"
@@ -211,7 +200,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                   {product.title}
                 </h2>
                 {product.description && (
-                  <p className="mt-2 text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed line-clamp-3 md:line-clamp-4 font-normal">
+                  <p className="mt-2 text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed line-clamp-3 md:line-clamp-4 font-medium">
                     {product.description}
                   </p>
                 )}
@@ -262,7 +251,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                     Select Pack Size:{" "}
                     <span className="text-[#168a4a] font-bold normal-case">
                       {selectedVariant?.title && selectedVariant.title.toLowerCase() !== "default title"
-                        ? selectedVariant.title
+                        ? formatPackSize(selectedVariant.title)
                         : "Standard Pack"}
                     </span>
                   </label>
@@ -284,7 +273,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
                               : "border-gray-200 bg-white text-gray-800 hover:border-gray-400"
                           } ${!isAvailable ? "opacity-40 cursor-not-allowed line-through" : ""}`}
                         >
-                          {variant.title}
+                          {formatPackSize(variant.title)}
                         </button>
                       );
                     })}

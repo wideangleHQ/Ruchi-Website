@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
+import { useDialog } from "@/lib/use-dialog";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { categoryHref } from "@/utils/categories";
 import { SlidersHorizontal, X, ChevronDown, Sparkles } from "lucide-react";
 import type { Collection, Product } from "@/lib/shopify/types";
 import { ProductCard } from "@/components/product/product-card";
@@ -11,6 +14,29 @@ import strip2 from "@/assets/Images/Ads/Strip_2.png";
 import strip3 from "@/assets/Images/Ads/Strip_3.png";
 
 import { ShopPromotionalStrip } from "./shop-promotional-strip";
+import { ShopStripSlideshow, type StripSlide } from "./shop-strip-slideshow";
+
+// Same three approved strip banners, now rotating at the top of the Shop. Each links to what it shows.
+const STRIP_SLIDES: StripSlide[] = [
+  {
+    id: "signature-delights",
+    image: strip1,
+    alt: "Ruchi Foodline Luxury Spice Combos & Signature Delights",
+    href: "/products?category=blended-spices",
+  },
+  {
+    id: "sattvik-festive-kit",
+    image: strip2,
+    alt: "RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Offer",
+    href: "/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic",
+  },
+  {
+    id: "authentic-spices",
+    image: strip3,
+    alt: "Ruchi Foodline Authentic Spices & Festive Delights",
+    href: "/products",
+  },
+];
 import { ShopCategoryDiscovery } from "./shop-category-discovery";
 import { ShopProductRow } from "./shop-product-row";
 import { ShopMothersChoice } from "./shop-mothers-choice";
@@ -52,6 +78,10 @@ interface ShopPageClientProps {
   priceBounds: { min: number; max: number };
   activeFilters: ActiveFilters;
   curated?: CuratedSectionsData;
+  /** Real best-selling products with photos, shown when a filter or search finds nothing. */
+  suggestions?: Product[];
+  /** Every Shop category (not just those with matches) for the zero-result shortcuts. */
+  allCategories?: Collection[];
 }
 
 export function ShopPageClient({
@@ -61,6 +91,8 @@ export function ShopPageClient({
   priceBounds,
   activeFilters,
   curated,
+  suggestions = [],
+  allCategories = [],
 }: ShopPageClientProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -68,8 +100,19 @@ export function ShopPageClient({
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const { ref: filterDrawerRef } = useDialog(isDrawerOpen, () => setIsDrawerOpen(false));
   const [minInput, setMinInput] = useState(activeFilters.min?.toString() ?? "");
   const [maxInput, setMaxInput] = useState(activeFilters.max?.toString() ?? "");
+
+  // Browser Back/Forward, a refresh or a shared link change the URL under a mounted page: re-sync everything typed locally.
+  const urlKey = searchParams.toString();
+  const [syncedKey, setSyncedKey] = useState(urlKey);
+  if (syncedKey !== urlKey) {
+    setSyncedKey(urlKey);
+    setMinInput(activeFilters.min?.toString() ?? "");
+    setMaxInput(activeFilters.max?.toString() ?? "");
+    setVisibleCount(PAGE_SIZE);
+  }
 
   const updateQuery = (patch: Record<string, string | undefined>) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -78,7 +121,8 @@ export function ShopPageClient({
       else params.set(key, value);
     }
     setVisibleCount(PAGE_SIZE);
-    router.replace(params.size ? `${pathname}?${params.toString()}` : pathname, { scroll: false });
+    // push (not replace): every filter change is a history entry, so Back steps through the filters the shopper applied.
+    router.push(params.size ? `${pathname}?${params.toString()}` : pathname, { scroll: false });
   };
 
   const commitPriceRange = () => {
@@ -310,6 +354,9 @@ export function ShopPageClient({
           </div>
         )}
 
+        {/* Rotating strip banners — default catalogue view only (hidden while searching or filtering) */}
+        {!isFilteredSearch && <ShopStripSlideshow slides={STRIP_SLIDES} />}
+
         {/* ============================================================
             CURATED MERCHANDISING FLOW (When viewing default catalogue)
             ============================================================ */}
@@ -423,9 +470,15 @@ export function ShopPageClient({
             <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#168a4a] block mb-1">
               Complete Catalogue
             </span>
-            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900">
-              {activeCategoryTitle ? `${activeCategoryTitle} Collection` : "All Products"}
-            </h2>
+            {activeFilters.query ? (
+              <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900">
+                {activeCategoryTitle ? `${activeCategoryTitle} Collection` : "All Products"}
+              </h2>
+            ) : (
+              <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900">
+                {activeCategoryTitle ? `${activeCategoryTitle} Collection` : "All Products"}
+              </h1>
+            )}
             <p className="mt-1 text-xs sm:text-sm text-gray-600">
               Filter by category, price, and pack size to find your kitchen favourites.
             </p>
@@ -523,18 +576,47 @@ export function ShopPageClient({
 
               {/* Product Grid — Strict ProductCard Reuse */}
               {products.length === 0 ? (
-                <div className="text-center py-20 border border-gray-200/80 rounded-2xl bg-gray-50/50">
-                  <p className="text-base font-bold text-gray-900 mb-1.5">No products found</p>
-                  <p className="text-sm font-medium text-gray-600 mb-5 max-w-sm mx-auto">
-                    We couldn&apos;t find any products matching your current filters. Try changing or clearing filters.
-                  </p>
-                  {hasActiveFilters && (
-                    <button
-                      onClick={clearAll}
-                      className="px-5 py-2.5 rounded-[8px] bg-[#168a4a] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0e6337] transition-all shadow-xs cursor-pointer active:scale-95"
-                    >
-                      Clear All Filters
-                    </button>
+                <div className="rounded-2xl border border-gray-200/80 bg-gray-50/50 px-4 py-10 sm:px-8" role="status">
+                  <div className="text-center">
+                    <p className="text-base font-bold text-gray-900 mb-1.5">
+                      {activeFilters.query ? <>No products match &ldquo;{activeFilters.query}&rdquo;</> : "No products match these filters"}
+                    </p>
+                    <p className="text-sm font-medium text-gray-600 mb-5 max-w-md mx-auto">
+                      {activeFilters.query
+                        ? "Check the spelling, try a simpler word (for example “turmeric” or “haldi”), or browse a category below."
+                        : "Try removing a filter, or browse a category below."}
+                    </p>
+                    {hasActiveFilters && (
+                      <button
+                        onClick={clearAll}
+                        className="min-h-11 px-5 rounded-[8px] bg-[#168a4a] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0e6337] transition-all shadow-xs cursor-pointer active:scale-95"
+                      >
+                        {activeFilters.query ? "Clear search & filters" : "Clear all filters"}
+                      </button>
+                    )}
+                  </div>
+                  {allCategories.length > 0 && (
+                    <div className="mt-6 flex flex-wrap justify-center gap-2">
+                      {allCategories.map((c) => (
+                        <Link
+                          key={c.handle}
+                          href={categoryHref(c.handle)}
+                          className="inline-flex min-h-11 items-center rounded-full border border-gray-300 bg-white px-4 text-xs font-semibold text-gray-900 hover:border-[#168a4a] hover:text-[#0e6337]"
+                        >
+                          {c.title}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                  {suggestions.length > 0 && (
+                    <div className="mt-8">
+                      <h2 className="mb-3 text-center font-serif text-lg font-bold text-gray-900">Popular right now</h2>
+                      <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+                        {suggestions.map((product) => (
+                          <ProductCard key={product.id} product={product} compact />
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
               ) : (
@@ -565,7 +647,7 @@ export function ShopPageClient({
 
       {/* Mobile Filter Drawer */}
       {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Filter products">
+        <div ref={filterDrawerRef} tabIndex={-1} className="fixed inset-0 z-50 lg:hidden focus:outline-none" role="dialog" aria-modal="true" aria-label="Filter products">
           <div
             className="fixed inset-0 bg-black/40 backdrop-blur-xs animate-fade-in"
             onClick={() => setIsDrawerOpen(false)}
@@ -578,7 +660,7 @@ export function ShopPageClient({
               <button
                 onClick={() => setIsDrawerOpen(false)}
                 aria-label="Close filters"
-                className="p-1.5 text-gray-500 hover:text-gray-900 rounded-[6px]"
+                className="flex h-11 w-11 items-center justify-center text-gray-500 hover:text-gray-900 rounded-[6px]"
               >
                 <X className="w-5 h-5" />
               </button>

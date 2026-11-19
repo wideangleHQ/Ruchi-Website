@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useCartDrawer } from "@/context/cart-context";
 import type { Collection } from "@/lib/shopify/types";
+import { useWhatsAppUrl } from "@/lib/use-whatsapp-url";
 
 interface MobileBottomNavProps {
   collections?: Collection[];
@@ -37,7 +38,7 @@ export function MobileBottomNav({ cartQuantity = 0 }: MobileBottomNavProps) {
   const isHomeActive = pathname === "/";
   const isShopActive = pathname.startsWith("/products");
   const isAccountActive = pathname.startsWith("/account");
-  const whatsappUrl = "https://wa.me/919124754082?text=Hello%20Ruchi%20Foodline%21%20I%20would%20like%20to%20inquire%20about%20your%20products%20and%20offers.";
+  const whatsappUrl = useWhatsAppUrl();
 
   // The Tea page is a full-bleed brand experience without the bottom bar (the header menu covers navigation).
   if (pathname === "/tea") return null;

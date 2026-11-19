@@ -4,6 +4,9 @@ import { notFound } from "next/navigation";
 import { getCollection, getCollectionProducts } from "@/lib/shopify";
 import { ProductCard } from "@/components/product/product-card";
 import { ChevronRight } from "lucide-react";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { DEFAULT_OG_IMAGE, toMetaDescription } from "@/lib/seo/site";
 
 type Props = {
   params: Promise<{ handle: string }>;
@@ -15,9 +18,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!collection) return {};
 
+  // Shopify descriptions win. Where none is written, say what is actually in the collection (real product names), not filler.
+  let description = toMetaDescription(collection.seo?.description || collection.description);
+  if (!description) {
+    const names = (await getCollectionProducts({ handle, first: 8 }))
+      .map((p) => p.title.replace(/^RUCHI\s+/i, ""))
+      .slice(0, 4);
+    description = toMetaDescription(
+      names.length
+        ? `Shop ${collection.title} from Ruchi Foodline, including ${names.join(", ")} and more. Order online in India.`
+        : `Shop ${collection.title} from Ruchi Foodline. Order online in India.`
+    );
+  }
   return {
-    title: `${collection.title} | Ruchi Foodline`,
-    description: collection.description || `Pure ${collection.title} from Ruchi Foodline.`,
+    title: collection.seo?.title || collection.title,
+    description,
+    alternates: { canonical: `/collections/${collection.handle}` },
+    openGraph: {
+      title: collection.seo?.title || collection.title,
+      description,
+      url: `/collections/${collection.handle}`,
+      images: [collection.image ? { url: collection.image.url, width: collection.image.width, height: collection.image.height, alt: collection.image.altText ?? collection.title } : DEFAULT_OG_IMAGE],
+    },
   };
 }
 
@@ -31,6 +53,13 @@ export default async function CollectionPage({ params }: Props) {
 
   return (
     <div className="bg-white py-10">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Collections", path: "/collections" },
+          { name: collection.title, path: `/collections/${collection.handle}` },
+        ])}
+      />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center space-x-2 text-xs text-muted-text mb-8">

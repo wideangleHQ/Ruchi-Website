@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGE } from "@/lib/seo/site";
 import { TeaIntro } from "@/components/tea/tea-intro";
 import { TeaHero } from "@/components/tea/tea-hero";
 import { TeaRitual, TeaStatement, TEA_BEIGE } from "@/components/tea/tea-story";
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   alternates: { canonical: "/tea" },
-  openGraph: { title: TITLE, description: DESCRIPTION, type: "website", url: "/tea" },
+  openGraph: { title: TITLE, description: DESCRIPTION, type: "website", url: "/tea", images: [DEFAULT_OG_IMAGE] },
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 

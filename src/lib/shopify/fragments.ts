@@ -188,6 +188,11 @@ export const cartFragment = /* GraphQL */ `
         ...money
       }
     }
+    discountAllocations {
+      discountedAmount {
+        amount
+      }
+    }
     lines(first: 100) {
       edges {
         node {
@@ -205,6 +210,9 @@ export const cartFragment = /* GraphQL */ `
             ... on ProductVariant {
               id
               title
+              availableForSale
+              currentlyNotInStock
+              quantityAvailable
               selectedOptions {
                 name
                 value

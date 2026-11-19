@@ -83,7 +83,7 @@ export function AboutManufacturing() {
                 <h4 className="font-serif text-base sm:text-lg font-bold text-gray-900 mb-2 leading-snug">
                   {tech.title}
                 </h4>
-                <p className="text-xs text-gray-600 leading-relaxed font-normal">
+                <p className="text-xs text-gray-600 leading-relaxed font-medium">
                   {tech.description}
                 </p>
               </div>

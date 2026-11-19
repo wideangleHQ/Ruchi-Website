@@ -164,7 +164,7 @@ export function SocialMediaSection() {
               onClick={() => setActiveIndex((p) => Math.max(0, p - 1))}
               disabled={activeIndex === 0}
               aria-label="Previous social card"
-              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all text-xs font-bold ${
+              className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all text-xs font-bold ${
                 activeIndex > 0
                   ? "bg-white text-gray-800 border-gray-200 hover:bg-gray-50 active:scale-95"
                   : "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed opacity-40"
@@ -180,10 +180,15 @@ export function SocialMediaSection() {
                   key={idx}
                   onClick={() => setActiveIndex(idx)}
                   aria-label={`Go to slide ${idx + 1}`}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    idx === activeIndex ? "w-5 bg-[#168a4a]" : "w-1.5 bg-gray-300"
-                  }`}
-                />
+                  aria-current={idx === activeIndex}
+                  className="group flex h-6 min-w-6 items-center justify-center"
+                >
+                  <span
+                    className={`block h-1.5 rounded-full transition-all duration-300 ${
+                      idx === activeIndex ? "w-5 bg-[#168a4a]" : "w-1.5 bg-gray-300 group-hover:bg-gray-400"
+                    }`}
+                  />
+                </button>
               ))}
             </div>
 
@@ -191,7 +196,7 @@ export function SocialMediaSection() {
               onClick={() => setActiveIndex((p) => Math.min(SOCIAL_POSTS.length - 1, p + 1))}
               disabled={activeIndex === SOCIAL_POSTS.length - 1}
               aria-label="Next social card"
-              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all text-xs font-bold ${
+              className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all text-xs font-bold ${
                 activeIndex < SOCIAL_POSTS.length - 1
                   ? "bg-white text-gray-800 border-gray-200 hover:bg-gray-50 active:scale-95"
                   : "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed opacity-40"
@@ -207,7 +212,7 @@ export function SocialMediaSection() {
               href={RUCHI_SOCIAL_URLS.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-linear-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white text-xs font-bold shadow-xs active:scale-95 transition-transform"
+              className="inline-flex min-h-11 items-center gap-1.5 px-4 py-2 rounded-full bg-linear-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white text-xs font-bold shadow-xs active:scale-95 transition-transform"
             >
               <InstagramSvg className="w-3.5 h-3.5" />
               <span>View Instagram</span>

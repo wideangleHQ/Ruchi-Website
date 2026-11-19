@@ -128,7 +128,7 @@ export function TrustPillars() {
 
                   {/* Supporting Story Description — Visible by default on mobile, hover revealed on desktop */}
                   <div className="overflow-hidden transition-all duration-300 ease-out motion-reduce:transition-none max-h-24 opacity-100 mt-1 sm:mt-1.5 lg:max-h-0 lg:opacity-0 lg:mt-0 lg:group-hover:max-h-24 lg:group-hover:opacity-100 lg:group-hover:mt-2">
-                    <p className="font-sans text-[11px] xs:text-xs sm:text-[13px] text-white/90 font-normal leading-relaxed line-clamp-3">
+                    <p className="font-sans text-[11px] xs:text-xs sm:text-[13px] text-white/90 font-medium leading-relaxed line-clamp-3">
                       {step.description}
                     </p>
                   </div>

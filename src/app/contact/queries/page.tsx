@@ -6,6 +6,7 @@ import { ContactForm } from "@/components/contact/contact-form";
 export const metadata: Metadata = {
   title: "General Queries",
   description: "Get in touch with Ruchi Foodline for general questions, product queries, or website support.",
+  alternates: { canonical: "/contact/queries" },
 };
 
 export default function QueriesPage() {

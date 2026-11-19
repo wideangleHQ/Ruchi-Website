@@ -1,3 +1,5 @@
+import type { RecipeItem } from "@/utils/recipe-kit";
+
 export type BlogArticle = {
   id: string;
   handle: string;
@@ -27,6 +29,8 @@ export type BlogArticle = {
     title: string | null;
     description: string | null;
   };
+  /** Variants linked via the `ruchi.recipe_products` article field. Empty until an editor links products. */
+  recipeProducts: RecipeItem[];
 };
 
 export type BlogCategory = {

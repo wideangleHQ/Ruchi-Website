@@ -2,48 +2,64 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import heroBanner1 from "@/assets/Images/Hero banner/Hero Banner 1.png";
 import heroBanner2 from "@/assets/Images/Hero banner/Hero banner 2.png";
 import heroBanner3 from "@/assets/Images/Hero banner/Hero banner 3.png";
 
+// Each banner opens what it shows. The Non-Veg Masala product is not in the current catalogue,
+// so its banner opens the Blended Spices range instead of a dead product page.
 const HERO_SLIDES = [
   {
     id: "ruchi-curry-powder",
     src: heroBanner1,
     alt: "Ruchi Foodline Curry Powder — The Taste of a Richer India",
+    href: "/products/ruchi-curry-powder",
   },
   {
     id: "ruchi-utkal-tea",
     src: heroBanner2,
     alt: "Ruchi Utkal Tea Dust — A Cup of Chai, A Richer Tomorrow",
+    href: "/tea",
   },
   {
     id: "ruchi-non-veg-masala",
     src: heroBanner3,
     alt: "Ruchi Non-Veg Masala — Authentic Non-Veg Flavours",
+    href: "/products?category=blended-spices",
   },
 ];
 
-const SLIDE_INTERVAL_MS = 3000;
+// 2 seconds per banner; pauses on hover/focus and never runs with reduced motion or in a background tab.
+const SLIDE_INTERVAL_MS = 2000;
 
 export function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   const nextSlide = useCallback(() => {
+    if (document.hidden) return;
     setCurrentIndex((prev) => (prev + 1) % HERO_SLIDES.length);
   }, []);
 
   useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = setInterval(nextSlide, SLIDE_INTERVAL_MS);
     return () => clearInterval(timer);
-  }, [nextSlide]);
+  }, [nextSlide, paused]);
 
   return (
     <section
       className="relative w-full overflow-hidden bg-white select-none min-h-[140px] xs:min-h-[165px] sm:min-h-[240px] md:min-h-[300px] lg:min-h-[360px] xl:min-h-[400px] aspect-[16/6] sm:aspect-[21/6] md:aspect-[2880/630]"
       aria-roledescription="carousel"
-      aria-label="Featured Promotions Slideshow"
+      aria-label="Featured products"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
     >
+      {/* The banners carry their headline as artwork; this is the page's real heading for search engines and screen readers. */}
+      <h1 className="sr-only">Ruchi Foodline — Authentic Indian Spices, Masalas, Tea &amp; Pasta Since 1976</h1>
       {/* Slides Container */}
       <div className="relative w-full h-full">
         {HERO_SLIDES.map((slide, index) => {
@@ -59,14 +75,17 @@ export function HeroSection() {
               }`}
               aria-hidden={!isActive}
             >
-              <Image
-                src={slide.src}
-                alt={slide.alt}
-                fill
-                priority={index === 0}
-                sizes="100vw"
-                className="object-cover object-center w-full h-full"
-              />
+              <Link href={slide.href} tabIndex={isActive ? 0 : -1} className="relative block h-full w-full focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white">
+                <Image
+                  src={slide.src}
+                  alt={slide.alt}
+                  fill
+                  priority={index === 0}
+                  fetchPriority={index === 0 ? "high" : "low"}
+                  sizes="100vw"
+                  className="object-cover object-center w-full h-full"
+                />
+              </Link>
             </div>
           );
         })}
@@ -97,15 +116,18 @@ export function HeroSection() {
               key={slide.id}
               type="button"
               onClick={() => setCurrentIndex(index)}
-              className={`h-1 sm:h-1.5 md:h-2 rounded-full transition-all duration-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white cursor-pointer ${
-                isActive
-                  ? "w-3.5 sm:w-6 md:w-8 bg-white"
-                  : "w-1 sm:w-1.5 md:w-2 bg-white/50 hover:bg-white/75"
-              }`}
+              className="group flex h-6 min-w-6 cursor-pointer items-center justify-center focus:outline-hidden focus-visible:outline-2 focus-visible:outline-white"
               aria-label={`Go to slide ${index + 1}: ${slide.alt}`}
               aria-selected={isActive}
               role="tab"
-            />
+            >
+              {/* The visible dot stays slim; the button around it is the 24px touch target. */}
+              <span
+                className={`block h-1 sm:h-1.5 md:h-2 rounded-full transition-all duration-300 ${
+                  isActive ? "w-3.5 sm:w-6 md:w-8 bg-white" : "w-1 sm:w-1.5 md:w-2 bg-white/50 group-hover:bg-white/75"
+                }`}
+              />
+            </button>
           );
         })}
       </div>

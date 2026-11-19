@@ -4,6 +4,7 @@ import {
   sanitizeInput,
 } from "@/lib/shopify/contact-submissions";
 import { checkRateLimit, getClientIp } from "@/lib/server/rate-limit";
+import { cleanPath, normalizeAttribution } from "@/utils/attribution";
 import {
   ShopifyConfigError,
   ShopifyAuthError,
@@ -130,6 +131,10 @@ export async function POST(request: NextRequest) {
       quantity: quantity ? sanitizeInput(quantity) : undefined,
       location: location ? sanitizeInput(location) : undefined,
       businessType: businessType ? sanitizeInput(businessType) : undefined,
+      idempotencyKey: typeof body.idempotencyKey === "string" ? body.idempotencyKey.slice(0, 100) : undefined,
+      // Re-validated here: the browser copy is untrusted.
+      attribution: normalizeAttribution(body.attribution),
+      sourcePage: cleanPath(body.sourcePage),
     });
 
     return NextResponse.json(
@@ -152,7 +157,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof ShopifyConfigError) {
       return NextResponse.json(
         {
-          error: "Shopify integration configuration missing: SHOPIFY_ADMIN_ACCESS_TOKEN is not configured on the server.",
+          error: "We can't take submissions right now. Please try again later or contact us on WhatsApp.",
           code: "CONFIGURATION_ERROR",
         },
         { status: 503 }
@@ -162,7 +167,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof ShopifyAuthError) {
       return NextResponse.json(
         {
-          error: "Shopify Admin authentication failed: invalid or expired access token.",
+          error: "We can't take submissions right now. Please try again later or contact us on WhatsApp.",
           code: "AUTHENTICATION_ERROR",
         },
         { status: 502 }
@@ -172,7 +177,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof ShopifyPermissionError) {
       return NextResponse.json(
         {
-          error: "Shopify permissions error: token lacks write_metaobjects scope.",
+          error: "We can't take submissions right now. Please try again later or contact us on WhatsApp.",
           code: "PERMISSION_ERROR",
         },
         { status: 502 }

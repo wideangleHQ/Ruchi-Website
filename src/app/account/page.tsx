@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { clientId, getCustomer, type Order } from "@/lib/shopify/customer-account";
 import { CA_COOKIES } from "@/lib/shopify/customer-account-core";
 
-export const metadata: Metadata = { title: "My Account" };
+export const metadata: Metadata = { title: "My Account", robots: { index: false, follow: false } };
 
 const TABS = [
   ["overview", "Overview"],
@@ -24,7 +24,7 @@ const status = (s: string | null | undefined) =>
 
 const title = "font-serif text-[clamp(1.75rem,1.4rem+1.5vw,2.25rem)] font-semibold leading-tight text-text";
 const h2 = "text-lg font-semibold text-text";
-const muted = "text-sm font-normal text-muted-text";
+const muted = "text-sm font-medium text-muted-text";
 const primaryBtn =
   "inline-flex min-h-11 items-center justify-center rounded-brand bg-primary-green px-5 text-[15px] font-medium text-white transition-colors hover:bg-deep-green";
 
@@ -38,10 +38,10 @@ function SignIn({ error }: { error?: string }) {
   return (
     <div className="mx-auto flex min-h-[90vh] w-full max-w-md flex-col justify-center px-4 py-10 sm:py-16">
       <h1 className={title}>My Account</h1>
-      <p className="mt-2 text-[15px] font-normal leading-relaxed text-muted-text">
+      <p className="mt-2 text-[15px] font-medium leading-relaxed text-muted-text">
         Sign in or create an account to view your orders and manage your details. You&apos;ll be taken to our secure Shopify sign-in page.
       </p>
-      {message && <p role="alert" className="mt-4 text-sm font-normal text-brand-red">{message}</p>}
+      {message && <p role="alert" className="mt-4 text-sm font-medium text-brand-red">{message}</p>}
       <a href="/account/login" className={`${primaryBtn} mt-6 w-full sm:w-auto`}>
         Sign in / Create account
       </a>
@@ -61,7 +61,7 @@ function OrderCard({ o }: { o: Order }) {
         <span className="text-[15px] font-medium text-text">{money(o.totalPrice.amount, o.totalPrice.currencyCode)}</span>
       </div>
       <p className={`${muted} mt-1`}>{date(o.processedAt)}</p>
-      <p className="mt-2 line-clamp-2 break-words text-sm font-normal text-text">{items}</p>
+      <p className="mt-2 line-clamp-2 break-words text-sm font-medium text-text">{items}</p>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
         <span className="rounded-full bg-soft-green px-2.5 py-1 text-xs font-medium text-primary-green">{badge}</span>
         {o.statusPageUrl && (
@@ -76,7 +76,7 @@ function OrderCard({ o }: { o: Order }) {
 
 function AddressCard({ lines, isDefault }: { lines: string[]; isDefault: boolean }) {
   return (
-    <li className="rounded-brand border border-border p-4 text-sm font-normal leading-relaxed text-text">
+    <li className="rounded-brand border border-border p-4 text-sm font-medium leading-relaxed text-text">
       {isDefault && <p className="mb-1 text-xs font-medium text-primary-green">Default</p>}
       {lines.map((l, i) => <p key={i} className="break-words">{l}</p>)}
     </li>
@@ -190,7 +190,7 @@ export default async function AccountPage({
                   ["Phone", phone],
                 ].map(([k, v]) => (
                   <div key={k} className="flex flex-col gap-0.5 px-4 py-3 min-[420px]:flex-row min-[420px]:gap-4">
-                    <dt className="text-sm font-normal text-muted-text min-[420px]:w-28 min-[420px]:shrink-0">{k}</dt>
+                    <dt className="text-sm font-medium text-muted-text min-[420px]:w-28 min-[420px]:shrink-0">{k}</dt>
                     <dd className="break-words text-[15px] font-medium text-text">{v || "—"}</dd>
                   </div>
                 ))}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useId, useState } from "react";
+import { useSubmissionKey } from "@/lib/use-submission-key";
+import { attributionPayload } from "@/lib/attribution-client";
 import Link from "next/link";
 import { CheckCircle2, Loader2, Mail, Phone, Send } from "lucide-react";
 import { ENQUIRY, GB_COLORS } from "./content";
@@ -42,6 +44,7 @@ export function GlobalBusinessEnquiry({ categories }: { categories: string[] }) 
   const [interests, setInterests] = useState<string[]>([]);
   const [errors, setErrors] = useState<Partial<Record<keyof Values | "interests", string>>>({});
   const [submitting, setSubmitting] = useState(false);
+  const submissionKey = useSubmissionKey();
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
@@ -78,6 +81,8 @@ export function GlobalBusinessEnquiry({ categories }: { categories: string[] }) 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           formType: "partner",
+          idempotencyKey: submissionKey.get(),
+          ...attributionPayload(),
           businessType: ENQUIRY.businessType,
           fullName: values.fullName.trim(),
           companyName: values.companyName.trim(),
@@ -92,6 +97,7 @@ export function GlobalBusinessEnquiry({ categories }: { categories: string[] }) 
         return;
       }
       setSubmitted(true);
+      submissionKey.renew();
       setValues(EMPTY);
       setInterests([]);
     } catch {
@@ -259,7 +265,7 @@ function Field({
   return (
     <div className={className}>
       <label htmlFor={id} className="mb-1.5 block font-sans text-xs font-semibold uppercase tracking-wider" style={{ color: GB_COLORS.charcoal }}>
-        {label} {optional ? <span className="font-normal normal-case tracking-normal opacity-60">(optional)</span> : <span style={{ color: GB_COLORS.red }}>*</span>}
+        {label} {optional ? <span className="font-medium normal-case tracking-normal opacity-60">(optional)</span> : <span style={{ color: GB_COLORS.red }}>*</span>}
       </label>
       {children}
       {error && (

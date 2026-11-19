@@ -56,7 +56,7 @@ export function AboutCSR() {
                 <h3 className="font-serif text-base sm:text-lg font-bold text-gray-900 mb-2 leading-snug">
                   {item.title}
                 </h3>
-                <p className="text-xs text-gray-600 leading-relaxed font-normal">
+                <p className="text-xs text-gray-600 leading-relaxed font-medium">
                   {item.description}
                 </p>
               </div>

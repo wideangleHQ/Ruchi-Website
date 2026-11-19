@@ -22,15 +22,36 @@ type ArticleEdge = {
   cursor: string;
 };
 
-type RawArticle = Omit<BlogArticle, "author"> & {
+type RawRecipeVariant = {
+  id?: string;
+  title: string;
+  availableForSale: boolean;
+  price: { amount: string; currencyCode: string };
+  product: { handle: string; title: string; featuredImage: { url: string; altText: string | null } | null };
+} | null;
+
+type RawArticle = Omit<BlogArticle, "author" | "recipeProducts"> & {
   authorV2: { name: string; bio: string | null };
+  recipeMetafield?: { references: { nodes: RawRecipeVariant[] } } | null;
 };
 
 function normalizeArticle(raw: RawArticle): BlogArticle {
-  const { authorV2, ...rest } = raw;
+  const { authorV2, recipeMetafield, ...rest } = raw;
   const localImg = getLocalBlogImage(raw.handle, raw.title, raw.blog?.handle);
   const image = localImg || rest.image;
-  return { ...rest, image, author: authorV2 };
+  // Only variants an editor explicitly linked in Shopify; nothing is guessed from the recipe text.
+  const recipeProducts = (recipeMetafield?.references.nodes ?? [])
+    .filter((v): v is NonNullable<RawRecipeVariant> & { id: string } => Boolean(v?.id))
+    .map((v) => ({
+      variantId: v.id,
+      productTitle: v.product.title,
+      handle: v.product.handle,
+      variantTitle: v.title,
+      price: v.price,
+      availableForSale: v.availableForSale,
+      image: v.product.featuredImage,
+    }));
+  return { ...rest, image, author: authorV2, recipeProducts };
 }
 
 // ---- Articles ----

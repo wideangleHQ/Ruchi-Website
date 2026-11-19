@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -24,8 +23,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, Cambria, serif;
+  --font-sans: var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: var(--font-playfair), 'Playfair Display', Georgia, Cambria, serif;
 
   --color-primary-green: var(--color-primary-green);
   --color-deep-green: var(--color-deep-green);
@@ -52,19 +51,36 @@ body {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Poppins Medium everywhere: no thin or regular text on the site. */
+  font-family: var(--font-poppins-medium), var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .font-serif {
-  font-family: 'Playfair Display', Georgia, Cambria, serif;
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, Cambria, serif;
 }
 
 /* All paragraph text uses the local Poppins Medium font file */
 p {
-  font-family: var(--font-poppins-medium), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-poppins-medium), var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-weight: 500;
+}
+
+/* Form controls don't inherit the page font by default — make search, inputs and buttons Poppins Medium too. */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-weight: 500;
+  opacity: 1;
 }
 
 /* Site Header Show / Hide Transition for full-screen sections (e.g. Farm to Kitchen) */

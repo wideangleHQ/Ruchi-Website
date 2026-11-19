@@ -6,6 +6,7 @@ import { PartnerForm } from "@/components/contact/partner-form";
 export const metadata: Metadata = {
   title: "Partner With Us",
   description: "Interested in partnering or becoming a distributor for Ruchi Foodline? Tell us about your business.",
+  alternates: { canonical: "/contact/partner" },
 };
 
 export default function PartnerPage() {

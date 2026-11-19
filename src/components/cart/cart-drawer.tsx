@@ -1,13 +1,16 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useDialog } from "@/lib/use-dialog";
+import React from "react";
 import Link from "next/link";
 import { useCartDrawer } from "@/context/cart-context";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CheckoutButton } from "@/components/cart/checkout-button";
+import { CartHealthNotice } from "@/components/cart/cart-health-notice";
+import { getCartIssues } from "@/utils/cart-health";
 import { CartRecommendations } from "@/components/cart/cart-recommendations";
 import { OffersTimeline } from "@/components/cart/offers-timeline";
-import { evaluateOffers, inr } from "@/utils/offers";
+import { evaluateOffers, freeDeliveryStatus, inr } from "@/utils/offers";
 import { formatMoney } from "@/utils/format";
 import type { Cart, Product } from "@/lib/shopify/types";
 
@@ -16,34 +19,28 @@ interface CartDrawerProps {
   recommendations?: Product[];
 }
 
-const FREE_DELIVERY_THRESHOLD = 499;
-
 export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
   const { isOpen, closeCart } = useCartDrawer();
   const lines = cart?.lines.edges.map((edge) => edge.node) ?? [];
   const totalQuantity = cart?.totalQuantity ?? 0;
-  const subtotal = cart?.cost.subtotalAmount ? parseFloat(cart.cost.subtotalAmount.amount) : 0;
-  
-  const isFreeDeliveryUnlocked = subtotal >= FREE_DELIVERY_THRESHOLD && subtotal > 0;
-  const remainingForFreeDelivery = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
+  // Integer paise throughout (no float drift around the free-delivery threshold).
+  const delivery = freeDeliveryStatus(cart);
+  const isFreeDeliveryUnlocked = delivery.eligible;
+  const remainingForFreeDelivery = delivery.remaining;
   const offer = evaluateOffers(cart);
-  const deliveryProgress = subtotal > 0 ? Math.min(100, (subtotal / FREE_DELIVERY_THRESHOLD) * 100) : 0;
+  const issues = getCartIssues(cart);
+  const deliveryProgress = delivery.progress;
 
-  // ESC key handler is also wired here for fast accessibility
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeCart();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, closeCart]);
+  // Focus trap, Escape, scroll lock, and focus back to the cart button when the drawer closes.
+  const { ref: drawerRef } = useDialog(isOpen, closeCart);
 
   if (!isOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[9999] overflow-hidden select-none"
+      ref={drawerRef}
+      tabIndex={-1}
+      className="fixed inset-0 z-[9999] overflow-hidden select-none focus:outline-none"
       role="dialog"
       aria-modal="true"
       aria-label="Your Shopping Bag"
@@ -98,7 +95,7 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
                     </span>
                   ) : (
                     <span className="text-gray-700">
-                      Add <strong className="text-gray-900 font-bold">₹{remainingForFreeDelivery.toFixed(0)}</strong> more for <strong className="text-[#168a4a] font-bold">FREE delivery</strong>
+                      Add <strong className="text-gray-900 font-bold">₹{remainingForFreeDelivery}</strong> more for <strong className="text-[#168a4a] font-bold">FREE delivery</strong>
                     </span>
                   )}
                 </div>
@@ -175,8 +172,8 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
               
               {offer.active && offer.saving > 0 && (
                 <div className="flex justify-between items-center text-[11px] font-semibold text-[#168a4a]">
-                  <span>{offer.active.percent}% offer (applied at checkout)</span>
-                  <span>≈ −{inr(offer.saving)}</span>
+                  <span>{offer.active.percent}% offer applied</span>
+                  <span>−{inr(offer.saving)}</span>
                 </div>
               )}
 
@@ -193,8 +190,9 @@ export function CartDrawer({ cart, recommendations = [] }: CartDrawerProps) {
             </div>
 
             {/* Primary Checkout CTA */}
-            <div>
-              <CheckoutButton />
+            <div className="space-y-2">
+              <CartHealthNotice issues={issues} />
+              <CheckoutButton disabled={issues.length > 0} />
             </div>
 
             {/* Reassurance Microcopy */}

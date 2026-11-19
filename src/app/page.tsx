@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Image from "next/image";
 import { getCollections } from "@/lib/shopify";
@@ -18,6 +19,11 @@ import { RecipeShowcase } from "@/components/home/recipe-showcase";
 import { SocialMediaSection } from "@/components/home/social-media-section";
 import pageBg from "@/assets/Images/Page Background.jpg";
 
+export const metadata: Metadata = {
+  // Title/description come from the root layout defaults; only the canonical is page-specific.
+  alternates: { canonical: "/" },
+};
+
 export const revalidate = 60;
 
 export default async function HomePage() {
@@ -33,9 +39,11 @@ export default async function HomePage() {
       <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden bg-white">
         <Image
           src={pageBg}
-          alt="Page Background"
+          alt=""
           fill
-          priority
+          // Decorative texture at 20% opacity: must not compete with the hero banner for the first paint.
+          loading="lazy"
+          quality={50}
           sizes="100vw"
           className="object-cover object-top opacity-20 w-full h-full"
         />
@@ -46,7 +54,7 @@ export default async function HomePage() {
 
       {/* Home Page Sections Layer */}
       <div className="relative z-10 w-full">
-        {/* 1. Hero Banner */}
+        {/* 1. Hero Banner (holds the page h1) */}
         <HeroSection />
 
         {/* 2. Category Cards — link straight into the Shop page's category filter */}

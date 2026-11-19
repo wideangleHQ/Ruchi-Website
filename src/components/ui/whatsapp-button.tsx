@@ -1,13 +1,10 @@
 "use client";
 
 import React from "react";
+import { useWhatsAppUrl } from "@/lib/use-whatsapp-url";
 
 export function WhatsAppButton() {
-  const phoneNumber = "919124754082";
-  const defaultMessage = encodeURIComponent(
-    "Hello Ruchi Foodline! I would like to inquire about your products and offers."
-  );
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
+  const whatsappUrl = useWhatsAppUrl();
 
   return (
     <aside

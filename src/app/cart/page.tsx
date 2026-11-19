@@ -6,12 +6,15 @@ import { getProducts } from "@/lib/shopify";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CartRecommendations } from "@/components/cart/cart-recommendations";
 import { CheckoutButton } from "@/components/cart/checkout-button";
+import { CartHealthNotice } from "@/components/cart/cart-health-notice";
+import { getCartIssues } from "@/utils/cart-health";
 import { OffersTimeline } from "@/components/cart/offers-timeline";
-import { evaluateOffers, inr } from "@/utils/offers";
+import { evaluateOffers, freeDeliveryStatus, FREE_DELIVERY_THRESHOLD, inr } from "@/utils/offers";
 import { formatMoney } from "@/utils/format";
 
 export const metadata: Metadata = {
   title: "Cart",
+  robots: { index: false, follow: false },
 };
 
 export default async function CartPage() {
@@ -21,6 +24,7 @@ export default async function CartPage() {
   ]);
   const lines = cart?.lines.edges.map((edge) => edge.node) ?? [];
   const offer = evaluateOffers(cart);
+  const delivery = freeDeliveryStatus(cart);
 
   return (
     <div className="bg-white py-12">
@@ -73,14 +77,23 @@ export default async function CartPage() {
                 </div>
                 {offer.active && offer.saving > 0 && (
                   <div className="flex justify-between font-semibold text-primary-green">
-                    <span>{offer.active.percent}% offer (applied at checkout)</span>
-                    <span>≈ −{inr(offer.saving)}</span>
+                    <span>{offer.active.percent}% offer applied</span>
+                    <span>−{inr(offer.saving)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span>Shipping & Taxes</span>
-                  <span>Calculated at checkout</span>
+                  <span>Delivery</span>
+                  {delivery.eligible ? (
+                    <span className="font-bold uppercase tracking-wider text-primary-green">Free</span>
+                  ) : (
+                    <span>Calculated at checkout</span>
+                  )}
                 </div>
+                {!delivery.eligible && delivery.remaining > 0 && (
+                  <p className="text-[11px]">
+                    Add {inr(delivery.remaining)} more for free delivery (orders of {inr(FREE_DELIVERY_THRESHOLD)}+ after offers).
+                  </p>
+                )}
               </div>
 
               <div className="flex justify-between text-base font-bold text-text pt-1">
@@ -88,7 +101,8 @@ export default async function CartPage() {
                 <span className="text-primary-green">{formatMoney(cart.cost.totalAmount)}</span>
               </div>
 
-              <CheckoutButton />
+              <CartHealthNotice issues={getCartIssues(cart)} />
+              <CheckoutButton disabled={getCartIssues(cart).length > 0} />
 
               <div className="text-[11px] text-muted-text space-y-1 pt-2">
                 <div className="flex items-center gap-1 text-primary-green font-medium">

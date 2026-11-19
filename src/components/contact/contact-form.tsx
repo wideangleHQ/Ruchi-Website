@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { InquiryFallback } from "./inquiry-fallback";
+import { attributionPayload } from "@/lib/attribution-client";
+import { buildInquiryText } from "@/utils/whatsapp";
 import { Loader2, CheckCircle2, Send } from "lucide-react";
 
 export type ContactFormType = "queries" | "bulk_order" | "partner";
@@ -70,6 +73,9 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
     return Object.keys(next).length === 0;
   };
 
+  // One key per form fill: a retry after a timeout or a double click maps to the same Shopify entry.
+  const submissionKey = useRef<string>(crypto.randomUUID());
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submitting) return;
@@ -97,6 +103,8 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
           quantity: values.quantity.trim() || undefined,
           location: values.location.trim() || undefined,
           businessType: values.businessType || undefined,
+          idempotencyKey: submissionKey.current,
+          ...attributionPayload(),
         }),
       });
 
@@ -107,6 +115,7 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
       }
 
       setSubmitted(true);
+      submissionKey.current = crypto.randomUUID();
       setValues(EMPTY_STATE);
     } catch {
       setSubmitError("Could not reach the server. Please check your connection and try again.");
@@ -226,6 +235,22 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
         <p className="text-xs font-medium text-brand-red bg-red-50 border border-red-200 rounded-[8px] px-3 py-2" role="alert">
           {submitError}
         </p>
+      )}
+
+      {submitError && (
+        <InquiryFallback
+          text={buildInquiryText(formType.replace('_', ' '), {
+            Name: values.fullName,
+            Email: values.email,
+            Phone: values.phone,
+            Company: values.companyName,
+            Products: values.productsRequired,
+            Quantity: values.quantity,
+            Location: values.location,
+            'Business type': values.businessType,
+            Message: values.message,
+          })}
+        />
       )}
 
       <button

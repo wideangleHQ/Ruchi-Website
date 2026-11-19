@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSubmissionKey } from "@/lib/use-submission-key";
+import { attributionPayload } from "@/lib/attribution-client";
 
 export function HeritageB2BSection() {
   const [isB2BSubmitted, setIsB2BSubmitted] = useState(false);
@@ -8,6 +10,7 @@ export function HeritageB2BSection() {
 
   const [b2bError, setB2BError] = useState("");
   const [b2bSending, setB2BSending] = useState(false);
+  const b2bKey = useSubmissionKey();
 
   const handleB2BSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +23,8 @@ export function HeritageB2BSection() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           formType: "partner",
+          idempotencyKey: b2bKey.get(),
+          ...attributionPayload(),
           fullName: b2bData.name.trim(),
           email: b2bData.email.trim(),
           phone: b2bData.phone.trim() || undefined,
@@ -35,6 +40,7 @@ export function HeritageB2BSection() {
       }
       setB2BData({ name: "", company: "", phone: "", email: "", type: "Distributor" });
       setIsB2BSubmitted(true);
+      b2bKey.renew();
       setTimeout(() => setIsB2BSubmitted(false), 4000);
     } catch {
       setB2BError("Could not reach the server. Please try again.");

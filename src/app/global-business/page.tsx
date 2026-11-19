@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGE } from "@/lib/seo/site";
 import { getCollections } from "@/lib/shopify";
 import { orderCategories } from "@/utils/categories";
 import { GlobalBusinessHero } from "@/components/global-business/gb-hero";
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   title: "Global Business & Exports",
   description: DESCRIPTION,
   alternates: { canonical: "/global-business" },
-  openGraph: { title: "Global Business & Exports | Ruchi Foodline", description: DESCRIPTION, url: "/global-business", type: "website" },
+  openGraph: { title: "Global Business & Exports | Ruchi Foodline", description: DESCRIPTION, url: "/global-business", type: "website", images: [DEFAULT_OG_IMAGE] },
 };
 
 export default async function GlobalBusinessPage() {

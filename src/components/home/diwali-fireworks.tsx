@@ -38,7 +38,8 @@ export function DiwaliFireworks() {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
-    setIsActive(true);
+    // Deferred a tick: the effect only starts the animation; state must not be set synchronously inside it.
+    Promise.resolve().then(() => setIsActive(true));
 
     let fadeTimer: NodeJS.Timeout;
     let cleanupTimer: NodeJS.Timeout;

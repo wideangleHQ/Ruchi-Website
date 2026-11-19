@@ -28,6 +28,29 @@ export const articleFragment = /* GraphQL */ `
       title
       description
     }
+    recipeMetafield: metafield(namespace: "ruchi", key: "recipe_products") {
+      references(first: 20) {
+        nodes {
+          ... on ProductVariant {
+            id
+            title
+            availableForSale
+            price {
+              amount
+              currencyCode
+            }
+            product {
+              handle
+              title
+              featuredImage {
+                url
+                altText
+              }
+            }
+          }
+        }
+      }
+    }
   }
 `;
 

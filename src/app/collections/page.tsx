@@ -6,7 +6,8 @@ import { SafeImage } from "@/components/ui/safe-image";
 
 export const metadata: Metadata = {
   title: "Collections",
-  description: "Explore Ruchi Foodline product collections: Basic Spices, Blended Masalas, Sattvik Line, Pasta & Ready Mixes.",
+  description: "Explore Ruchi Foodline product collections: basic spices, blended spices, whole spices, pasta, vermicelli, noodles, tea, ready mixes and hampers.",
+  alternates: { canonical: "/collections" },
 };
 
 export default async function CollectionsOverviewPage() {

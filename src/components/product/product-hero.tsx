@@ -1,6 +1,8 @@
 "use client";
 
+import { productImageAlt } from "@/utils/image-alt";
 import React, { startTransition, useActionState, useEffect, useState } from "react";
+import { formatPackSize, isValidPrice } from "@/utils/pricing";
 import Link from "next/link";
 import {
   ShoppingBag,
@@ -147,7 +149,7 @@ export function ProductHero({ product }: ProductHeroProps) {
     return () => clearTimeout(timer);
   }, [added]);
 
-  const isSoldOut = !selectedVariant || !selectedVariant.availableForSale;
+  const isSoldOut = !selectedVariant || !selectedVariant.availableForSale || !isValidPrice(selectedVariant.price);
   const price = selectedVariant?.price;
   const compareAtPrice = selectedVariant?.compareAtPrice;
   const priceNum = price ? parseFloat(price.amount) : null;
@@ -266,7 +268,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                 <SafeImage
                   key={images[activeImageIdx].url}
                   src={images[activeImageIdx].url}
-                  alt={images[activeImageIdx].altText ?? product.title}
+                  alt={productImageAlt(product, images[activeImageIdx], activeImageIdx)}
                   fallbackTitle={product.title}
                   fill
                   priority
@@ -315,7 +317,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                   >
                     <SafeImage
                       src={img.url}
-                      alt={img.altText ?? product.title}
+                      alt={productImageAlt(product, img, idx)}
                       fallbackTitle={product.title}
                       fill
                       className="object-contain"
@@ -390,7 +392,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                   Selected Quantity:{" "}
                   <span className="font-bold text-primary-green capitalize">
                     {selectedVariant?.title && selectedVariant.title.toLowerCase() !== "default title"
-                      ? selectedVariant.title
+                      ? formatPackSize(selectedVariant.title)
                       : "Standard Pack"}
                   </span>
                 </span>
@@ -415,7 +417,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                             : "bg-white text-text border-border hover:border-text/60"
                         } ${!isAvailable ? "opacity-40 cursor-not-allowed line-through" : ""}`}
                       >
-                        {v.title}
+                        {formatPackSize(v.title)}
                       </button>
                       {unitPriceStr && (
                         <span className="text-[10px] text-muted-text font-semibold mt-1">
@@ -558,7 +560,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                 <div className="flex items-start gap-2 text-muted-text">
                   <Truck className="w-3.5 h-3.5 text-primary-green shrink-0 mt-0.5" />
                   <span>
-                    <strong className="text-text font-bold">Free Delivery:</strong> On all orders above ₹499. Dispatched within 24 hours.
+                    <strong className="text-text font-bold">Free Delivery:</strong> On orders of ₹699+ after offers. Dispatched within 24 hours.
                   </span>
                 </div>
                 <div className="flex items-start gap-2 text-muted-text">
@@ -660,7 +662,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                 </span>
                 {variants.length > 1 && (
                   <span className="text-[11px] text-muted-text font-semibold truncate">
-                    ({selectedVariant?.title})
+                    ({selectedVariant ? formatPackSize(selectedVariant.title) : ""})
                   </span>
                 )}
               </div>

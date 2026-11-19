@@ -88,7 +88,7 @@ function CertificationCard({ cert, index, onView }: { cert: Certificate; index: 
           <button
             type="button"
             onClick={(e) => onView(cert, e.currentTarget)}
-            className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1 sm:gap-1.5 rounded-md bg-[#168a4a] px-2 py-1.5 xs:px-2.5 xs:py-2 font-sans text-[11px] xs:text-xs font-semibold text-white transition-colors hover:bg-[#0e6337] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-sm"
+            className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center gap-1 sm:gap-1.5 rounded-md bg-[#168a4a] px-2 py-1.5 xs:px-2.5 xs:py-2 font-sans text-[11px] xs:text-xs font-semibold text-white transition-colors hover:bg-[#0e6337] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-sm"
             aria-label={`View certificate: ${cert.title}`}
           >
             <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" aria-hidden="true" />
@@ -97,7 +97,7 @@ function CertificationCard({ cert, index, onView }: { cert: Certificate; index: 
           <a
             href={cert.file}
             download={cert.downloadName}
-            className="inline-flex flex-1 items-center justify-center gap-1 sm:gap-1.5 rounded-md border border-[#168a4a] px-2 py-1.5 xs:px-2.5 xs:py-2 font-sans text-[11px] xs:text-xs font-semibold text-[#0e6337] transition-colors hover:bg-[#eef6ec] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-sm"
+            className="inline-flex min-h-11 flex-1 items-center justify-center gap-1 sm:gap-1.5 rounded-md border border-[#168a4a] px-2 py-1.5 xs:px-2.5 xs:py-2 font-sans text-[11px] xs:text-xs font-semibold text-[#0e6337] transition-colors hover:bg-[#eef6ec] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168a4a] sm:text-sm"
             aria-label={`Download PDF: ${cert.title}`}
           >
             <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" aria-hidden="true" />
@@ -149,7 +149,8 @@ export function CertificationsSection() {
   return (
     <section
       ref={rootRef}
-      className="py-8 sm:py-10"
+      id="certifications"
+      className="scroll-mt-32 py-8 sm:py-10"
       aria-labelledby="certifications-heading"
     >
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">

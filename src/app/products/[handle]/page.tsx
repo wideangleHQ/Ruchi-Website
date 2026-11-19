@@ -6,6 +6,9 @@ import type { Product } from "@/lib/shopify/types";
 import { ProductHero } from "@/components/product/product-hero";
 import { ProductCard } from "@/components/product/product-card";
 import { ChevronRight } from "lucide-react";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbJsonLd, productJsonLd } from "@/lib/seo/jsonld";
+import { DEFAULT_OG_IMAGE, toMetaDescription } from "@/lib/seo/site";
 
 type Props = {
   params: Promise<{ handle: string }>;
@@ -18,28 +21,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) return {};
 
   const seoTitle = product.seo?.title || product.title;
-  const seoDescription = product.seo?.description || product.description || "Authentic pure Indian spice from Ruchi Foodline.";
+  const seoDescription =
+    toMetaDescription(product.seo?.description || product.description) ||
+    `Buy ${product.title} from Ruchi Foodline, made in Cuttack, Odisha.`;
+  const path = `/products/${product.handle}`;
 
   return {
-    title: `${seoTitle} | Ruchi Foodline`,
+    title: seoTitle,
     description: seoDescription,
-    alternates: { canonical: `/products/${product.handle}` },
+    alternates: { canonical: path },
     openGraph: {
+      type: "website",
+      url: path,
       title: seoTitle,
       description: seoDescription,
-      ...(product.featuredImage
-        ? {
-          images: [
-            {
+      // Products still waiting for a photo fall back to the genuine RUCHI range photo rather than having no share card.
+      images: [
+        product.featuredImage
+          ? {
               url: product.featuredImage.url,
               width: product.featuredImage.width,
               height: product.featuredImage.height,
               alt: product.featuredImage.altText ?? product.title,
-            },
-          ],
-        }
-        : {}),
+            }
+          : DEFAULT_OG_IMAGE,
+      ],
     },
+    twitter: { card: "summary_large_image", title: seoTitle, description: seoDescription },
   };
 }
 
@@ -69,8 +77,34 @@ export default async function ProductPage({ params }: Props) {
   }
   relatedProducts = relatedProducts.slice(0, 4);
 
+  // Structured data mirrors what the page shows: real Shopify price, SKU and availability per pack size.
+  const structured = productJsonLd({
+    handle: product.handle,
+    title: product.title,
+    description: product.description,
+    images: product.images.edges.map((e) => e.node.url),
+    variants: product.variants.edges.map(({ node: v }) => ({
+      title: v.title,
+      sku: v.sku,
+      availableForSale: v.availableForSale,
+      price: v.price,
+      image: v.image,
+      ean: v.metafields.find((m) => m?.key === "ean")?.value ?? null,
+    })),
+  });
+
   return (
     <div className="bg-white py-6 sm:py-8 pb-24">
+      <JsonLd
+        data={[
+          structured,
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Shop", path: "/products" },
+            { name: product.title, path: `/products/${product.handle}` },
+          ]),
+        ]}
+      />
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center space-x-2 text-xs font-medium text-muted-text mb-5">

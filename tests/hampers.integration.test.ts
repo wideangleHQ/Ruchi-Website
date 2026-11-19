@@ -44,7 +44,7 @@ test("hampers: the Hampers category lists hampers and no regular products", asyn
   const titles = cardTitles(page.html);
   assert.ok(titles.length >= 1, "expected at least one hamper card");
   assert.ok(titles.every((x) => /\(\d+-In-1\)|Combo|Pack|Kit|Box/i.test(x)), `non-hamper product in Hampers: ${titles.join(" | ")}`);
-  assert.ok((page.html.match(/aria-label="Add to cart"/g) ?? []).length >= titles.length - 1);
+  assert.ok((page.html.match(/aria-label="Add [^"]+ to cart"/g) ?? []).length >= titles.length - 1);
 });
 
 test("hampers: another category does not leak hampers", async (t) => {

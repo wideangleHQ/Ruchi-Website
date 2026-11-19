@@ -6,6 +6,7 @@ import { ContactForm } from "@/components/contact/contact-form";
 export const metadata: Metadata = {
   title: "Bulk Order Enquiry",
   description: "Request a bulk order quote from Ruchi Foodline for large-quantity or commercial purchases.",
+  alternates: { canonical: "/contact/bulk-order" },
 };
 
 export default function BulkOrderPage() {

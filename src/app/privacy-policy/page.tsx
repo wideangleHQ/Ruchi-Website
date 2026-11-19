@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LegalPageLayout, type LegalSection } from "@/components/legal/legal-page-layout";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacy-policy" },
   title: "Privacy Policy",
   description:
     "Statutory Privacy Policy for Ruchi Foodline (Om Oil & Flour Mills Ltd.). Formulated under the DPDP Act 2023, IT Act 2000, and applicable Indian e-commerce regulations.",

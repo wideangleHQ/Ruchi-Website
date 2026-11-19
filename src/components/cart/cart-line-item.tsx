@@ -109,6 +109,9 @@ export function CartLineItem({ line }: { line: CartLine }) {
 
           {/* Line Total Price */}
           <span className="font-sans font-bold text-xs sm:text-sm text-gray-900">
+            {line.cost.subtotalAmount && Number(line.cost.subtotalAmount.amount) > Number(line.cost.totalAmount.amount) && (
+              <s className="mr-1.5 font-medium text-gray-400">{formatMoney(line.cost.subtotalAmount)}</s>
+            )}
             {formatMoney(line.cost.totalAmount)}
           </span>
         </div>

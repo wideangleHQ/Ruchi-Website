@@ -8,6 +8,12 @@
       "port": 4500
     },
     {
+      "name": "ruchi-prod",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "start", "-p", "4600"],
+      "port": 4600
+    },
+    {
       "name": "ruchi-handbook",
       "runtimeExecutable": "mdbook",
       "runtimeArgs": ["serve", "docs", "-p", "3001", "-n", "127.0.0.1"],

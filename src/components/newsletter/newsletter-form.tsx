@@ -107,7 +107,7 @@ export function HeadlessNewsletterForm({ className = "", onSuccess }: Newsletter
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full px-5 py-2.5 rounded-lg bg-[#168a4a] hover:bg-[#0e6337] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors cursor-pointer active:scale-[0.99] shadow-xs"
+        className="w-full min-h-11 px-5 py-2.5 rounded-lg bg-[#168a4a] hover:bg-[#0e6337] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors cursor-pointer active:scale-[0.99] shadow-xs"
       >
         {isSubmitting ? "Submitting…" : "Subscribe"}
       </button>

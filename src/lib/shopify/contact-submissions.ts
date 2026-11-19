@@ -1,6 +1,7 @@
 import "server-only";
-import { createHash } from "node:crypto";
-import { shopifyAdminFetch } from "./admin-client";
+import { createHash, randomUUID } from "node:crypto";
+import { shopifyAdminFetch, ShopifyGraphQLError } from "./admin-client";
+import type { Attribution } from "@/utils/attribution";
 
 export type ContactFormType = "queries" | "bulk_order" | "partner";
 
@@ -14,6 +15,12 @@ export interface ContactSubmissionInput {
   quantity?: string;
   location?: string;
   businessType?: string;
+  /** Optional client-generated key: the same key always maps to the same Shopify entry (safe against double-submit/retry). */
+  idempotencyKey?: string;
+  /** Validated lead attribution (campaign tags, landing page, referrer). */
+  attribution?: Attribution;
+  /** Page the form was on (product or collection path). */
+  sourcePage?: string;
 }
 
 export interface SubmissionResult {
@@ -53,9 +60,12 @@ export async function createContactSubmission(
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "")
     .slice(0, 16);
-  const timestamp = Date.now().toString(36);
-  const randomSuffix = Math.random().toString(36).slice(2, 6);
-  const handle = `${input.formType}-${cleanName || "entry"}-${timestamp}-${randomSuffix}`;
+  // The handle is fixed ONCE per submission and the write is an upsert, so any retry (network timeout, 429, fallback type)
+  // lands on the same entry instead of creating a duplicate when the first attempt actually succeeded.
+  const unique = input.idempotencyKey
+    ? createHash("sha256").update(input.idempotencyKey).digest("hex").slice(0, 16)
+    : `${Date.now().toString(36)}-${randomUUID().slice(0, 8)}`;
+  const handle = `${input.formType}-${cleanName || "entry"}-${unique}`;
 
   const fields = [
     { key: "form_type", value: input.formType },
@@ -67,13 +77,19 @@ export async function createContactSubmission(
     { key: "quantity", value: input.quantity ? sanitizeInput(input.quantity) : "" },
     { key: "location", value: input.location ? sanitizeInput(input.location) : "" },
     { key: "business_type", value: input.businessType ? sanitizeInput(input.businessType) : "" },
+    { key: "utm_source", value: input.attribution?.utm_source ?? "" },
+    { key: "utm_medium", value: input.attribution?.utm_medium ?? "" },
+    { key: "utm_campaign", value: input.attribution?.utm_campaign ?? "" },
+    { key: "landing_page", value: input.attribution?.landing_page ?? "" },
+    { key: "referrer", value: input.attribution?.referrer ?? "" },
+    { key: "source_page", value: input.sourcePage ?? "" },
     { key: "status", value: "new" },
     { key: "submitted_at", value: new Date().toISOString() },
   ];
 
   const mutation = /* GraphQL */ `
-    mutation CreateContactSubmission($metaobject: MetaobjectCreateInput!) {
-      metaobjectCreate(metaobject: $metaobject) {
+    mutation UpsertContactSubmission($handle: MetaobjectHandleInput!, $metaobject: MetaobjectUpsertInput!) {
+      metaobjectUpsert(handle: $handle, metaobject: $metaobject) {
         metaobject {
           id
           handle
@@ -91,39 +107,43 @@ export async function createContactSubmission(
   let data;
   try {
     data = await shopifyAdminFetch<{
-      metaobjectCreate: {
+      metaobjectUpsert: {
         metaobject: { id: string; handle: string } | null;
         userErrors: { field: string[]; message: string; code?: string }[];
       };
     }>({
       query: mutation,
       variables: {
-        metaobject: { type: METAOBJECT_TYPE, handle, fields },
+        handle: { type: METAOBJECT_TYPE, handle },
+        metaobject: { fields },
       },
     });
   } catch (err) {
+    // Only a schema/type problem justifies the alternate type; network/auth/rate-limit errors must surface as-is.
+    if (!(err instanceof ShopifyGraphQLError)) throw err;
     console.warn("[createContactSubmission] Attempting fallback metaobject type:", err);
     data = await shopifyAdminFetch<{
-      metaobjectCreate: {
+      metaobjectUpsert: {
         metaobject: { id: string; handle: string } | null;
         userErrors: { field: string[]; message: string; code?: string }[];
       };
     }>({
       query: mutation,
       variables: {
-        metaobject: { type: METAOBJECT_TYPE_FALLBACK, handle, fields },
+        handle: { type: METAOBJECT_TYPE_FALLBACK, handle },
+        metaobject: { fields },
       },
     });
   }
 
-  const errors = data.metaobjectCreate?.userErrors ?? [];
+  const errors = data.metaobjectUpsert?.userErrors ?? [];
   if (errors.length > 0) {
     const errorMsg = errors.map((e) => `${e.field?.join(".") || "field"}: ${e.message}`).join("; ");
     console.error("[createContactSubmission] Shopify userErrors:", errorMsg);
     throw new Error(`Shopify metaobject error: ${errorMsg}`);
   }
 
-  const created = data.metaobjectCreate?.metaobject;
+  const created = data.metaobjectUpsert?.metaobject;
   if (!created?.id) {
     throw new Error("Shopify did not return a confirmed metaobject ID upon creation.");
   }

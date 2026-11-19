@@ -47,11 +47,14 @@ export function CartProvider({
   const toggleCart = useCallback(() => setIsOpen((prev) => !prev), []);
 
   // Synchronize cart whenever initialCart changes from server revalidation
-  useEffect(() => {
+  // (adjusting state during render is React's recommended pattern for deriving state from a changed prop)
+  const [prevInitialCart, setPrevInitialCart] = useState(initialCart);
+  if (prevInitialCart !== initialCart) {
+    setPrevInitialCart(initialCart);
     setCart(initialCart);
     // Clear optimistic overrides once canonical server state arrives
     setOptimisticQuantities({});
-  }, [initialCart]);
+  }
 
   // Close cart drawer when navigating to a new route
   const [prevPathname, setPrevPathname] = useState(pathname);

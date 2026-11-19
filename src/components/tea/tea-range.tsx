@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatPackSize } from "@/utils/pricing";
 import { ArrowRight } from "lucide-react";
 import { getCollectionProducts } from "@/lib/shopify";
 import type { Product } from "@/lib/shopify/types";
@@ -75,7 +76,7 @@ export function TeaCards({ cards }: { cards: Card[] }) {
       {cards.map(({ product, tint, image }, i) => {
         const variants = product.variants.edges.map((e) => e.node);
         const specs = getKeySpecs(product, variants[0] ?? null);
-        const packSizes = variants.map((v) => v.title).filter((t) => t && t.toLowerCase() !== "default title");
+        const packSizes = variants.map((v) => v.title).filter((t) => t && t.toLowerCase() !== "default title").map(formatPackSize);
         const img = product.featuredImage;
         return (
           <li key={product.id} className={i === 2 ? "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-0.75rem)] lg:col-span-1 lg:mx-0 lg:w-auto" : ""}>

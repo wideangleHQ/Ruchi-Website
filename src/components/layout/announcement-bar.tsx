@@ -8,11 +8,11 @@ interface OfferSegment {
 }
 
 const OFFERS: OfferSegment[][] = [
-  [{ text: "Buy More, Save More — " }, { text: "5% OFF", emphasis: true }, { text: " on Orders ₹299+ (excl. hampers)" }],
+  [{ text: "Buy More, Save More — " }, { text: "5% OFF", emphasis: true }, { text: " on Orders ₹299+" }],
   [{ text: "Unlock " }, { text: "10% OFF", emphasis: true }, { text: " on Orders ₹499+" }],
   [{ text: "Enjoy " }, { text: "15% OFF", emphasis: true }, { text: " on Orders ₹799+" }],
   [{ text: "Get Your Biggest Saving — " }, { text: "20% OFF", emphasis: true }, { text: " on Orders ₹999+" }],
-  [{ text: "Free Delivery", emphasis: true }, { text: " on Orders Above ₹699" }],
+  [{ text: "Free Delivery", emphasis: true }, { text: " on Orders ₹699+ (after offers)" }],
 ];
 
 const ROTATE_INTERVAL_MS = 2800;

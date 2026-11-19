@@ -184,6 +184,8 @@ export function CustomerStories() {
           {duplicatedReviews.map((review, idx) => (
             <div
               key={`${review.id}-${idx}`}
+              // The second copy only exists to make the marquee loop seamlessly: hide it from screen readers.
+              aria-hidden={idx >= REVIEWS.length ? true : undefined}
               className="review-card w-[280px] xs:w-[320px] sm:w-[360px] lg:w-[380px] shrink-0 bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-xs hover:shadow-xl hover:-translate-y-1 hover:border-[#168a4a]/40 transition-all duration-300 flex flex-col justify-between select-none"
             >
               <div>

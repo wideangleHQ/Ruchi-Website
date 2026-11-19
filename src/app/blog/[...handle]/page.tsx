@@ -5,7 +5,11 @@ import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { getArticles, getArticleByHandle, getBlogArticles, estimateReadingTime } from "@/lib/shopify/blog";
 import { getLocalBlogImage } from "@/lib/blog-images";
+import { JsonLd } from "@/components/seo/json-ld";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { absoluteUrl, toMetaDescription } from "@/lib/seo/site";
 import { ArticleContent } from "@/components/blog/article-content";
+import { RecipeKit } from "@/components/blog/recipe-kit";
 import { SocialShare } from "@/components/blog/social-share";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { RelatedPosts } from "@/components/blog/related-posts";
@@ -35,16 +39,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!article) return {};
 
   const seoTitle = article.seo.title || article.title;
-  const seoDescription = article.seo.description || article.excerpt || article.content.replace(/<[^>]*>/g, "").slice(0, 160);
+  const seoDescription = toMetaDescription(article.seo.description || article.excerpt || article.content);
+  const articlePath = `/blog/${article.blog.handle}/${article.handle}`;
 
   const ogImage = article.image || getLocalBlogImage(article.handle, article.title, article.blog?.handle);
 
   return {
-    title: `${seoTitle} | Ruchi Foodline`,
+    title: seoTitle,
     description: seoDescription,
+    // /blog/<article> and /blog/<blog>/<article> both resolve; one canonical keeps them from competing.
+    alternates: { canonical: articlePath },
+    twitter: { card: "summary_large_image", title: seoTitle, description: seoDescription },
     openGraph: {
       title: seoTitle,
       description: seoDescription,
+      url: articlePath,
       type: "article",
       publishedTime: article.publishedAt,
       authors: [article.author.name],
@@ -77,7 +86,8 @@ export default async function BlogArticlePage({ params }: Props) {
   const { articles: sameBlog } = await getBlogArticles({ handle: article.blog.handle, first: 6 });
   const related = sameBlog.filter((a) => a.id !== article.id).slice(0, 3);
 
-  const articleUrl = `https://ruchifoodline.com/blog/${article.blog.handle}/${article.handle}`;
+  const articlePath = `/blog/${article.blog.handle}/${article.handle}`;
+  const articleUrl = absoluteUrl(articlePath);
 
   return (
     <>
@@ -145,6 +155,8 @@ export default async function BlogArticlePage({ params }: Props) {
           <div className="flex-1 min-w-0 max-w-3xl">
             <ArticleContent html={article.contentHtml} />
 
+            <RecipeKit items={article.recipeProducts} />
+
             {/* Tags */}
             {article.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-10 pt-6 border-t border-border">
@@ -201,24 +213,23 @@ export default async function BlogArticlePage({ params }: Props) {
         </div>
       </article>
 
-      {/* Article Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: article.title,
-            description: article.seo.description || article.excerpt,
-            image: article.image?.url,
-            author: { "@type": "Person", name: article.author.name },
-            datePublished: article.publishedAt,
-            publisher: {
-              "@type": "Organization",
-              name: "Ruchi Foodline",
-            },
+      {/* Article + breadcrumb structured data (only facts Shopify provides; no modified date is guessed) */}
+      <JsonLd
+        data={[
+          articleJsonLd({
+            title: article.title,
+            description: article.seo.description || article.excerpt || article.content,
+            imageUrl: (article.image || getLocalBlogImage(article.handle, article.title, article.blog?.handle))?.url,
+            authorName: article.author?.name,
+            publishedAt: article.publishedAt,
+            path: articlePath,
           }),
-        }}
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: article.title, path: articlePath },
+          ]),
+        ]}
       />
     </>
   );

@@ -13,6 +13,9 @@ import {
   updateCart,
 } from "./index";
 import type { Cart } from "./types";
+import { shopifyFetch } from "./client";
+import { planRecipeKit } from "@/utils/recipe-kit";
+import { getCartIssues } from "@/utils/cart-health";
 
 const CART_COOKIE = "cartId";
 const CART_COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
@@ -58,8 +61,14 @@ export async function getOrCreateCart(): Promise<Cart> {
   const cartId = await getCartId();
 
   if (cartId) {
-    const existingCart = await getCart(cartId);
-    if (existingCart) return existingCart;
+    try {
+      const existingCart = await getCart(cartId);
+      if (existingCart) return existingCart;
+    } catch (error) {
+      // A malformed id makes Shopify answer with an error (a merely expired cart returns null). Either way the
+      // stored cart is unusable: start a fresh one instead of leaving "Add to cart" broken until the cookie expires.
+      console.warn("[shopify] stored cart id unusable, creating a new cart:", error);
+    }
   }
 
   const newCart = await createCart();
@@ -199,5 +208,56 @@ export async function redirectToCheckoutAction(): Promise<void> {
   const cart = await getCart(cartId);
   if (!cart) redirect("/cart");
 
+  // Re-validate against live Shopify data: the browser's copy may be stale (item sold out, stock reduced, price changed).
+  if (getCartIssues(cart).length > 0) redirect("/cart");
+
   redirect(cart.checkoutUrl);
+}
+
+export type RecipeKitResult = { added: number; unavailable: string[]; error?: string };
+
+/**
+ * "Add all spices to cart" for a recipe. The browser only sends variant ids: availability is re-read from Shopify
+ * here (never trusted from the page), unavailable items are reported instead of failing the kit, and
+ * Shopify merges a variant already in the cart into its existing line.
+ */
+export async function addRecipeKitAction(variantIds: string[]): Promise<RecipeKitResult> {
+  if (!Array.isArray(variantIds) || variantIds.length === 0 || variantIds.length > 20) {
+    return { added: 0, unavailable: [], error: "This recipe has no products to add." };
+  }
+  try {
+    const data = await shopifyFetch<{
+      nodes: Array<{ id: string; availableForSale: boolean; product: { title: string } } | null>;
+    }>({
+      query: /* GraphQL */ `
+        query RecipeKitVariants($ids: [ID!]!) {
+          nodes(ids: $ids) {
+            ... on ProductVariant {
+              id
+              availableForSale
+              product {
+                title
+              }
+            }
+          }
+        }
+      `,
+      variables: { ids: variantIds.filter((id) => typeof id === "string").slice(0, 20) },
+      cache: "no-store",
+    });
+    const plan = planRecipeKit(
+      data.nodes.filter((n): n is NonNullable<typeof n> => Boolean(n?.id)).map((n) => ({ variantId: n.id, productTitle: n.product.title, availableForSale: n.availableForSale }))
+    );
+    if (plan.addable.length === 0) return { added: 0, unavailable: plan.unavailable };
+
+    const cart = await getOrCreateCart();
+    await addToCart(
+      cart.id,
+      plan.addable.map((merchandiseId) => ({ merchandiseId, quantity: 1 }))
+    );
+    updateTag(TAGS.cart);
+    return { added: plan.addable.length, unavailable: plan.unavailable };
+  } catch (error) {
+    return { added: 0, unavailable: [], error: isShopifyApiError(error) ? error.message : "Could not add the recipe items to your cart." };
+  }
 }

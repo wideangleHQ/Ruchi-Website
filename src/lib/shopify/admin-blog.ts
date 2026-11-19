@@ -64,6 +64,12 @@ export async function getApprovedComments(articleId: string): Promise<BlogCommen
 
 export async function addComment(articleId: string, comment: Omit<BlogComment, "id" | "status" | "createdAt">): Promise<BlogComment> {
   const comments = await getComments(articleId);
+  // A double-click or a client retry after a timeout resubmits the same comment: return the existing one instead of duplicating it.
+  const duplicate = comments.find(
+    (c) => c.name === comment.name && c.content === comment.content && Date.now() - Date.parse(c.createdAt) < 10 * 60_000
+  );
+  if (duplicate) return duplicate;
+  // ponytail: whole-array read-modify-write — two truly simultaneous comments can overwrite each other; move to one metaobject per comment if volume grows.
   const newComment: BlogComment = {
     id: crypto.randomUUID(),
     ...comment,
