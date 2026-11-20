@@ -6,6 +6,7 @@ Nothing below has been submitted, deployed or verified on production. Phase 1 an
 ## 1. Before deploying
 - ☐ **Decide the permanent domain.** Until then the site is on `*.vercel.app`. Changing domain later means 301-redirecting the old one and re-verifying Search Console — avoid by deciding now.
 - ☐ In Vercel → Project → Settings → Environment Variables (**Production**): `SITE_URL=https://<your-domain>`; optionally `GOOGLE_SITE_VERIFICATION`, `BING_SITE_VERIFICATION`, `AI_SEARCH_CRAWLERS`, `AI_TRAINING_CRAWLERS`. (Plus the Phase 1 variables: `HEALTH_CHECK_SECRET`, `SHOPIFY_WEBHOOK_SECRET`.)
+- ⚠ **`SITE_URL` also sets the customer sign-in callback address** (`<SITE_URL>/account/callback`). Before setting or changing it, register `<SITE_URL>/account/callback` (callback), `<SITE_URL>/account` (logout) and `<SITE_URL>` (JavaScript origin) in Shopify's Customer Account API settings — otherwise sign-in fails with "redirect_uri mismatch". `/account/debug` prints the exact three values for the current host.
 - ☐ Do **not** set `SEO_INDEXING=on` on previews. Preview deployments are noindexed automatically.
 - ☐ Commit and review Phase 1 + Phase 2 + SEO changes together (they share files: layout, header, product pages). Run `npm test`, `npx tsc --noEmit`, `npx eslint .`, `next build`.
 - ✔ `npm run seo:validate` passes against a production-mode build (33/33 on 2026-11-19).
