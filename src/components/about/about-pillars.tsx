@@ -69,11 +69,11 @@ export function AboutPillars() {
         </div>
 
         {/* 4 Large Visual Story Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 max-sm:grid-cols-2 max-sm:gap-3 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {PILLARS.map((p) => (
             <div
               key={p.number}
-              className="group relative h-[320px] sm:h-[360px] lg:h-[400px] rounded-2xl overflow-hidden border border-gray-200/90 shadow-2xs hover:shadow-xl transition-all duration-500 bg-stone-900 flex flex-col justify-end p-5 sm:p-6"
+              className="group relative h-[320px] sm:h-[360px] lg:h-[400px] max-sm:h-auto max-sm:min-h-[15.5rem] max-sm:rounded-xl rounded-2xl overflow-hidden border border-gray-200/90 shadow-2xs hover:shadow-xl transition-all duration-500 bg-stone-900 flex flex-col justify-end p-5 sm:p-6 max-sm:p-3"
             >
               {/* Background Canvas Image */}
               <Image
@@ -89,15 +89,15 @@ export function AboutPillars() {
 
               {/* Title & Subtitle */}
               <div className="relative z-10">
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-white mb-1 leading-snug">
+                <h3 className="font-serif text-xl sm:text-2xl max-sm:text-[0.95rem] font-bold text-white mb-1 leading-snug">
                   {p.title}
                 </h3>
-                <div className="text-xs font-semibold text-emerald-200/90 mb-3">
+                <div className="text-xs max-sm:text-[10px] font-semibold text-emerald-200/90 mb-3 max-sm:mb-1.5 max-sm:leading-tight">
                   {p.subtitle}
                 </div>
 
                 {/* Supporting Text — Always clear on mobile, enhanced on desktop */}
-                <p className="text-xs text-stone-200 leading-relaxed font-medium line-clamp-4 lg:line-clamp-none">
+                <p className="text-xs max-sm:text-[10.5px] text-stone-200 leading-relaxed max-sm:leading-snug font-medium line-clamp-4 max-sm:line-clamp-none lg:line-clamp-none">
                   {p.description}
                 </p>
               </div>

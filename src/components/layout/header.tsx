@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { ShoppingBag, Menu, X, User, ArrowRight, Search, ChevronDown, Download, FileDown } from "lucide-react";
 import { useCartDrawer } from "@/context/cart-context";
@@ -386,8 +387,12 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
       </>
       )}
 
-      {/* Mobile Full-Screen Navigation Overlay */}
-      {isMobileMenuOpen && (
+      {/* Mobile Full-Screen Navigation Overlay.
+          Portalled to <body> on purpose: the header has `will-change: transform` and a backdrop blur, which make it the
+          containing block for `position: fixed` children, and the Farm-to-Kitchen scroll story hides the header
+          (transform + opacity 0 + pointer-events none). Rendered inside the header, the menu inherited all of that —
+          it mounted off-screen and invisible, and only "worked" again after scrolling back up. */}
+      {isMobileMenuOpen && typeof document !== "undefined" && createPortal(
         <div
           ref={mobileMenuRef}
           onClickCapture={onMobileMenuClickCapture}
@@ -555,7 +560,8 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );

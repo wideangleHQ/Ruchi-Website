@@ -31,18 +31,24 @@ export function PromoAdsSection() {
       image: strip1,
       alt: "Ruchi Foodline Luxury Spice Combos & Signature Delights",
       href: "/products?category=blended-spices",
+      // Phone fit: text sits on the right of this artwork.
+      mobileFit: "max-sm:object-right",
     },
     {
       id: "strip-2",
       image: strip2,
       alt: "RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Offer",
       href: "/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic",
+      // Phone fit: text sits on the left.
+      mobileFit: "max-sm:object-left",
     },
     {
       id: "strip-3",
       image: strip3,
       alt: "Ruchi Foodline Authentic Spices & Festive Delights",
       href: "/products",
+      // Phone fit: text at both ends, so show it whole; its white top blends into the taller frame.
+      mobileFit: "max-sm:object-contain max-sm:object-bottom max-sm:bg-white",
     },
   ];
 
@@ -104,7 +110,7 @@ export function PromoAdsSection() {
 
         {/* 2. Strip Ad (Displays the complete strip banner in its original ratio) */}
         <div
-          className="relative w-full aspect-[1920/420] overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 bg-stone-100 transition-all duration-300 shadow-2xs"
+          className="relative w-full aspect-[1920/420] overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 bg-stone-100 transition-all duration-300 shadow-2xs max-sm:aspect-[3/1]"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -121,7 +127,7 @@ export function PromoAdsSection() {
                 alt={strip.alt}
                 fill
                 sizes="(min-width: 1400px) 1336px, (min-width: 1024px) 95vw, 100vw"
-                className="object-cover object-center w-full h-full transition-transform duration-700 ease-out hover:scale-[1.01]"
+                className={`object-cover object-center w-full h-full transition-transform duration-700 ease-out hover:scale-[1.01] ${strip.mobileFit}`}
                 priority={idx === 0}
               />
             </Link>

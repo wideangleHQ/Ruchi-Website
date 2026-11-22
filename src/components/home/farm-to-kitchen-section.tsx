@@ -202,6 +202,12 @@ export function FarmToKitchenSection() {
           const setHeaderVisibility = (hidden: boolean) => {
             const header = document.getElementById("site-header");
             if (!header) return;
+            // Phones keep the header (and its menu button) during the story: hiding it left mobile visitors with no way
+            // to open the menu until they scrolled back up. Desktop keeps the immersive full-screen behaviour.
+            if (isMobile) {
+              header.removeAttribute("data-hidden");
+              return;
+            }
             if (hidden) {
               header.setAttribute("data-hidden", "true");
             } else {

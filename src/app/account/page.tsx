@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { clientId, getCustomer, type Order } from "@/lib/shopify/customer-account";
 import { CA_COOKIES } from "@/lib/shopify/customer-account-core";
+import { AddressBook, ProfileDetails } from "@/components/account/profile-forms";
+import { profilePhone } from "@/utils/customer-profile";
 
 export const metadata: Metadata = { title: "My Account", robots: { index: false, follow: false } };
 
@@ -109,7 +111,8 @@ export default async function AccountPage({
   const tab = TABS.some(([k]) => k === rawTab) ? rawTab! : "overview";
   const orders = customer.orders.nodes;
   const email = customer.emailAddress?.emailAddress;
-  const phone = customer.phoneNumber?.phoneNumber;
+  // Account phone if Shopify has one, else the phone given at checkout (saved on the default address).
+  const phone = profilePhone(customer);
   const name = [customer.firstName, customer.lastName].filter(Boolean).join(" ") || email;
 
   return (
@@ -182,34 +185,24 @@ export default async function AccountPage({
           {tab === "profile" && (
             <div>
               <h2 className={`${h2} mb-4`}>Profile details</h2>
-              <dl className="max-w-xl divide-y divide-border rounded-brand border border-border">
-                {[
-                  ["First name", customer.firstName],
-                  ["Last name", customer.lastName],
-                  ["Email", email],
-                  ["Phone", phone],
-                ].map(([k, v]) => (
-                  <div key={k} className="flex flex-col gap-0.5 px-4 py-3 min-[420px]:flex-row min-[420px]:gap-4">
-                    <dt className="text-sm font-medium text-muted-text min-[420px]:w-28 min-[420px]:shrink-0">{k}</dt>
-                    <dd className="break-words text-[15px] font-medium text-text">{v || "—"}</dd>
-                  </div>
-                ))}
-              </dl>
+              <ProfileDetails
+                firstName={customer.firstName}
+                lastName={customer.lastName}
+                email={email}
+                phone={phone}
+                hasDefaultAddress={Boolean(customer.defaultAddress)}
+              />
             </div>
           )}
 
           {tab === "addresses" && (
             <div>
               <h2 className={h2}>Saved addresses</h2>
-              {customer.addresses.nodes.length ? (
-                <ul className="mt-3 grid gap-3 sm:grid-cols-2">
-                  {customer.addresses.nodes.map((a) => (
-                    <AddressCard key={a.id} lines={a.formatted} isDefault={a.id === customer.defaultAddress?.id} />
-                  ))}
-                </ul>
-              ) : (
-                <Empty>No saved addresses. They&apos;re saved when you check out.</Empty>
-              )}
+              <AddressBook
+                addresses={customer.addresses.nodes}
+                defaultId={customer.defaultAddress?.id ?? null}
+                defaults={{ firstName: customer.firstName, lastName: customer.lastName, phone: phone?.value ?? null }}
+              />
             </div>
           )}
 

@@ -43,6 +43,10 @@ export function MobileBottomNav({ cartQuantity = 0 }: MobileBottomNavProps) {
   // The Tea page is a full-bleed brand experience without the bottom bar (the header menu covers navigation).
   if (pathname === "/tea") return null;
 
+  // On specific product detail pages, the dedicated Mobile Shopping Bar takes over the bottom of the screen.
+  const isProductDetailPage = pathname.startsWith("/products/") && pathname !== "/products";
+  if (isProductDetailPage) return null;
+
   // Fixed Bottom Navigation Bar — Mobile Only
   return (
     <nav

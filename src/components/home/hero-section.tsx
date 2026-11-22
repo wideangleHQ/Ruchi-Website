@@ -15,18 +15,23 @@ const HERO_SLIDES = [
     src: heroBanner1,
     alt: "Ruchi Foodline Curry Powder — The Taste of a Richer India",
     href: "/products/ruchi-curry-powder",
+    // Phones show a taller crop (7:4). Artwork is 2880×630 with the headline baked in: at 7:4 the window is ~38% of the width,
+    // the most that still keeps headline + pack (≈27–66% of the artwork) uncropped. Taller would cut the headline.
+    mobileFocus: "max-sm:object-[44.5%_50%]",
   },
   {
     id: "ruchi-utkal-tea",
     src: heroBanner2,
     alt: "Ruchi Utkal Tea Dust — A Cup of Chai, A Richer Tomorrow",
     href: "/tea",
+    mobileFocus: "max-sm:object-[53%_50%]",
   },
   {
     id: "ruchi-non-veg-masala",
     src: heroBanner3,
     alt: "Ruchi Non-Veg Masala — Authentic Non-Veg Flavours",
     href: "/products?category=blended-spices",
+    mobileFocus: "max-sm:object-[43%_50%]",
   },
 ];
 
@@ -50,7 +55,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-white select-none min-h-[140px] xs:min-h-[165px] sm:min-h-[240px] md:min-h-[300px] lg:min-h-[360px] xl:min-h-[400px] aspect-[16/6] sm:aspect-[21/6] md:aspect-[2880/630]"
+      className="relative w-full overflow-hidden bg-white select-none min-h-[140px] xs:min-h-[165px] sm:min-h-[240px] md:min-h-[300px] lg:min-h-[360px] xl:min-h-[400px] aspect-[16/6] sm:aspect-[21/6] md:aspect-[2880/630] max-sm:aspect-[7/4] max-sm:min-h-0 max-sm:max-h-[60svh]"
       aria-roledescription="carousel"
       aria-label="Featured products"
       onMouseEnter={() => setPaused(true)}
@@ -83,7 +88,7 @@ export function HeroSection() {
                   priority={index === 0}
                   fetchPriority={index === 0 ? "high" : "low"}
                   sizes="100vw"
-                  className="object-cover object-center w-full h-full"
+                  className={`object-cover object-center w-full h-full ${slide.mobileFocus}`}
                 />
               </Link>
             </div>

@@ -6,7 +6,6 @@ import { formatPackSize, isValidPrice } from "@/utils/pricing";
 import Link from "next/link";
 import {
   ShoppingBag,
-  Zap,
   Check,
   ShieldCheck,
   Truck,
@@ -16,11 +15,10 @@ import {
   ChevronDown,
   ChevronUp,
   CreditCard,
-  RotateCcw,
   CheckCircle2,
 } from "lucide-react";
 import type { Product, ProductVariant } from "@/lib/shopify/types";
-import { addItemAction, buyNowAction } from "@/lib/shopify/cart-actions";
+import { addItemAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
 import { getKeyFeatures, getKeySpecs, getPackCatalogue, productMetafield } from "@/utils/catalogue";
 import { SafeImage } from "@/components/ui/safe-image";
@@ -134,7 +132,6 @@ export function ProductHero({ product }: ProductHeroProps) {
   }
 
   const [addState, addAction, isAdding] = useActionState(addItemAction, undefined);
-  const [buyState, buyAction, isBuying] = useActionState(buyNowAction, undefined);
   const [added, setAdded] = useState(false);
   const [prevAdding, setPrevAdding] = useState(isAdding);
 
@@ -164,11 +161,6 @@ export function ProductHero({ product }: ProductHeroProps) {
     startTransition(() => addAction({ merchandiseId: selectedVariant.id, quantity }));
   };
 
-  const handleBuyNow = () => {
-    if (isSoldOut || !selectedVariant) return;
-    startTransition(() => buyAction({ merchandiseId: selectedVariant.id, quantity }));
-  };
-
   const handleShare = async () => {
     if (typeof window === "undefined") return;
     const shareData = {
@@ -193,7 +185,7 @@ export function ProductHero({ product }: ProductHeroProps) {
     }
   };
 
-  const errorMessage = addState?.error || buyState?.error;
+  const errorMessage = addState?.error;
 
   // Catalogue content comes only from the selected variant's ruchi.* metafields (Excel source)
   const catalogue = getPackCatalogue(product, selectedVariant);
@@ -256,7 +248,7 @@ export function ProductHero({ product }: ProductHeroProps) {
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start pb-28 sm:pb-32">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
         {/* ============================================================ */}
         {/* LEFT COLUMN — MARKETPLACE MULTI-IMAGE GALLERY (~58%)        */}
         {/* ============================================================ */}
@@ -338,7 +330,10 @@ export function ProductHero({ product }: ProductHeroProps) {
         {/* ============================================================ */}
         {/* RIGHT COLUMN — INFORMATION & SPECIFICATIONS                 */}
         {/* ============================================================ */}
-        <div className="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2 flex flex-col gap-4">
+        <div
+          data-testid="pdp-info-panel"
+          className="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2 flex flex-col gap-4 lg:sticky lg:top-[164px] lg:self-start lg:max-h-[calc(100svh-176px)] lg:overflow-y-auto lg:[scrollbar-width:none] lg:[&::-webkit-scrollbar]:hidden"
+        >
           {/* Category breadcrumb */}
           {primaryCollection && (
             <Link
@@ -471,65 +466,53 @@ export function ProductHero({ product }: ProductHeroProps) {
             </ul>
           )}
 
-          {/* 4. In-Page Purchase Controls */}
-          <div className="flex flex-col gap-2.5 pt-1">
-            <div className="flex items-center gap-3">
-              {/* Quantity Stepper */}
-              <div className="flex items-center border border-border rounded-[8px] bg-white px-1 h-[48px] shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="p-2 text-muted-text hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green rounded-[4px]"
-                  aria-label="Decrease quantity"
-                >
-                  <Minus className="w-3.5 h-3.5" />
-                </button>
-                <span className="px-2.5 text-sm font-bold text-text w-7 text-center" aria-live="polite">
-                  {quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => q + 1)}
-                  className="p-2 text-muted-text hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green rounded-[4px]"
-                  aria-label="Increase quantity"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* Add to Cart Button */}
+          {/* 4. In-Page Purchase Controls — Visible on desktop; on mobile (< lg), replaced by the persistent bottom shopping bar */}
+          <div className="hidden lg:flex items-center gap-3 pt-1">
+            {/* Quantity Stepper */}
+            <div className="flex items-center border border-border rounded-[8px] bg-white px-1 h-[48px] shrink-0">
               <button
                 type="button"
-                disabled={isSoldOut || isAdding}
-                onClick={handleAddToCart}
-                className={`flex-1 h-[48px] px-4 rounded-[8px] font-bold text-sm flex items-center justify-center gap-2 border-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${
-                  added
-                    ? "border-primary-green bg-soft-green text-deep-green shadow-xs"
-                    : "border-primary-green text-deep-green hover:bg-soft-green bg-white shadow-xs"
-                } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"}`}
+                disabled={isSoldOut || quantity <= 1}
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                className="p-2 text-muted-text hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green rounded-[4px] disabled:opacity-30 disabled:cursor-not-allowed"
+                aria-label="Decrease quantity"
               >
-                {added ? (
-                  <>
-                    <Check className="w-4 h-4" /> Added to Cart
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag className="w-4 h-4" /> {isAdding ? "Adding…" : "Add to Cart"}
-                  </>
-                )}
+                <Minus className="w-3.5 h-3.5" />
+              </button>
+              <span className="px-2.5 text-sm font-bold text-text w-7 text-center tabular-nums" aria-live="polite">
+                {quantity}
+              </span>
+              <button
+                type="button"
+                disabled={isSoldOut}
+                onClick={() => setQuantity((q) => q + 1)}
+                className="p-2 text-muted-text hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green rounded-[4px] disabled:opacity-30 disabled:cursor-not-allowed"
+                aria-label="Increase quantity"
+              >
+                <Plus className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            {/* Buy Now Button */}
+            {/* Add to Cart Button */}
             <button
               type="button"
-              disabled={isSoldOut || isBuying}
-              onClick={handleBuyNow}
-              className={`w-full h-[48px] px-4 rounded-[8px] font-bold text-sm flex items-center justify-center gap-2 bg-primary-green hover:bg-deep-green text-white shadow-xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${
-                isSoldOut || isBuying ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"
-              }`}
+              disabled={isSoldOut || isAdding}
+              onClick={handleAddToCart}
+              className={`flex-1 h-[48px] px-6 rounded-[8px] font-bold text-sm flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${
+                added
+                  ? "border-2 border-primary-green bg-soft-green text-deep-green shadow-xs"
+                  : "bg-primary-green hover:bg-deep-green text-white shadow-xs hover:shadow-md"
+              } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"}`}
             >
-              <Zap className="w-4 h-4" /> {isBuying ? "Redirecting…" : "Buy Now"}
+              {added ? (
+                <>
+                  <Check className="w-4 h-4" /> Added to Cart
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="w-4 h-4" /> {isSoldOut ? "Out of Stock" : isAdding ? "Adding…" : "Add to Cart"}
+                </>
+              )}
             </button>
           </div>
 
@@ -584,10 +567,6 @@ export function ProductHero({ product }: ProductHeroProps) {
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-primary-green shrink-0" />
               100% Genuine
-            </span>
-            <span className="flex items-center gap-1.5">
-              <RotateCcw className="w-4 h-4 text-primary-green shrink-0" />
-              Easy Replacement
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-primary-green shrink-0" />
@@ -648,51 +627,34 @@ export function ProductHero({ product }: ProductHeroProps) {
       </div>
 
       {/* ============================================================ */}
-      {/* PERSISTENT STICKY PURCHASE PANEL AT RIGHT BOTTOM SCREEN      */}
+      {/* MOBILE PERSISTENT STICKY SHOPPING BAR (Mobile Only: lg:hidden) */}
       {/* ============================================================ */}
-      <div className="fixed bottom-14 sm:bottom-6 sm:right-6 right-0 left-0 sm:left-auto z-40 px-3 sm:px-0">
-        <div className="mx-auto sm:mx-0 w-full sm:w-[380px] bg-white/95 backdrop-blur-md border border-border shadow-[0_8px_32px_rgba(0,0,0,0.14)] rounded-[14px] p-3 sm:p-3.5 transition-all">
-          {/* Top preview row: Price & Variant */}
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-border/70 text-xs">
-            <div className="min-w-0 flex-1">
-              <p className="font-bold text-text truncate text-xs sm:text-sm">{product.title}</p>
-              <div className="flex items-center gap-2">
-                <span className="font-sans text-sm sm:text-base font-bold text-text">
-                  {selectedVariant ? formatMoney(selectedVariant.price) : ""}
-                </span>
-                {variants.length > 1 && (
-                  <span className="text-[11px] text-muted-text font-semibold truncate">
-                    ({selectedVariant ? formatPackSize(selectedVariant.title) : ""})
-                  </span>
-                )}
-              </div>
-            </div>
-            {isSoldOut && (
-              <span className="text-[11px] font-bold text-brand-red shrink-0 bg-red-50 px-2 py-0.5 rounded">
-                Out of Stock
-              </span>
-            )}
-          </div>
-
-          {/* Action Row: Quantity + Add to Cart */}
-          <div className="flex items-center gap-2 mb-2">
-            {/* Quantity Selector */}
-            <div className="flex items-center border border-border rounded-[8px] bg-white px-1 h-[42px] shrink-0">
+      <aside
+        aria-label="Mobile purchase bar"
+        className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-white/95 backdrop-blur-md border-t border-border shadow-[0_-4px_24px_rgba(0,0,0,0.08)]"
+        style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.5rem)" }}
+      >
+        <div className="px-3 pt-2.5 pb-1 max-w-lg mx-auto">
+          <div className="flex items-center gap-2.5">
+            {/* Quantity Counter */}
+            <div className="flex items-center border border-border rounded-[8px] bg-stone-50/90 px-1.5 h-11 shrink-0">
               <button
                 type="button"
+                disabled={isSoldOut || quantity <= 1}
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="p-1.5 text-muted-text hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green rounded-[4px]"
+                className="p-1.5 sm:p-2 text-muted-text hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green rounded-[4px] disabled:opacity-30 disabled:cursor-not-allowed"
                 aria-label="Decrease quantity"
               >
                 <Minus className="w-3.5 h-3.5" />
               </button>
-              <span className="px-2 text-xs sm:text-sm font-bold text-text w-6 text-center" aria-live="polite">
+              <span className="px-1.5 sm:px-2 text-xs sm:text-sm font-bold text-text w-6 sm:w-7 text-center tabular-nums" aria-live="polite">
                 {quantity}
               </span>
               <button
                 type="button"
+                disabled={isSoldOut}
                 onClick={() => setQuantity((q) => q + 1)}
-                className="p-1.5 text-muted-text hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green rounded-[4px]"
+                className="p-1.5 sm:p-2 text-muted-text hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green rounded-[4px] disabled:opacity-30 disabled:cursor-not-allowed"
                 aria-label="Increase quantity"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -704,37 +666,34 @@ export function ProductHero({ product }: ProductHeroProps) {
               type="button"
               disabled={isSoldOut || isAdding}
               onClick={handleAddToCart}
-              className={`flex-1 h-[42px] px-3 rounded-[8px] font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 border-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${
+              className={`flex-1 min-w-0 h-11 px-3 sm:px-4 rounded-[8px] font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${
                 added
-                  ? "border-primary-green bg-soft-green text-deep-green"
-                  : "border-primary-green text-deep-green hover:bg-soft-green bg-white"
-              } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"}`}
+                  ? "border-2 border-primary-green bg-soft-green text-deep-green shadow-xs"
+                  : "bg-primary-green hover:bg-deep-green text-white shadow-xs"
+              } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.98]"}`}
+              aria-label="Add to cart"
             >
               {added ? (
                 <>
-                  <Check className="w-4 h-4" /> Added
+                  <Check className="w-4 h-4 shrink-0" />
+                  <span className="truncate">Added to Cart</span>
                 </>
               ) : (
                 <>
-                  <ShoppingBag className="w-4 h-4" /> {isAdding ? "Adding…" : "Add to Cart"}
+                  <ShoppingBag className="w-4 h-4 shrink-0" />
+                  <span className="truncate">{isSoldOut ? "Out of Stock" : isAdding ? "Adding…" : "Add to Cart"}</span>
                 </>
               )}
             </button>
           </div>
 
-          {/* Buy Now Button */}
-          <button
-            type="button"
-            disabled={isSoldOut || isBuying}
-            onClick={handleBuyNow}
-            className={`w-full h-[42px] px-3 rounded-[8px] font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 bg-primary-green hover:bg-deep-green text-white shadow-2xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${
-              isSoldOut || isBuying ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"
-            }`}
-          >
-            <Zap className="w-4 h-4" /> {isBuying ? "Redirecting…" : "Buy Now"}
-          </button>
+          {errorMessage && (
+            <p className="text-[11px] font-bold text-brand-red text-center mt-1 truncate" role="alert">
+              {errorMessage}
+            </p>
+          )}
         </div>
-      </div>
+      </aside>
     </>
   );
 }

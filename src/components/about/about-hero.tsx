@@ -67,7 +67,7 @@ export function AboutHero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex w-full min-h-[calc(100vh-var(--hero-offset,0px))] min-h-[calc(100svh-var(--hero-offset,0px))] h-[calc(100vh-var(--hero-offset,0px))] h-[calc(100svh-var(--hero-offset,0px))] overflow-hidden bg-[#0a0908] text-white"
+      className="relative flex w-full min-h-[calc(100vh-var(--hero-offset,0px))] min-h-[calc(100svh-var(--hero-offset,0px))] h-[calc(100vh-var(--hero-offset,0px))] h-[calc(100svh-var(--hero-offset,0px))] max-md:min-h-[320px] max-md:h-[max(320px,60vh)] max-md:h-[max(320px,60svh)] overflow-hidden bg-[#0a0908] text-white"
       aria-label="About Ruchi Foodline Hero"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}

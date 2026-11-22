@@ -120,15 +120,31 @@ export type Order = {
   lineItems: { nodes: { title: string; quantity: number }[] };
 };
 
+export type SavedAddress = {
+  id: string;
+  formatted: string[];
+  firstName: string | null;
+  lastName: string | null;
+  address1: string | null;
+  address2: string | null;
+  city: string | null;
+  zip: string | null;
+  zoneCode: string | null;
+  countryCode: string | null;
+  phoneNumber: string | null;
+};
+
 export type Customer = {
   firstName: string | null;
   lastName: string | null;
   emailAddress: { emailAddress: string } | null;
   phoneNumber: { phoneNumber: string } | null;
-  defaultAddress: { id: string; formatted: string[] } | null;
-  addresses: { nodes: { id: string; formatted: string[] }[] };
+  defaultAddress: (SavedAddress & { phoneNumber: string | null }) | null;
+  addresses: { nodes: SavedAddress[] };
   orders: { nodes: Order[] };
 };
+
+const ADDRESS_FIELDS = "id formatted firstName lastName address1 address2 city zip zoneCode countryCode phoneNumber";
 
 const customerQuery = `
   query {
@@ -136,8 +152,8 @@ const customerQuery = `
       firstName lastName
       emailAddress { emailAddress }
       phoneNumber { phoneNumber }
-      defaultAddress { id formatted }
-      addresses(first: 10) { nodes { id formatted } }
+      defaultAddress { ${ADDRESS_FIELDS} }
+      addresses(first: 10) { nodes { ${ADDRESS_FIELDS} } }
       orders(first: 20, sortKey: PROCESSED_AT, reverse: true) {
         nodes {
           id name processedAt financialStatus statusPageUrl
@@ -169,3 +185,61 @@ export async function getCustomer(accessToken: string): Promise<Customer | null>
     return null;
   }
 }
+
+// ---- Writes (the signed-in customer's own record only) ----
+// Identity comes solely from the customer's access token: Shopify scopes every mutation to that customer, so no
+// customer id is ever accepted from the browser, and one customer can't read or change another's data.
+
+export type MutationResult = { ok: true } | { ok: false; reason: "session" | "rejected" | "network"; message?: string; field?: string };
+
+async function customerMutation(accessToken: string, query: string, variables: Record<string, unknown>, root: string): Promise<MutationResult> {
+  try {
+    const { graphqlUrl } = await discover();
+    const res = await fetch(graphqlUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: accessToken },
+      body: JSON.stringify({ query, variables }),
+      cache: "no-store",
+    });
+    if (res.status === 401 || res.status === 403) return { ok: false, reason: "session" };
+    if (!res.ok) return { ok: false, reason: "network" };
+    const body = await res.json();
+    if (body.errors?.length) {
+      console.error("[customer-account] mutation errors", JSON.stringify(body.errors));
+      return { ok: false, reason: "rejected", message: "Shopify couldn't save this change." };
+    }
+    const errs = (body.data?.[root]?.userErrors ?? []) as Array<{ field?: string[] | null; message: string }>;
+    if (errs.length) return { ok: false, reason: "rejected", message: errs[0].message, field: errs[0].field?.at(-1) ?? undefined };
+    return { ok: true };
+  } catch (error) {
+    console.error("[customer-account] mutation failed:", error);
+    return { ok: false, reason: "network" };
+  }
+}
+
+/** Customer Account API: only first/last name are editable (sign-in email/phone are managed by Shopify). */
+export const updateCustomerName = (token: string, input: { firstName: string; lastName?: string }) =>
+  customerMutation(
+    token,
+    `mutation customerUpdate($input: CustomerUpdateInput!) { customerUpdate(input: $input) { customer { id } userErrors { field message } } }`,
+    { input },
+    "customerUpdate"
+  );
+
+type AddressFields = { firstName: string; lastName?: string; address1: string; address2?: string; city: string; zoneCode: string; zip: string; countryCode: string; phoneNumber?: string };
+
+export const createCustomerAddress = (token: string, address: AddressFields, defaultAddress: boolean) =>
+  customerMutation(
+    token,
+    `mutation addressCreate($address: CustomerAddressInput!, $defaultAddress: Boolean) { customerAddressCreate(address: $address, defaultAddress: $defaultAddress) { customerAddress { id } userErrors { field message } } }`,
+    { address, defaultAddress },
+    "customerAddressCreate"
+  );
+
+export const updateCustomerAddress = (token: string, addressId: string, address: Partial<AddressFields>, defaultAddress?: boolean) =>
+  customerMutation(
+    token,
+    `mutation addressUpdate($addressId: ID!, $address: CustomerAddressInput, $defaultAddress: Boolean) { customerAddressUpdate(addressId: $addressId, address: $address, defaultAddress: $defaultAddress) { customerAddress { id } userErrors { field message } } }`,
+    { addressId, address, ...(defaultAddress ? { defaultAddress: true } : {}) },
+    "customerAddressUpdate"
+  );

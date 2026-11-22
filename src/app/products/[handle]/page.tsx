@@ -94,7 +94,7 @@ export default async function ProductPage({ params }: Props) {
   });
 
   return (
-    <div className="bg-white py-6 sm:py-8 pb-24">
+    <div className="bg-white py-6 sm:py-8 pb-28 sm:pb-32 lg:pb-16">
       <JsonLd
         data={[
           structured,
@@ -124,7 +124,7 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <section className="mt-14 pt-10 border-t border-border">
+          <section data-testid="related-products" className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-border">
             <h2 className="font-serif text-xl sm:text-2xl font-semibold text-text mb-6">You May Also Like</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
               {relatedProducts.map((p) => (

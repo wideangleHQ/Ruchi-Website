@@ -9,6 +9,8 @@ export interface StripSlide {
   image: StaticImageData | string;
   alt: string;
   href: string;
+  /** Phone-only object-fit/position classes (strip artwork carries its own text). */
+  mobileFit?: string;
 }
 
 const INTERVAL_MS = 2000;
@@ -45,9 +47,9 @@ export function ShopStripSlideshow({ slides }: { slides: StripSlide[] }) {
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      <div className="relative w-full overflow-hidden rounded-2xl border border-gray-200/80 bg-[#f7f6f2] shadow-2xs sm:rounded-3xl">
+      <div className="relative w-full overflow-hidden rounded-2xl border border-gray-200/80 bg-[#f7f6f2] shadow-2xs sm:rounded-3xl max-sm:-mx-4 max-sm:w-[calc(100%+2rem)] max-sm:rounded-none max-sm:border-x-0">
         {/* Box matches the 1920×420 artwork exactly, so the headline is never cropped on phones. */}
-        <div className="relative aspect-[1920/420] w-full">
+        <div className="relative aspect-[1920/420] w-full max-sm:aspect-[3/1]">
           {slides.map((slide, i) => {
             const active = i === index;
             return (
@@ -71,7 +73,7 @@ export function ShopStripSlideshow({ slides }: { slides: StripSlide[] }) {
                     fill
                     priority={i === 0}
                     sizes="(min-width: 1400px) 1336px, (min-width: 1024px) 960px, (min-width: 768px) 720px, 100vw"
-                    className="h-full w-full object-cover object-center"
+                    className={`h-full w-full object-cover object-center ${slide.mobileFit ?? ""}`}
                   />
                 </Link>
               </div>

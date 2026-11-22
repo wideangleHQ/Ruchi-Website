@@ -23,18 +23,21 @@ const STRIP_SLIDES: StripSlide[] = [
     image: strip1,
     alt: "Ruchi Foodline Luxury Spice Combos & Signature Delights",
     href: "/products?category=blended-spices",
+    mobileFit: "max-sm:object-right",
   },
   {
     id: "sattvik-festive-kit",
     image: strip2,
     alt: "RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Offer",
     href: "/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic",
+    mobileFit: "max-sm:object-left",
   },
   {
     id: "authentic-spices",
     image: strip3,
     alt: "Ruchi Foodline Authentic Spices & Festive Delights",
     href: "/products",
+    mobileFit: "max-sm:object-contain max-sm:object-bottom max-sm:bg-white",
   },
 ];
 import { ShopCategoryDiscovery } from "./shop-category-discovery";

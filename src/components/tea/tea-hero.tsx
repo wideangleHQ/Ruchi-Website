@@ -128,9 +128,9 @@ export function TeaHero() {
     <section
       ref={sectionRef}
       aria-labelledby="tea-hero-heading"
-      // On /tea the site header is a transparent overlay, so the hero is a full screen tall.
+      // On /tea the site header is a transparent overlay. Hero is 70% height on mobile, 100vh on tablet, laptop & desktop.
       // The light sky colour is the fallback while (or if) the sky image fails to load.
-      className="relative isolate h-[var(--hero-h)] w-full overflow-hidden bg-[#cfe6f5] [--hero-h:max(560px,100svh)]"
+      className="relative isolate h-[var(--hero-h)] w-full overflow-hidden bg-[#cfe6f5] [--hero-h:70vh] sm:[--hero-h:70svh] md:[--hero-h:100vh] md:[--hero-h:100svh]"
     >
       {/* Layer order (back → front): sky 0 · left mountain 10 · packets 20 · right mountain 30 · gradient 40 · copy 50.
           Phones: near mountain in front (z 30), lowered so the names stay clear. Tablet (sm–lg): behind the packets (z 15). */}

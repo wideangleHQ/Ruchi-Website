@@ -147,7 +147,8 @@ export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
     ],
     image: readyMixImg,
     alt: "Ruchi Ready Mixes and Desserts - Kheer Mix, Bhaji Mix, Hampers",
-    href: "/products?category=ready-mix",
+    // Was ?category=ready-mix, which is not a Shopify collection (0 products). The real handle is flour-ready-mix-spices.
+    href: "/products?category=flour-ready-mix-spices",
   },
 ];
 
@@ -375,7 +376,7 @@ export function ProductPortfolioGallery() {
             MOBILE & TABLET RESPONSIVE VIEW (< 1024px)
             Touch-Optimized Vertical Accordion / Card Panels
             =================================================================== */}
-        <div className="lg:hidden space-y-3">
+        <div className="max-sm:hidden lg:hidden space-y-3">
           {PORTFOLIO_CATEGORIES.map((cat, idx) => {
             const isExpanded = activeIndex === idx;
 
@@ -472,7 +473,75 @@ export function ProductPortfolioGallery() {
           })}
         </div>
 
+        {/* ===================================================================
+            PHONES (< 640px): swipeable text-on-image card slider with pagination dots
+            =================================================================== */}
+        <PhoneCollectionSlider />
+
       </div>
     </section>
+  );
+}
+
+function PhoneCollectionSlider() {
+  const trackRef = useRef<HTMLUListElement>(null);
+  const [active, setActive] = useState(0);
+
+  // The dots follow the card nearest the left edge of the track.
+  const onScroll = () => {
+    const track = trackRef.current;
+    const first = track?.firstElementChild as HTMLElement | null;
+    if (!track || !first) return;
+    const step = first.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || "0");
+    setActive(Math.min(PORTFOLIO_CATEGORIES.length - 1, Math.max(0, Math.round(track.scrollLeft / step))));
+  };
+  const goTo = (i: number) => (trackRef.current?.children[i] as HTMLElement | undefined)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+
+  return (
+    <div className="sm:hidden">
+      <ul
+        ref={trackRef}
+        onScroll={onScroll}
+        aria-label="Ruchi collections"
+        className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1 no-scrollbar"
+      >
+        {PORTFOLIO_CATEGORIES.map((cat, i) => (
+          <li key={cat.id} className="w-[78%] max-w-[320px] shrink-0 snap-start">
+            <Link
+              href={cat.href}
+              className="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-[#1A1A1A] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#168a4a] focus-visible:ring-offset-2"
+            >
+              <Image src={cat.image} alt={cat.alt} fill sizes="78vw" priority={i === 0} className="object-cover object-center transition-transform duration-500 group-active:scale-[1.03]" />
+              {/* Subtle bottom scrim keeps the text readable on any photo */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                <span className="font-mono text-[11px] font-bold tracking-widest text-white/75">
+                  {cat.number} / {String(PORTFOLIO_CATEGORIES.length).padStart(2, "0")}
+                </span>
+                <h3 className="mt-1 font-serif text-xl font-bold leading-snug">{cat.title}</h3>
+                <p className="mt-1 text-xs font-medium text-emerald-100">{cat.shortDescription}</p>
+                <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-300">
+                  Explore <span aria-hidden="true">→</span>
+                </span>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-3 flex justify-center gap-1" role="group" aria-label="Choose collection">
+        {PORTFOLIO_CATEGORIES.map((cat, i) => (
+          <button
+            key={cat.id}
+            type="button"
+            onClick={() => goTo(i)}
+            aria-label={`Show ${cat.title}`}
+            aria-current={i === active}
+            className="group flex h-6 min-w-6 items-center justify-center"
+          >
+            <span className={`block h-1.5 rounded-full transition-all duration-300 ${i === active ? "w-5 bg-[#168a4a]" : "w-1.5 bg-[#168a4a]/30"}`} />
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }

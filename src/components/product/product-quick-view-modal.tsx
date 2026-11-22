@@ -6,9 +6,9 @@ import React, { useEffect, useState, useSyncExternalStore, startTransition, useA
 import { formatPackSize, isValidPrice } from "@/utils/pricing";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { X, ShoppingBag, Zap, Check, ShieldCheck, Truck, Minus, Plus, ArrowRight } from "lucide-react";
+import { X, ShoppingBag, Check, ShieldCheck, Truck, Minus, Plus, ArrowRight } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
-import { addItemAction, buyNowAction } from "@/lib/shopify/cart-actions";
+import { addItemAction } from "@/lib/shopify/cart-actions";
 import { formatMoney } from "@/utils/format";
 import { SafeImage } from "../ui/safe-image";
 import { getKeyFeatures, splitFeature } from "@/utils/catalogue";
@@ -52,7 +52,6 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
   };
 
   const [addState, addAction, isAdding] = useActionState(addItemAction, undefined);
-  const [buyState, buyAction, isBuying] = useActionState(buyNowAction, undefined);
   const [added, setAdded] = useState(false);
   const [prevAdding, setPrevAdding] = useState(isAdding);
 
@@ -80,12 +79,7 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
     startTransition(() => addAction({ merchandiseId: selectedVariant.id, quantity }));
   };
 
-  const handleBuyNow = () => {
-    if (isSoldOut || !selectedVariant) return;
-    startTransition(() => buyAction({ merchandiseId: selectedVariant.id, quantity }));
-  };
-
-  const errorMessage = addState?.error || buyState?.error;
+  const errorMessage = addState?.error;
   const activeImage = images[activeImageIdx] ?? product.featuredImage;
 
   if (!mounted) return null;
@@ -282,67 +276,54 @@ export function ProductQuickViewModal({ product, onClose }: ProductQuickViewModa
               )}
 
               {/* Quantity Stepper & Add to Cart Action */}
-              <div className="flex flex-col gap-2.5 sm:gap-3 pt-1">
-                <div className="flex items-center gap-2.5 sm:gap-3.5">
-                  {/* Quantity Stepper */}
-                  <div className="flex items-center border border-gray-200 rounded-xl bg-white px-2 h-[44px] sm:h-[48px] md:h-[50px] shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => setQuantity((q: number) => Math.max(1, q - 1))}
-                      className="p-1.5 text-gray-500 hover:text-gray-900 rounded-md cursor-pointer transition-colors"
-                      aria-label="Decrease quantity"
-                    >
-                      <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </button>
-                    <span className="px-2.5 text-sm sm:text-base md:text-lg font-bold text-gray-900 w-8 text-center" aria-live="polite">
-                      {quantity}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setQuantity((q: number) => q + 1)}
-                      className="p-1.5 text-gray-500 hover:text-gray-900 rounded-md cursor-pointer transition-colors"
-                      aria-label="Increase quantity"
-                    >
-                      <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </button>
-                  </div>
-
-                  {/* Add to Cart Button */}
+              <div className="flex items-center gap-2.5 sm:gap-3.5 pt-1">
+                {/* Quantity Stepper */}
+                <div className="flex items-center border border-gray-200 rounded-xl bg-white px-2 h-[44px] sm:h-[48px] md:h-[50px] shrink-0">
                   <button
                     type="button"
-                    disabled={isSoldOut || isAdding}
-                    onClick={handleAddToCart}
-                    className={`flex-1 h-[44px] sm:h-[48px] md:h-[50px] px-3 sm:px-5 rounded-xl font-bold text-xs sm:text-sm md:text-base uppercase tracking-wide flex items-center justify-center gap-1.5 sm:gap-2 border-2 transition-all cursor-pointer ${
-                      added
-                        ? "border-[#168a4a] bg-emerald-50 text-[#0e6337]"
-                        : "border-[#168a4a] text-[#0e6337] hover:bg-[#168a4a] hover:text-white bg-white shadow-xs"
-                    } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"}`}
+                    disabled={isSoldOut || quantity <= 1}
+                    onClick={() => setQuantity((q: number) => Math.max(1, q - 1))}
+                    className="p-1.5 text-gray-500 hover:text-gray-900 rounded-md cursor-pointer transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    aria-label="Decrease quantity"
                   >
-                    {added ? (
-                      <>
-                        <Check className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                        <span className="whitespace-nowrap">Added to Cart</span>
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                        <span className="whitespace-nowrap">{isSoldOut ? "Out of Stock" : isAdding ? "Adding…" : "Add to Cart"}</span>
-                      </>
-                    )}
+                    <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  </button>
+                  <span className="px-2.5 text-sm sm:text-base md:text-lg font-bold text-gray-900 w-8 text-center tabular-nums" aria-live="polite">
+                    {quantity}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={isSoldOut}
+                    onClick={() => setQuantity((q: number) => q + 1)}
+                    className="p-1.5 text-gray-500 hover:text-gray-900 rounded-md cursor-pointer transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </button>
                 </div>
 
-                {/* Buy Now Button */}
+                {/* Add to Cart Button */}
                 <button
                   type="button"
-                  disabled={isSoldOut || isBuying}
-                  onClick={handleBuyNow}
-                  className={`w-full h-[44px] sm:h-[48px] md:h-[50px] px-3 sm:px-5 rounded-xl font-bold text-xs sm:text-sm md:text-base uppercase tracking-wide flex items-center justify-center gap-1.5 sm:gap-2 bg-[#168a4a] hover:bg-[#0e6337] text-white shadow-xs transition-all cursor-pointer ${
-                    isSoldOut || isBuying ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"
-                  }`}
+                  disabled={isSoldOut || isAdding}
+                  onClick={handleAddToCart}
+                  className={`flex-1 h-[44px] sm:h-[48px] md:h-[50px] px-3 sm:px-5 rounded-xl font-bold text-xs sm:text-sm md:text-base uppercase tracking-wide flex items-center justify-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+                    added
+                      ? "border-2 border-[#168a4a] bg-emerald-50 text-[#0e6337] shadow-xs"
+                      : "bg-[#168a4a] hover:bg-[#0e6337] text-white shadow-xs"
+                  } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"}`}
                 >
-                  <Zap className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                  <span className="whitespace-nowrap">{isBuying ? "Redirecting to Checkout…" : "Buy Now"}</span>
+                  {added ? (
+                    <>
+                      <Check className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                      <span className="whitespace-nowrap">Added to Cart</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                      <span className="whitespace-nowrap">{isSoldOut ? "Out of Stock" : isAdding ? "Adding…" : "Add to Cart"}</span>
+                    </>
+                  )}
                 </button>
               </div>
 

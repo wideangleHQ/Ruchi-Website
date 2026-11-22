@@ -35,6 +35,13 @@ const CATEGORY_IMAGE_MAP: Record<string, StaticImageData> = {
   "gift-hampers": hampersImg,
 };
 
+// Short 2–3 word names for the phone category slider (full Shopify titles are kept on tablet/desktop and in links).
+const MOBILE_LABELS: Record<string, string> = {
+  "flour-ready-mix-spices": "Flour & Mixes",
+  "flour-and-ready-mix-spices": "Flour & Mixes",
+  hampers: "Combos & Hampers",
+};
+
 function getCategoryImage(handle: string): StaticImageData | null {
   if (CATEGORY_IMAGE_MAP[handle]) return CATEGORY_IMAGE_MAP[handle];
   const normalized = handle.toLowerCase().replace(/[^a-z0-9]/g, "-");
@@ -52,8 +59,8 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
   return (
     <section className="pt-3 sm:pt-5 lg:pt-7 pb-1.5 sm:pb-3 lg:pb-4 bg-transparent" aria-label="Shop by category">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-text tracking-tight text-center sm:text-left mb-3 sm:mb-4 lg:mb-5">
-          Explore the Flavours Behind Every Ruchi Meal
+        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-text tracking-tight text-left mb-3 sm:mb-4 lg:mb-5">
+          Explore Categories
         </h2>
 
         {/* Mobile: Circular Horizontal Slider */}
@@ -83,7 +90,7 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
                   )}
                 </div>
                 <span className="mt-2 text-[11px] font-semibold tracking-tight leading-tight text-gray-800 group-hover:text-primary-green transition-colors line-clamp-2 max-w-[80px]">
-                  {collection.title}
+                  {MOBILE_LABELS[collection.handle] ?? collection.title}
                 </span>
               </Link>
             );

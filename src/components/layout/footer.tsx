@@ -25,6 +25,8 @@ interface FooterNavItem {
   label: string;
   href: string;
   download?: string;
+  /** Hidden on phones only (still shown on tablet/desktop; the page itself is unaffected). */
+  hideOnMobile?: boolean;
 }
 
 const primaryFooterNav: FooterNavItem[] = [
@@ -35,7 +37,6 @@ const primaryFooterNav: FooterNavItem[] = [
   { label: "Global Business", href: "/global-business" },
   { label: "Blog", href: "/blog" },
   { label: "Contact Us", href: "/contact/queries" },
-  { label: "Track Your Order", href: "/track-order" },
   {
     label: "Product Catalogue",
     href: "/documents/Ruchi-Foodline-Product-Catalogue.pdf",
@@ -233,7 +234,7 @@ export function Footer({ collections = [] }: FooterProps) {
         {/* ============================================================
             ZONE B — Main Footer Navigation (Logo on Left, Nav on Right)
             ============================================================ */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6 py-5 sm:py-6 border-b border-white/10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-5 md:gap-6 py-3.5 sm:py-5 md:py-6 border-b border-white/10">
           {/* Brand Logo / Wordmark from src/assets/Images */}
           <Link href="/" className="flex items-center justify-center md:justify-start shrink-0 group focus:outline-hidden" aria-label="Ruchi Foodline Home">
             <div className="relative w-24 sm:w-28 md:w-32 lg:w-36 h-14 sm:h-16 md:h-18 lg:h-20 flex items-center justify-center md:justify-start">
@@ -249,14 +250,14 @@ export function Footer({ collections = [] }: FooterProps) {
 
           {/* Primary Footer Navigation (Horizontal Row / Clean Center Wrap on Mobile) */}
           <nav aria-label="Footer primary navigation" className="w-full md:w-auto">
-            <ul className="flex flex-wrap items-center justify-center md:justify-end gap-x-5 gap-y-2.5 sm:gap-6 lg:gap-8 text-xs sm:text-sm font-medium text-white/90">
+            <ul className="flex flex-wrap items-center justify-center md:justify-end gap-x-3 min-[390px]:gap-x-4 sm:gap-x-5 md:gap-x-6 lg:gap-8 gap-y-1 sm:gap-y-2 md:gap-y-2.5 text-xs sm:text-sm font-medium text-white/90">
               {primaryFooterNav.map((link) => (
-                <li key={link.label}>
+                <li key={link.label} className={link.hideOnMobile ? "max-sm:hidden" : undefined}>
                   {link.download ? (
                     <a
                       href={link.href}
                       download={link.download}
-                      className="hover:text-emerald-300 active:text-emerald-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e6337] rounded-xs transition-colors duration-200 py-1"
+                      className="hover:text-emerald-300 active:text-emerald-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e6337] rounded-xs transition-colors duration-200 inline-flex items-center py-1 sm:py-1.5 md:min-h-11"
                       aria-label="Download Ruchi Foodline Product Catalogue"
                     >
                       {link.label}
@@ -264,7 +265,7 @@ export function Footer({ collections = [] }: FooterProps) {
                   ) : (
                     <Link
                       href={link.href}
-                      className="hover:text-emerald-300 active:text-emerald-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e6337] rounded-xs transition-colors duration-200 py-1 inline-flex min-h-11 items-center"
+                      className="hover:text-emerald-300 active:text-emerald-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e6337] rounded-xs transition-colors duration-200 inline-flex items-center py-1 sm:py-1.5 md:min-h-11"
                     >
                       {link.label}
                     </Link>

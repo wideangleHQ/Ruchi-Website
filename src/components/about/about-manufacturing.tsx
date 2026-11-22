@@ -70,20 +70,20 @@ export function AboutManufacturing() {
         </div>
 
         {/* 4 Technology Highlights Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 max-sm:grid-cols-2 max-sm:gap-3 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {techHighlights.map((tech, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-xl p-6 border border-gray-200/90 shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between group"
+              className="bg-white rounded-xl p-6 max-sm:p-3 border border-gray-200/90 shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="text-[11px] font-bold text-[#168a4a] uppercase tracking-wider mb-1">
+                <div className="text-[11px] max-sm:text-[9.5px] max-sm:leading-tight font-bold text-[#168a4a] uppercase tracking-wider mb-1">
                   {tech.subtitle}
                 </div>
-                <h4 className="font-serif text-base sm:text-lg font-bold text-gray-900 mb-2 leading-snug">
+                <h4 className="font-serif text-base sm:text-lg max-sm:text-[0.9rem] font-bold text-gray-900 mb-2 max-sm:mb-1.5 leading-snug">
                   {tech.title}
                 </h4>
-                <p className="text-xs text-gray-600 leading-relaxed font-medium">
+                <p className="text-xs max-sm:text-[10.5px] text-gray-600 leading-relaxed max-sm:leading-snug font-medium">
                   {tech.description}
                 </p>
               </div>

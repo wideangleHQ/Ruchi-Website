@@ -80,24 +80,28 @@ export function TeaRitual() {
     <section
       data-tea-reveal
       aria-labelledby="tea-ritual-heading"
-      className="relative flex min-h-[min(650px,85vh)] flex-col justify-center overflow-hidden px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-12 xl:py-14"
+      className="relative flex min-h-[min(650px,85vh)] flex-col justify-center overflow-hidden px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-14 xl:py-16"
       style={{ backgroundColor: TEA_BEIGE }}
     >
       <FloatingLeaves leaves={RITUAL_LEAVES} />
 
-      {/* =========================================================================
-          CONTENT GRID (Text, Moments List & Product Image)
-          ========================================================================= */}
-      <div className="relative z-20 mx-auto grid w-full max-w-[1400px] items-center gap-x-10 gap-y-8 [grid-template-areas:'head'_'img'_'list'] md:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] md:[grid-template-areas:'head_img'_'list_img'] lg:grid-cols-[minmax(0,46fr)_minmax(0,54fr)] lg:gap-x-14 xl:gap-x-18">
+      {/* Centered Heading */}
+      <div className="relative z-20 mx-auto mb-8 w-full max-w-[1400px] text-center sm:mb-10 lg:mb-12">
         <h2
           id="tea-ritual-heading"
           data-reveal="0"
-          className="self-end font-serif text-[clamp(2.25rem,5vw,4.5rem)] font-bold leading-[1.05] tracking-tight text-[#10331f] [grid-area:head]"
+          className="font-serif text-[clamp(2.25rem,5vw,4.5rem)] font-bold leading-[1.05] tracking-tight text-[#10331f]"
         >
           The RUCHI tea ritual
         </h2>
+      </div>
 
-        <div data-reveal="1" className="mx-auto w-full max-w-[28rem] [grid-area:img] sm:max-w-xl md:max-w-none md:scale-105 lg:scale-110 origin-center">
+      {/* =========================================================================
+          CONTENT GRID (Moments List on Left & Product Image on Right)
+          ========================================================================= */}
+      <div className="relative z-20 mx-auto grid w-full max-w-[1400px] items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:grid-cols-[minmax(0,46fr)_minmax(0,54fr)] lg:gap-x-14 xl:gap-x-18">
+        {/* On mobile: Product image placed first (above moments list). On desktop: Product image in right column. */}
+        <div data-reveal="1" className="order-first md:order-last mx-auto w-full max-w-[28rem] sm:max-w-xl md:max-w-none md:scale-105 lg:scale-110 origin-center">
           <Image
             src={teaAndCup}
             alt="A pack of RUCHI Utkal Dust tea beside a red cup and saucer of tea"
@@ -106,7 +110,8 @@ export function TeaRitual() {
           />
         </div>
 
-        <ol className="self-start [grid-area:list]">
+        {/* Moments List: Left column on desktop, below image on mobile */}
+        <ol className="self-center">
           {MOMENTS.map((m, i) => (
             <li
               key={m.title}
