@@ -35,13 +35,11 @@ export function AboutManufacturing() {
       <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-5 sm:mb-6 lg:mb-8">
-          <div>
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
-              Manufacturing &amp; Food Technology
-            </h2>
-          </div>
-          <p className="text-xs sm:text-sm text-gray-600 max-w-md font-medium leading-relaxed">
+        <div className="max-w-2xl mb-5 sm:mb-6 lg:mb-8">
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
+            Manufacturing &amp; Food Technology
+          </h2>
+          <p className="mt-2 text-xs sm:text-sm text-gray-600 leading-relaxed font-medium">
             World-class processing infrastructure across Cuttack (Khapuria) and Ramdaspur industrial estates.
           </p>
         </div>

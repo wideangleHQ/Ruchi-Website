@@ -439,7 +439,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
+                  className="text-base font-medium text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
                 >
                   <span>{link.label}</span>
                   <ArrowRight className="w-4.5 h-4.5 text-gray-400" />
@@ -451,14 +451,14 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                 href={CATALOGUE_URL}
                 download={CATALOGUE_FILENAME}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors group cursor-pointer"
+                className="text-base font-medium text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors group cursor-pointer"
                 aria-label="Download Product Catalogue"
               >
                 <span className="flex items-center gap-2.5">
                   <FileDown className="w-5 h-5 text-[#168a4a]" />
                   <span>Product Catalogue</span>
                 </span>
-                <span className="text-xs font-semibold text-[#168a4a] bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full flex items-center gap-1">
+                <span className="text-xs font-medium text-[#168a4a] bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full flex items-center gap-1">
                   PDF <Download className="w-3 h-3" />
                 </span>
               </a>
@@ -469,7 +469,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   type="button"
                   onClick={() => setIsMobileContactOpen((v) => !v)}
                   aria-expanded={isMobileContactOpen}
-                  className="w-full text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 flex justify-between items-center cursor-pointer transition-colors"
+                  className="w-full text-base font-medium text-gray-900 hover:text-[#168a4a] py-3.5 flex justify-between items-center cursor-pointer transition-colors"
                 >
                   <span>Contact Us</span>
                   <ChevronDown
@@ -489,9 +489,9 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                           setIsMobileContactOpen(false);
                           setIsMobileMenuOpen(false);
                         }}
-                        className="block py-2.5 px-3 rounded-xl text-xs font-bold text-gray-900 hover:text-[#168a4a] hover:bg-[#f4faf3] transition-colors"
+                        className="block py-2.5 px-3 rounded-xl text-xs font-medium text-gray-900 hover:text-[#168a4a] hover:bg-[#f4faf3] transition-colors"
                       >
-                        <span className="block font-bold">{child.label}</span>
+                        <span className="block font-medium">{child.label}</span>
                         <span className="block text-[11px] text-gray-600 font-medium mt-0.5">{child.description}</span>
                       </Link>
                     ))}
@@ -505,7 +505,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   <Link
                     href="/account"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
+                    className="text-base font-medium text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
                   >
                     <span>My Account</span>
                     <ArrowRight className="w-4.5 h-4.5 text-gray-400" />
@@ -513,7 +513,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
                   <form action="/account/logout" method="post">
                     <button
                       type="submit"
-                      className="w-full text-left text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 cursor-pointer transition-colors"
+                      className="w-full text-left text-base font-medium text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 cursor-pointer transition-colors"
                     >
                       Sign Out
                     </button>
@@ -522,7 +522,7 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
               ) : (
                 <a
                   href="/account/login"
-                  className="text-base font-bold text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
+                  className="text-base font-medium text-gray-900 hover:text-[#168a4a] py-3.5 border-b border-gray-100/90 flex justify-between items-center transition-colors"
                 >
                   <span>Sign In / Sign Up</span>
                   <ArrowRight className="w-4.5 h-4.5 text-gray-400" />
@@ -534,16 +534,16 @@ export function Header({ cartQuantity = 0, isSignedIn = false }: { cartQuantity?
           {/* Footer inside mobile menu with comfortable bottom padding */}
           <div className="mx-auto max-w-[1400px] w-full px-4 sm:px-6 pt-5 pb-8 border-t border-gray-200/80 bg-gray-50/70 text-xs text-gray-600 space-y-3.5 mt-4">
             <div>
-              <p className="font-bold text-gray-900 text-xs">Ruchi Foodline Customer Service</p>
+              <p className="font-medium text-gray-900 text-xs">Ruchi Foodline Customer Service</p>
               <div className="flex flex-col gap-1 text-[11px] mt-1.5">
-                <p>Email: <a href="mailto:info@ruchifoodline.com" className="text-[#168a4a] font-semibold">info@ruchifoodline.com</a></p>
-                <p>Toll-Free: <a href="tel:18003454439" className="text-[#168a4a] font-semibold">1800 345 4439</a></p>
+                <p>Email: <a href="mailto:info@ruchifoodline.com" className="text-[#168a4a] font-medium">info@ruchifoodline.com</a></p>
+                <p>Toll-Free: <a href="tel:18003454439" className="text-[#168a4a] font-medium">1800 345 4439</a></p>
               </div>
             </div>
 
             {/* Social media profiles */}
             <div className="pt-2 border-t border-gray-200/70">
-              <p className="font-bold text-gray-900 text-xs mb-2">Connect With Us</p>
+              <p className="font-medium text-gray-900 text-xs mb-2">Connect With Us</p>
               <div className="flex items-center gap-2.5" aria-label="Social media profiles">
                 {socialLinks.map((item) => (
                   <a

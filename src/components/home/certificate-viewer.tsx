@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Download, ExternalLink, X } from "lucide-react";
-import { CertificateWatermark } from "@/components/ui/certificate-watermark";
 
 export interface ViewerDocument {
   title: string;
@@ -101,7 +100,6 @@ export function CertificateViewer({ doc, onClose }: { doc: ViewerDocument | null
                 </div>
               </object>
             )}
-            {!missing && <CertificateWatermark />}
           </div>
 
           <div className="flex items-center justify-between gap-3 border-t border-[#1A1A1A]/10 px-4 py-2 font-sans text-xs sm:px-5">

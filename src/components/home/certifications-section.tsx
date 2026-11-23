@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Download, Eye } from "lucide-react";
 import { CertificateViewer, type ViewerDocument } from "./certificate-viewer";
-import { CertificateWatermark } from "@/components/ui/certificate-watermark";
 
 interface Certificate {
   id: string;
@@ -16,35 +15,11 @@ interface Certificate {
 
 const CERTIFICATES: Certificate[] = [
   {
-    id: "fssai-ramdaspur",
-    title: "FSSAI Licence — Ramdaspur",
-    file: "/documents/certifications/fssai-ramdaspur.pdf",
-    preview: "/documents/certifications/previews/fssai-ramdaspur.jpg",
-    downloadName: "RUCHI-FSSAI-Ramdaspur.pdf",
-    previewAlt: "First page of the FSSAI central licence for the Ramdaspur facility",
-  },
-  {
-    id: "iso-22000",
-    title: "ISO 22000:2018",
-    file: "/documents/certifications/iso-22000-2018.pdf",
-    preview: "/documents/certifications/previews/iso-22000-2018.jpg",
-    downloadName: "RUCHI-ISO-22000-2018.pdf",
-    previewAlt: "ISO 22000:2018 food safety management system certificate",
-  },
-  {
-    id: "halal",
-    title: "Halal Certificate",
-    file: "/documents/certifications/halal-certificate.pdf",
-    preview: "/documents/certifications/previews/halal-certificate.jpg",
-    downloadName: "RUCHI-Halal-Certificate.pdf",
-    previewAlt: "Halal product certificate issued by HCS India for Om Oil & Flour Mills Limited",
-  },
-  {
-    id: "ayush-gmp",
+    id: "ayush-gmp-certificate",
     title: "AYUSH GMP Certificate",
     file: "/documents/certifications/ayush-gmp-certificate.pdf",
     preview: "/documents/certifications/previews/ayush-gmp-certificate.jpg",
-    downloadName: "RUCHI-AYUSH-GMP.pdf",
+    downloadName: "ayush-gmp-certificate.pdf",
     previewAlt: "AYUSH certificate of good manufacturing practices",
   },
   {
@@ -52,8 +27,32 @@ const CERTIFICATES: Certificate[] = [
     title: "FSSAI Licence — Khapuria",
     file: "/documents/certifications/fssai-khapuria.pdf",
     preview: "/documents/certifications/previews/fssai-khapuria.jpg",
-    downloadName: "RUCHI-FSSAI-Khapuria.pdf",
+    downloadName: "fssai-khapuria.pdf",
     previewAlt: "First page of the FSSAI central licence for the Khapuria facility",
+  },
+  {
+    id: "fssai-ramdaspur",
+    title: "FSSAI Licence — Ramdaspur",
+    file: "/documents/certifications/fssai-ramdaspur.pdf",
+    preview: "/documents/certifications/previews/fssai-ramdaspur.jpg",
+    downloadName: "fssai-ramdaspur.pdf",
+    previewAlt: "First page of the FSSAI central licence for the Ramdaspur facility",
+  },
+  {
+    id: "halal-certificate",
+    title: "Halal Certificate",
+    file: "/documents/certifications/halal-certificate.pdf",
+    preview: "/documents/certifications/previews/halal-certificate.jpg",
+    downloadName: "halal-certificate.pdf",
+    previewAlt: "Halal product certificate issued by HCS India for Om Oil & Flour Mills Limited",
+  },
+  {
+    id: "iso-22000-2018",
+    title: "ISO 22000:2018",
+    file: "/documents/certifications/iso-22000-2018.pdf",
+    preview: "/documents/certifications/previews/iso-22000-2018.jpg",
+    downloadName: "iso-22000-2018.pdf",
+    previewAlt: "ISO 22000:2018 food safety management system certificate",
   },
 ];
 
@@ -78,7 +77,6 @@ function CertificationCard({ cert, index, onView }: { cert: Certificate; index: 
           decoding="async"
           className="h-full w-full object-cover object-top motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.03]"
         />
-        <CertificateWatermark />
       </div>
 
       <div className="flex flex-1 flex-col p-3 xs:p-4 sm:p-5">

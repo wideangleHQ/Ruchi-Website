@@ -59,7 +59,7 @@ export function CategoryCardsSection({ collections }: CategoryCardsSectionProps)
   return (
     <section className="pt-3 sm:pt-5 lg:pt-7 pb-1.5 sm:pb-3 lg:pb-4 bg-transparent" aria-label="Shop by category">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-text tracking-tight text-left mb-3 sm:mb-4 lg:mb-5">
+        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-text tracking-tight text-center mb-3 sm:mb-4 lg:mb-5">
           Explore Categories
         </h2>
 

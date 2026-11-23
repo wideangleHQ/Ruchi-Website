@@ -301,11 +301,10 @@ export function ProductHero({ product }: ProductHeroProps) {
                     role="tab"
                     aria-selected={activeImageIdx === idx}
                     aria-label={img.altText ?? `View image ${idx + 1}`}
-                    className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-[8px] overflow-hidden border bg-[#F8F9FA] p-1 shrink-0 transition-all ${
-                      activeImageIdx === idx
-                        ? "border-primary-green ring-2 ring-primary-green/30"
-                        : "border-border"
-                    }`}
+                    className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-[8px] overflow-hidden border bg-[#F8F9FA] p-1 shrink-0 transition-all ${activeImageIdx === idx
+                      ? "border-primary-green ring-2 ring-primary-green/30"
+                      : "border-border"
+                      }`}
                   >
                     <SafeImage
                       src={img.url}
@@ -406,11 +405,10 @@ export function ProductHero({ product }: ProductHeroProps) {
                         disabled={!isAvailable}
                         onClick={() => setSelectedVariantId(v.id)}
                         aria-pressed={isSelected}
-                        className={`min-w-[72px] px-3.5 py-2 rounded-[8px] text-xs font-bold border transition-all ${
-                          isSelected
-                            ? "bg-[#171717] text-white border-[#171717] shadow-sm"
-                            : "bg-white text-text border-border hover:border-text/60"
-                        } ${!isAvailable ? "opacity-40 cursor-not-allowed line-through" : ""}`}
+                        className={`min-w-[72px] px-3.5 py-2 rounded-[8px] text-xs font-bold border transition-all ${isSelected
+                          ? "bg-[#171717] text-white border-[#171717] shadow-sm"
+                          : "bg-white text-text border-border hover:border-text/60"
+                          } ${!isAvailable ? "opacity-40 cursor-not-allowed line-through" : ""}`}
                       >
                         {formatPackSize(v.title)}
                       </button>
@@ -498,11 +496,10 @@ export function ProductHero({ product }: ProductHeroProps) {
               type="button"
               disabled={isSoldOut || isAdding}
               onClick={handleAddToCart}
-              className={`flex-1 h-[48px] px-6 rounded-[8px] font-bold text-sm flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${
-                added
-                  ? "border-2 border-primary-green bg-soft-green text-deep-green shadow-xs"
-                  : "bg-primary-green hover:bg-deep-green text-white shadow-xs hover:shadow-md"
-              } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"}`}
+              className={`flex-1 h-[48px] px-6 rounded-[8px] font-bold text-sm flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${added
+                ? "border-2 border-primary-green bg-soft-green text-deep-green shadow-xs"
+                : "bg-primary-green hover:bg-deep-green text-white shadow-xs hover:shadow-md"
+                } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.99]"}`}
             >
               {added ? (
                 <>
@@ -666,11 +663,10 @@ export function ProductHero({ product }: ProductHeroProps) {
               type="button"
               disabled={isSoldOut || isAdding}
               onClick={handleAddToCart}
-              className={`flex-1 min-w-0 h-11 px-3 sm:px-4 rounded-[8px] font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${
-                added
-                  ? "border-2 border-primary-green bg-soft-green text-deep-green shadow-xs"
-                  : "bg-primary-green hover:bg-deep-green text-white shadow-xs"
-              } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.98]"}`}
+              className={`flex-1 min-w-0 h-11 px-3 sm:px-4 rounded-[8px] font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green ${added
+                ? "border-2 border-primary-green bg-soft-green text-deep-green shadow-xs"
+                : "bg-primary-green hover:bg-deep-green text-white shadow-xs"
+                } ${isSoldOut || isAdding ? "opacity-50 cursor-not-allowed" : "active:scale-[0.98]"}`}
               aria-label="Add to cart"
             >
               {added ? (
