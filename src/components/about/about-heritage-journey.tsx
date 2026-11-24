@@ -573,7 +573,7 @@ export function AboutHeritageJourney() {
             {/* Continuous Progress Bar with Milestone Markers */}
             <div className="relative w-full py-1">
               {/* Background Track */}
-              <div className="relative h-1.5 w-full bg-stone-200 rounded-full">
+              <div className="relative mx-2 h-1.5 bg-stone-200 rounded-full">
                 {/* Active Progress Fill */}
                 <div
                   ref={mobileFillRef}
@@ -583,7 +583,7 @@ export function AboutHeritageJourney() {
               </div>
 
               {/* Milestone Point Taps */}
-              <div className="absolute top-1 left-0 right-0 -translate-y-1/2 flex justify-between pointer-events-none">
+              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none">
                 {STOP_POINTS.map((sp, idx) => {
                   const isPassed = idx < activeChapterIndex;
                   const isCurrent = activeChapterIndex === idx;
@@ -628,13 +628,12 @@ export function AboutHeritageJourney() {
 
         {/* Cardless Connected Vertical Timeline Story */}
         <div className="px-4 sm:px-6 lg:px-8 pb-14 sm:pb-16 max-w-2xl sm:max-w-3xl mx-auto relative">
-          {/* Vertical Timeline Spine Line */}
-          <div
-            className="absolute top-4 bottom-8 left-8 sm:left-10 w-0.5 bg-stone-200 -translate-x-1/2"
-            aria-hidden="true"
-          />
-
-          <div className="space-y-16">
+          <div className="relative flex flex-col gap-16">
+            {/* Vertical Timeline Spine: same offset as the markers (inside the same box), so dots sit on the line */}
+            <div
+              className="absolute top-3 bottom-8 left-8 sm:left-10 w-0.5 bg-stone-200 -translate-x-1/2"
+              aria-hidden="true"
+            />
             {HERITAGE_CHAPTERS.map((chapter, idx) => {
               const isPassed = idx < activeChapterIndex;
               const isCurrent = activeChapterIndex === idx;
@@ -649,7 +648,7 @@ export function AboutHeritageJourney() {
                 >
                   {/* Marker Node on Vertical Spine */}
                   <div
-                    className={`absolute top-0 left-8 sm:left-10 -translate-x-1/2 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    className={`absolute top-0 sm:top-[3px] left-8 sm:left-10 -translate-x-1/2 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
                       isCurrent
                         ? "bg-[#168a4a] text-white ring-4 ring-[#168a4a]/25 scale-110 shadow-sm"
                         : isPassed
@@ -661,12 +660,12 @@ export function AboutHeritageJourney() {
                   </div>
 
                   {/* Year & Milestone Tag (No "STOP 01" Tag) */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col items-start gap-1.5 sm:flex-row sm:items-center sm:gap-2">
                     <span className="font-sans text-2xl sm:text-3xl font-bold text-[#168a4a] leading-none">
                       {chapter.year}
                     </span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-500">
-                      · {chapter.chapterLabel}
+                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-stone-500">
+                      <span className="max-sm:hidden">· </span>{chapter.chapterLabel}
                     </span>
                   </div>
 

@@ -12,6 +12,9 @@ import { ProductCard } from "@/components/product/product-card";
 import strip1 from "@/assets/Images/Ads/Strip_1.png";
 import strip2 from "@/assets/Images/Ads/Strip_2.png";
 import strip3 from "@/assets/Images/Ads/Strip_3.png";
+import strip2Mobile from "@/assets/Images/Ads/Strip_2 Mobile.png";
+import strip3Mobile from "@/assets/Images/Ads/Strip_3 Mobile.png";
+import mothersChoiceStripMobile from "@/assets/Images/Mothers Choice/Mothers Choice Strip Mobile  banner.png";
 
 import { ShopPromotionalStrip } from "./shop-promotional-strip";
 import { ShopStripSlideshow, type StripSlide } from "./shop-strip-slideshow";
@@ -21,23 +24,23 @@ const STRIP_SLIDES: StripSlide[] = [
   {
     id: "signature-delights",
     image: strip1,
+    mobileImage: mothersChoiceStripMobile,
     alt: "Ruchi Foodline Luxury Spice Combos & Signature Delights",
     href: "/products?category=blended-spices",
-    mobileFit: "max-sm:object-right",
   },
   {
     id: "sattvik-festive-kit",
     image: strip2,
+    mobileImage: strip2Mobile,
     alt: "RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Offer",
     href: "/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic",
-    mobileFit: "max-sm:object-left",
   },
   {
     id: "authentic-spices",
     image: strip3,
+    mobileImage: strip3Mobile,
     alt: "Ruchi Foodline Authentic Spices & Festive Delights",
     href: "/products",
-    mobileFit: "max-sm:object-contain max-sm:object-bottom max-sm:bg-white",
   },
 ];
 import { ShopCategoryDiscovery } from "./shop-category-discovery";
@@ -369,6 +372,7 @@ export function ShopPageClient({
             {/* SECTION 02 — PROMOTIONAL CAMPAIGN STRIP 1 (New Featured Hero Strip) */}
             <ShopPromotionalStrip
               image={strip1}
+              mobileImage={mothersChoiceStripMobile}
               alt="Ruchi Foodline Luxury Spice Combos & Signature Delights"
               href="/products?category=blended-spices"
               title="Signature Delights & Special Combos"
@@ -397,6 +401,7 @@ export function ShopPageClient({
             {/* SECTION 05 — PROMOTIONAL STRIP AD 2 (Between Product Rows) */}
             <ShopPromotionalStrip
               image={strip2}
+              mobileImage={strip2Mobile}
               alt="RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Offer"
               href="/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic"
               title="Ruchi Sattvik Festive Kit"
@@ -425,6 +430,7 @@ export function ShopPageClient({
             {/* SECTION 05B — PROMOTIONAL STRIP AD 3 (Authentic Spices & Delights) */}
             <ShopPromotionalStrip
               image={strip3}
+              mobileImage={strip3Mobile}
               alt="Ruchi Foodline Authentic Spices & Festive Delights"
               href="/products"
               title="Authentic Spices & Festive Delights"

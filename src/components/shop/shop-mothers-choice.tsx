@@ -62,11 +62,24 @@ export function ShopMothersChoice({
       <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-[#f3ecdc]/40 pointer-events-none blur-3xl" />
       <div className="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-[#faedd8]/30 pointer-events-none blur-3xl" />
 
+      {/* Mobile View Only: Mother's Choice Banner (1080x1080 original square ratio, uncropped, with standard side padding) */}
+      <div className="block sm:hidden mb-4 overflow-hidden rounded-2xl border border-[#e2d5c3] bg-white shadow-2xs">
+        <Link href={viewAllHref} className="block relative w-full aspect-square">
+          <Image
+            src={mothersChoiceBadge}
+            alt="Mother's Choice — Maa Ke Haathon Ka Swaad, Dil Mein Basa Har Yaad"
+            fill
+            sizes="(max-width: 640px) 100vw, 420px"
+            className="object-contain"
+          />
+        </Link>
+      </div>
+
       {/* Header with Emotional Tagline and Campaign Artwork */}
       <div className="relative z-1 flex flex-col md:flex-row md:items-end justify-between gap-4 mb-5 sm:mb-6 pb-4 border-b border-[#e8dfcf]/70">
         <div className="flex items-start gap-3.5 sm:gap-4">
-          {/* Mother's Choice Campaign Logo / Emblem */}
-          <div className="relative w-14 h-14 sm:w-16 sm:h-16 lg:w-18 lg:h-18 rounded-2xl overflow-hidden bg-white/90 border border-[#e2d5c3] p-1 shrink-0 shadow-2xs flex items-center justify-center">
+          {/* Mother's Choice Campaign Logo / Emblem (Desktop & Tablet) */}
+          <div className="hidden sm:flex relative w-14 h-14 sm:w-16 sm:h-16 lg:w-18 lg:h-18 rounded-2xl overflow-hidden bg-white/90 border border-[#e2d5c3] p-1 shrink-0 shadow-2xs items-center justify-center">
             <Image
               src={mothersChoiceBadge}
               alt="Mother's Choice Emblem"

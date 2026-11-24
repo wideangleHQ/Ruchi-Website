@@ -7,6 +7,7 @@ import Link from "next/link";
 export interface StripSlide {
   id: string;
   image: StaticImageData | string;
+  mobileImage?: StaticImageData | string;
   alt: string;
   href: string;
   /** Phone-only object-fit/position classes (strip artwork carries its own text). */
@@ -47,9 +48,9 @@ export function ShopStripSlideshow({ slides }: { slides: StripSlide[] }) {
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      <div className="relative w-full overflow-hidden rounded-2xl border border-gray-200/80 bg-[#f7f6f2] shadow-2xs sm:rounded-3xl max-sm:-mx-4 max-sm:w-[calc(100%+2rem)] max-sm:rounded-none max-sm:border-x-0">
-        {/* Box matches the 1920×420 artwork exactly, so the headline is never cropped on phones. */}
-        <div className="relative aspect-[1920/420] w-full max-sm:aspect-[3/1]">
+      <div className="relative w-full overflow-hidden rounded-2xl border border-gray-200/80 bg-[#f7f6f2] shadow-2xs sm:rounded-3xl">
+        {/* Box matches the 1920×420 artwork on desktop and 1080×720 on mobile, so the artwork is never cropped. */}
+        <div className="relative aspect-[1920/420] w-full max-sm:aspect-[3/2]">
           {slides.map((slide, i) => {
             const active = i === index;
             return (
@@ -67,13 +68,23 @@ export function ShopStripSlideshow({ slides }: { slides: StripSlide[] }) {
                   aria-label={slide.alt}
                   className="relative block h-full w-full focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[#168a4a]"
                 >
+                  {/* Desktop Strip Ad */}
                   <Image
                     src={slide.image}
                     alt={slide.alt}
                     fill
                     priority={i === 0}
                     sizes="(min-width: 1400px) 1336px, (min-width: 1024px) 960px, (min-width: 768px) 720px, 100vw"
-                    className={`h-full w-full object-cover object-center ${slide.mobileFit ?? ""}`}
+                    className="hidden sm:block h-full w-full object-cover object-center"
+                  />
+                  {/* Mobile Strip Ad (1080x720 uncropped original ratio) */}
+                  <Image
+                    src={slide.mobileImage || slide.image}
+                    alt={slide.alt}
+                    fill
+                    priority={i === 0}
+                    sizes="100vw"
+                    className="block sm:hidden h-full w-full object-contain object-center"
                   />
                 </Link>
               </div>

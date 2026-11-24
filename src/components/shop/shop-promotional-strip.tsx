@@ -6,6 +6,7 @@ import Link from "next/link";
 
 export interface ShopPromotionalStripProps {
   image: StaticImageData | string;
+  mobileImage?: StaticImageData | string;
   alt: string;
   href: string;
   title?: string;
@@ -17,6 +18,7 @@ export interface ShopPromotionalStripProps {
 
 export function ShopPromotionalStrip({
   image,
+  mobileImage,
   alt,
   href,
   title,
@@ -40,18 +42,36 @@ export function ShopPromotionalStrip({
               fill
               priority={priority}
               sizes="(min-width: 1400px) 1336px, (min-width: 1024px) 960px, (min-width: 768px) 720px, 100vw"
-              className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.015]"
+              className="hidden sm:block w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.015]"
+            />
+            <Image
+              src={mobileImage || image}
+              alt={alt}
+              fill
+              priority={priority}
+              sizes="100vw"
+              className="block sm:hidden w-full h-full object-contain object-center"
             />
           </div>
         ) : (
-          <div className="relative w-full aspect-[16/5] sm:aspect-[1920/420] min-h-[90px] sm:min-h-0 overflow-hidden bg-stone-100">
+          <div className="relative w-full aspect-[16/5] sm:aspect-[1920/420] max-sm:aspect-[3/2] min-h-[90px] sm:min-h-0 overflow-hidden bg-stone-100">
+            {/* Desktop Strip Ad */}
             <Image
               src={image}
               alt={alt}
               fill
               priority={priority}
               sizes="(min-width: 1400px) 1336px, (min-width: 1024px) 960px, (min-width: 768px) 720px, 100vw"
-              className="object-cover object-center w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.012]"
+              className="hidden sm:block object-cover object-center w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.012]"
+            />
+            {/* Mobile Strip Ad (1080x720 uncropped original ratio) */}
+            <Image
+              src={mobileImage || image}
+              alt={alt}
+              fill
+              priority={priority}
+              sizes="100vw"
+              className="block sm:hidden object-contain object-center w-full h-full"
             />
           </div>
         )}

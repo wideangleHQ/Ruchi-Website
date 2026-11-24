@@ -6,6 +6,9 @@ import Link from "next/link";
 import heroBanner1 from "@/assets/Images/Hero banner/Hero Banner 1.png";
 import heroBanner2 from "@/assets/Images/Hero banner/Hero banner 2.png";
 import heroBanner3 from "@/assets/Images/Hero banner/Hero banner 3.png";
+import heroBanner1Mobile from "@/assets/Images/Hero banner/Hero Banner 1 Mobile.png";
+import heroBanner2Mobile from "@/assets/Images/Hero banner/Hero Banner 2 Mobile.png";
+import heroBanner3Mobile from "@/assets/Images/Hero banner/Hero Banner 3 Mobile.png";
 
 // Each banner opens what it shows. The Non-Veg Masala product is not in the current catalogue,
 // so its banner opens the Blended Spices range instead of a dead product page.
@@ -13,25 +16,23 @@ const HERO_SLIDES = [
   {
     id: "ruchi-curry-powder",
     src: heroBanner1,
+    mobileSrc: heroBanner1Mobile,
     alt: "Ruchi Foodline Curry Powder — The Taste of a Richer India",
     href: "/products/ruchi-curry-powder",
-    // Phones show a taller crop (7:4). Artwork is 2880×630 with the headline baked in: at 7:4 the window is ~38% of the width,
-    // the most that still keeps headline + pack (≈27–66% of the artwork) uncropped. Taller would cut the headline.
-    mobileFocus: "max-sm:object-[44.5%_50%]",
   },
   {
     id: "ruchi-utkal-tea",
     src: heroBanner2,
+    mobileSrc: heroBanner2Mobile,
     alt: "Ruchi Utkal Tea Dust — A Cup of Chai, A Richer Tomorrow",
     href: "/tea",
-    mobileFocus: "max-sm:object-[53%_50%]",
   },
   {
     id: "ruchi-non-veg-masala",
     src: heroBanner3,
+    mobileSrc: heroBanner3Mobile,
     alt: "Ruchi Non-Veg Masala — Authentic Non-Veg Flavours",
     href: "/products?category=blended-spices",
-    mobileFocus: "max-sm:object-[43%_50%]",
   },
 ];
 
@@ -55,7 +56,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-white select-none min-h-[140px] xs:min-h-[165px] sm:min-h-[240px] md:min-h-[300px] lg:min-h-[360px] xl:min-h-[400px] aspect-[16/6] sm:aspect-[21/6] md:aspect-[2880/630] max-sm:aspect-[7/4] max-sm:min-h-0 max-sm:max-h-[60svh]"
+      className="relative w-full overflow-hidden bg-white select-none min-h-[140px] xs:min-h-[165px] sm:min-h-[240px] md:min-h-[300px] lg:min-h-[360px] xl:min-h-[400px] aspect-[16/6] sm:aspect-[21/6] md:aspect-[2880/630] max-sm:aspect-[3/2] max-sm:min-h-0"
       aria-roledescription="carousel"
       aria-label="Featured products"
       onMouseEnter={() => setPaused(true)}
@@ -81,6 +82,7 @@ export function HeroSection() {
               aria-hidden={!isActive}
             >
               <Link href={slide.href} tabIndex={isActive ? 0 : -1} className="relative block h-full w-full focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white">
+                {/* Desktop Banner Image */}
                 <Image
                   src={slide.src}
                   alt={slide.alt}
@@ -88,7 +90,17 @@ export function HeroSection() {
                   priority={index === 0}
                   fetchPriority={index === 0 ? "high" : "low"}
                   sizes="100vw"
-                  className={`object-cover object-center w-full h-full ${slide.mobileFocus}`}
+                  className="hidden sm:block object-cover object-center w-full h-full"
+                />
+                {/* Mobile Banner Image (1080x720 uncropped original ratio) */}
+                <Image
+                  src={slide.mobileSrc}
+                  alt={slide.alt}
+                  fill
+                  priority={index === 0}
+                  fetchPriority={index === 0 ? "high" : "low"}
+                  sizes="100vw"
+                  className="block sm:hidden object-contain object-center w-full h-full"
                 />
               </Link>
             </div>

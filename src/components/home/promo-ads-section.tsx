@@ -8,6 +8,9 @@ import ad2 from "@/assets/Images/Ads/2.png";
 import strip1 from "@/assets/Images/Ads/Strip_1.png";
 import strip2 from "@/assets/Images/Ads/Strip_2.png";
 import strip3 from "@/assets/Images/Ads/Strip_3.png";
+import strip2Mobile from "@/assets/Images/Ads/Strip_2 Mobile.png";
+import strip3Mobile from "@/assets/Images/Ads/Strip_3 Mobile.png";
+import mothersChoiceStripMobile from "@/assets/Images/Mothers Choice/Mothers Choice Strip Mobile  banner.png";
 
 export function PromoAdsSection() {
   const portraitAds = [
@@ -29,26 +32,23 @@ export function PromoAdsSection() {
     {
       id: "strip-1",
       image: strip1,
-      alt: "Ruchi Foodline Luxury Spice Combos & Signature Delights",
-      href: "/products?category=blended-spices",
-      // Phone fit: text sits on the right of this artwork.
-      mobileFit: "max-sm:object-right",
+      mobileImage: mothersChoiceStripMobile,
+      alt: "Ruchi Foodline Mother's Choice — Maa Ke Haathon Ka Swaad, Dil Mein Basa Har Yaad",
+      href: "/products?category=basic-spices",
     },
     {
       id: "strip-2",
       image: strip2,
+      mobileImage: strip2Mobile,
       alt: "RUCHI Sattvik Festive Kit (11 in 1 Combo) No Onion No Garlic Special Offer",
       href: "/products/ruchi-sattvik-festive-kit-11-in-1-combo-no-onion-no-garlic",
-      // Phone fit: text sits on the left.
-      mobileFit: "max-sm:object-left",
     },
     {
       id: "strip-3",
       image: strip3,
+      mobileImage: strip3Mobile,
       alt: "Ruchi Foodline Authentic Spices & Festive Delights",
       href: "/products",
-      // Phone fit: text at both ends, so show it whole; its white top blends into the taller frame.
-      mobileFit: "max-sm:object-contain max-sm:object-bottom max-sm:bg-white",
     },
   ];
 
@@ -110,7 +110,7 @@ export function PromoAdsSection() {
 
         {/* 2. Strip Ad (Displays the complete strip banner in its original ratio) */}
         <div
-          className="relative w-full aspect-[1920/420] overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 bg-stone-100 transition-all duration-300 shadow-2xs max-sm:aspect-[3/1]"
+          className="relative w-full aspect-[1920/420] overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200/60 bg-stone-100 transition-all duration-300 shadow-2xs max-sm:aspect-[3/2]"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -118,16 +118,25 @@ export function PromoAdsSection() {
             <Link
               key={strip.id}
               href={strip.href}
-              className={`absolute inset-0 block w-full h-full transition-opacity duration-700 ease-in-out ${
-                currentStripIdx === idx ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
-              }`}
+              className={`absolute inset-0 block w-full h-full transition-opacity duration-700 ease-in-out ${currentStripIdx === idx ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
+                }`}
             >
+              {/* Desktop Strip Ad Image */}
               <Image
                 src={strip.image}
                 alt={strip.alt}
                 fill
                 sizes="(min-width: 1400px) 1336px, (min-width: 1024px) 95vw, 100vw"
-                className={`object-cover object-center w-full h-full transition-transform duration-700 ease-out hover:scale-[1.01] ${strip.mobileFit}`}
+                className="hidden sm:block object-cover object-center w-full h-full transition-transform duration-700 ease-out hover:scale-[1.01]"
+                priority={idx === 0}
+              />
+              {/* Mobile Strip Ad Image (1080x720 uncropped original ratio) */}
+              <Image
+                src={strip.mobileImage}
+                alt={strip.alt}
+                fill
+                sizes="100vw"
+                className="block sm:hidden object-contain object-center w-full h-full"
                 priority={idx === 0}
               />
             </Link>
