@@ -17,7 +17,7 @@ const BUSINESS_TYPES = [
 ];
 
 const inputClass =
-  "w-full rounded-[12px] border border-border bg-white px-4 py-2.5 text-sm text-text placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-primary-green/40 focus:border-primary-green transition-colors";
+  "w-full rounded-[12px] border border-border bg-white px-4 py-2.5 text-sm font-medium text-text placeholder:font-medium placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-primary-green/40 focus:border-primary-green transition-colors";
 const labelClass = "block text-xs font-bold text-text uppercase tracking-wider mb-1.5";
 
 interface FormState {
@@ -148,13 +148,13 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className={labelClass} htmlFor="fullName">Full Name *</label>
-          <input id="fullName" type="text" value={values.fullName} onChange={set("fullName")} maxLength={100} required className={inputClass} aria-invalid={!!errors.fullName} aria-describedby={errors.fullName ? "fullName-error" : undefined} />
+          <input id="fullName" type="text" value={values.fullName} onChange={set("fullName")} maxLength={100} required placeholder="Enter your full name" className={inputClass} aria-invalid={!!errors.fullName} aria-describedby={errors.fullName ? "fullName-error" : undefined} />
           {errors.fullName && <p id="fullName-error" className="mt-1 text-xs font-medium text-brand-red">{errors.fullName}</p>}
         </div>
 
         <div>
           <label className={labelClass} htmlFor="email">Email *</label>
-          <input id="email" type="email" value={values.email} onChange={set("email")} maxLength={150} required className={inputClass} aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} />
+          <input id="email" type="email" value={values.email} onChange={set("email")} maxLength={150} required placeholder="you@example.com" className={inputClass} aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} />
           {errors.email && <p id="email-error" className="mt-1 text-xs font-medium text-brand-red">{errors.email}</p>}
         </div>
       </div>
@@ -162,7 +162,7 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className={labelClass} htmlFor="phone">Phone Number</label>
-          <input id="phone" type="tel" value={values.phone} onChange={set("phone")} maxLength={20} className={inputClass} aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-error" : undefined} />
+          <input id="phone" type="tel" value={values.phone} onChange={set("phone")} maxLength={20} placeholder="+91 98765 43210" className={inputClass} aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-error" : undefined} />
           {errors.phone && <p id="phone-error" className="mt-1 text-xs font-medium text-brand-red">{errors.phone}</p>}
         </div>
 
@@ -171,7 +171,7 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
             <label className={labelClass} htmlFor="companyName">
               {formType === "bulk_order" ? "Company / Business Name" : "Business / Company Name"}
             </label>
-            <input id="companyName" type="text" value={values.companyName} onChange={set("companyName")} maxLength={150} className={inputClass} />
+            <input id="companyName" type="text" value={values.companyName} onChange={set("companyName")} maxLength={150} placeholder="e.g. Sharma Enterprises" className={inputClass} />
           </div>
         )}
       </div>
@@ -191,7 +191,7 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
             </div>
             <div>
               <label className={labelClass} htmlFor="location">Location</label>
-              <input id="location" type="text" value={values.location} onChange={set("location")} maxLength={150} className={inputClass} />
+              <input id="location" type="text" value={values.location} onChange={set("location")} maxLength={150} placeholder="e.g. Cuttack, Odisha" className={inputClass} />
             </div>
           </div>
         </>
@@ -201,7 +201,7 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className={labelClass} htmlFor="location">City / Location</label>
-            <input id="location" type="text" value={values.location} onChange={set("location")} maxLength={150} className={inputClass} />
+            <input id="location" type="text" value={values.location} onChange={set("location")} maxLength={150} placeholder="e.g. Bhubaneswar, Odisha" className={inputClass} />
           </div>
           <div>
             <label className={labelClass} htmlFor="businessType">Business Type *</label>
@@ -227,6 +227,13 @@ export function ContactForm({ formType }: { formType: ContactFormType }) {
           maxLength={2000}
           rows={4}
           required={formType === "queries"}
+          placeholder={
+            formType === "queries"
+              ? "Write your question or message here..."
+              : formType === "bulk_order"
+              ? "Share packaging preferences, delivery timeline, or any additional details..."
+              : "Tell us about your business and distribution interest..."
+          }
           className={`${inputClass} resize-none`}
         />
       </div>

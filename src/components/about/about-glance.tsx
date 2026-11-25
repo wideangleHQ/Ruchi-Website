@@ -6,7 +6,7 @@ const LABEL = "mt-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.
 const BODY = "mt-2.5 font-sans text-xs leading-relaxed text-[#1A1A1A]/75";
 
 const CARD =
-  "relative flex h-full w-[260px] shrink-0 snap-start flex-col rounded-2xl border border-[#1A1A1A]/10 bg-white p-6 shadow-[0_1px_2px_rgba(26,26,26,0.04)] motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 hover:border-[#168a4a] hover:shadow-[0_8px_24px_rgba(26,26,26,0.08)] motion-safe:hover:-translate-y-0.5 sm:w-[280px] lg:w-auto lg:p-5 xl:p-6 max-sm:mb-3 max-sm:h-auto max-sm:w-full max-sm:break-inside-avoid max-sm:p-4";
+  "relative flex h-full w-[260px] shrink-0 snap-start flex-col rounded-2xl border border-[#1A1A1A]/10 bg-white p-6 shadow-[0_1px_2px_rgba(26,26,26,0.04)] motion-safe:transition-[transform,box-shadow,border-color] motion-safe:duration-200 hover:border-[#168a4a] hover:shadow-[0_8px_24px_rgba(26,26,26,0.08)] motion-safe:hover:-translate-y-0.5 sm:w-[280px] lg:w-auto lg:p-5 xl:p-6 max-sm:w-full max-sm:p-4";
 
 export function AboutGlance() {
   return (
@@ -27,8 +27,8 @@ export function AboutGlance() {
           </p>
         </div>
 
-        {/* One line of five cards: grid on desktop, swipeable single row on tablets, staggered two-column masonry on phones */}
-        <div className="max-sm:mx-0 max-sm:block max-sm:columns-2 max-sm:gap-x-3 max-sm:overflow-visible max-sm:px-0 max-sm:pb-0 max-sm:snap-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-[1fr_1.05fr_1fr_1.3fr_1.35fr] lg:gap-4 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
+        {/* One line of five cards: grid on desktop, swipeable single row on tablets, balanced two-column grid on phones */}
+        <div className="max-sm:mx-0 max-sm:grid max-sm:grid-cols-2 max-sm:gap-3 max-sm:overflow-visible max-sm:px-0 max-sm:pb-0 max-sm:snap-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-[1fr_1.05fr_1fr_1.3fr_1.35fr] lg:gap-4 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
           {/* 1 — Legacy */}
           <article className={`${CARD}`}>
             <p className={BIG}>50+</p>
@@ -68,7 +68,7 @@ export function AboutGlance() {
           </article>
 
           {/* 5 — Distribution Network (spans both phone columns: two figures side by side) */}
-          <article className={`${CARD} max-sm:[column-span:all]`}>
+          <article className={`${CARD} max-sm:col-span-2`}>
             <dl className="grid grid-cols-2 gap-3 xl:gap-5">
               <div className="flex min-w-0 flex-col-reverse justify-end">
                 <dt className="mt-2.5 font-sans text-[10px] font-semibold uppercase leading-snug tracking-[0.1em] text-[#1A1A1A]">
